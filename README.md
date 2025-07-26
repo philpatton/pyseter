@@ -17,14 +17,14 @@ Of course, Anaconda, miniconda, mamba, or any other form of conda will work too.
 
 Then, you'll need to open the dreaded command line, which will depend on your operating system. Are you on Windows? Open the "miniforge prompt" in your start menu. Are you on Mac? Open the Terminal application. Then, you'll create the environment that the package will live in. Environments are walled off areas where we can install packages, which helps prevent conflicts between packages.
 
-```
+``` bash
 conda create -n pyseter_env
 conda activate pyseter_env
 ```
 
 Your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and pyseter (see below).
 
-```
+``` bash
 conda install pip -y
 ```
 
@@ -34,7 +34,7 @@ There are several different ways to interact with Python. The most common way fo
 
 For example, you can try [Jupyter Lab](https://docs.jupyter.org/en/latest/), which is somewhat similar to R Studio. To do so, [install Jupyter](https://jupyter.org/install) via the command line. I also recommend installing the [ipykernel](https://ipython.readthedocs.io/en/stable/install/kernel_install.html#kernels-for-different-environments), which helps you select the right conda environment in Jupyter Lab.
 
-```
+``` bash
 conda activate pyseter_env
 conda install jupyter ipykernel -y
 python -m ipykernel install --user --name pyseter --display-name "Python (pyseter)"
@@ -42,7 +42,7 @@ python -m ipykernel install --user --name pyseter --display-name "Python (pysete
 
 Note that you only need to activate `pyseter_env` when you open a new command line (i.e., terminal or miniforge prompt). Then you can open Jupyter Lab with the following command:
 
-```
+``` bash
 jupyter lab
 ```
 
@@ -75,6 +75,8 @@ And that's it!
 
 Open a Jupyter Notebook. You can do this through Jupyter Lab, VS Code, or Positron. The first step is verifying your PyTorch installation.
 
-```
+``` python
+import pyseter
+pyseter.verify_pytorch()
 
 ```
