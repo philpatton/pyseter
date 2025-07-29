@@ -6,7 +6,7 @@ A Python package that sorts images by an automatically generated ID before photo
 
 ### New to Python?
 
-While most biologists use R, Python is the language for machine learning tasks with images. If you're new to Python, please follow these steps to installing Python and conda. Conda is an important tool for managing packages in Python. Packages in R are handled behind the scenes. Python, however, requires a more hands on approach.
+While most biologists use R, it would be challenging to release Pyseter as an R package because Pyseter relies heavily on Pytorch, an deep learning library. If you're new to Python, please follow these steps to installing Python and conda. Conda is an important tool for managing packages in Python. Unlike Python, R handles packages for you, behind the scenes. Python, however, requires a more hands on approach.
 
    - Download [Python](https://www.python.org/downloads/) (Windows users only)
    - Download and install [Miniforge](https://conda-forge.org/download/) (a form of conda)
@@ -15,7 +15,7 @@ Of course, Anaconda, miniconda, mamba, or any other form of conda will work too.
 
 #### Create a new environment
 
-Then, you'll need to open the dreaded command line, which will depend on your operating system. Are you on Windows? Open the "miniforge prompt" in your start menu. Are you on Mac? Open the Terminal application. Then, you'll create the environment that the package will live in. Environments are walled off areas where we can install packages, which helps prevent conflicts between packages.
+Then, you'll need to open the command line, which will depend on your operating system. Are you on Windows? Open the "miniforge prompt" in your start menu. Are you on Mac? Open the Terminal application. Then, you'll create the environment that the package will live in. Environments are walled off areas where we can install packages, which helps prevent conflicts between packages.
 
 ``` bash
 conda create -n pyseter_env
