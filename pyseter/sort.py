@@ -302,15 +302,15 @@ def report_cluster_results(cluster_labs: np.ndarray) -> None:
     print(f'Found {len(label)} clusters.')
     print(f'Largest cluster has {np.max(count)} images.')
 
-def sort_images(id_df, image_root, out_dir='clusters') -> None:
+def sort_images(id_df, input_dir: str, output_dir: str) -> None:
     """Sort images into folders based on cluster and encounter."""
 
-    out_dir = os.path.join(image_root, out_dir)
-    tmp_dir = os.path.join(image_root, 'tmp')
+    if not os.path.isdir(input_dir):
+        raise ValueError('input_dir', input_dir, 'is not a valid directory')
 
-    if os.path.exists(out_dir):
-        shutil.rmtree(out_dir)
-    os.makedirs(out_dir)
+    if os.path.exists(output_dir):
+        shutil.rmtree(output_dir)
+    os.makedirs(output_dir)
 
     grouped = id_df.groupby(['autosort_id', 'encounter'])
     i = 0
@@ -318,7 +318,7 @@ def sort_images(id_df, image_root, out_dir='clusters') -> None:
     for (clust_id, enc_id), mini_df in grouped:
 
         i += 1
-        cluster_dir = os.path.join(out_dir, clust_id)
+        cluster_dir = os.path.join(output_dir, clust_id)
         os.makedirs(cluster_dir, exist_ok=True)
 
         encounter_dir = os.path.join(cluster_dir, enc_id)
@@ -326,7 +326,7 @@ def sort_images(id_df, image_root, out_dir='clusters') -> None:
 
         for img in mini_df['image']:
             j += 1
-            old_path = os.path.join(tmp_dir, img)
+            old_path = os.path.join(input_dir, img)
             shutil.copy(old_path, encounter_dir)
         
     print(f'Sorted {j} images into {i} folders.')

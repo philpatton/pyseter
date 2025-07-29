@@ -128,7 +128,7 @@ class FeatureExtractor:
         else:
             self.device = device
 
-    def extract(self, image_root: str):
+    def extract(self, image_dir: str):
 
         print('Loading model...')
         model = self.get_model()
@@ -136,7 +136,6 @@ class FeatureExtractor:
         if not self.stochastic:
             model.eval()
 
-        image_dir = os.path.join(image_root, 'tmp')
         test_dataloader = get_test_data(image_dir, self.batch_size, self.bbox_csv)
 
         print('Extracting features...')
