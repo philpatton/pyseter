@@ -14,11 +14,12 @@ import numpy as np
 import pandas as pd
 
 def prep_images(image_dir) -> None:
+    """Copy all images to a tempory directory and return encounter information"""
     images, encounters = process_images(image_dir)
     save_encounter_info(image_dir, encounters, images)
 
 def process_images(image_root: str) -> Tuple[List[str], List[str]]:
-    """Copy images to upload directory and return encounter information"""
+    """Copy all images to a tempory directory and return encounter information"""
     image_list = []
     encounter_list = []
 
