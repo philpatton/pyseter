@@ -55,48 +55,6 @@ def save_encounter_info(output_dir: str, encounters: List[str], images: List[str
     encounter_df.to_csv(encounter_path, index=False)
     print('Saved encounter information to:', encounter_path)
 
-# def main() -> None:
-#     """Main function to run autosort."""
-
-#     # parse command line arguments
-#     args = None
-
-#     # check if the user wants to run the preparation step
-#     if args['prep']:
-#         print('Preparing images for autosorting.')
-#         prep_images()
-    
-#     # check if the user wants to run the extraction step
-#     if args['extract']:
-#         print('Extracting features from images.')
-#         extract()
-
-#     # load the configuration file
-#     with open('config.yaml', 'r') as f:
-#         config = yaml.safe_load(f)
-
-#     root = config['image_root']
-
-#     # cluster the feature vectors into proposed individuals
-#     fnames, features = load_features(root)
-#     cluster_ids = cluster_images(features, config['cluster_algo'], config['match_threshold'])
-
-#     # quick summary of the clustering results
-#     report_cluster_results(cluster_ids)
-
-#     # we want to subdivide the clusters by encounter for easier viewing
-#     encounter_path = os.path.join(root, 'encounter_info.csv')
-#     encounter_info = pd.read_csv(encounter_path)
-
-#     # create a dataframe proposed id and encounter for each image
-#     cluster_df = pd.DataFrame({'image': fnames, 'autosort_id': cluster_ids})
-#     cluster_df = cluster_df.merge(encounter_info)
-
-#     # sort the images into folders based on the proposed individuals
-#     sort_images(cluster_df, root)
-
-#     shutil.rmtree(os.path.join(root, 'tmp'))
-
 def load_features(image_root: str) -> Tuple[np.ndarray, np.ndarray]:
     """Load features from disk."""
 
@@ -144,26 +102,6 @@ def cluster_hac(feature_layer: np.ndarray, match_threshold: float) -> np.ndarray
 
     return cluster_labels
 
-# def cluster_network_old(features: np.ndarray, threshold: float) -> np.ndarray:
-
-#     # similarity = 1 - pairwise_distances(features, metric='cosine')
-#     # matches = np.where(similarity > threshold, similarity, 0)
-
-#     distance = pairwise_distances(features, metric='cosine')
-#     matches = (distance < threshold) * 1
-
-#     # Get connected components from the graph
-#     nx_graph = nx.from_numpy_array(matches)
-#     connected_components = list(nx.connected_components(nx_graph))
-
-#     # Create a mapping from node index to cluster index
-#     file_count, _ = features.shape 
-#     cluster_labels = np.zeros(file_count, dtype=int)
-#     for cluster_idx, cluster in enumerate(connected_components):
-#         for node in cluster:
-#             cluster_labels[node] = cluster_idx
-
-#     return cluster_labels
 class ClusterResults:
     def __init__(self, cluster_labels):
         self.cluster_labels = cluster_labels
