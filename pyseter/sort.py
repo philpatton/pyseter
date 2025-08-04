@@ -23,7 +23,8 @@ def process_images(image_root: str) -> Tuple[List[str], List[str]]:
     image_list = []
     encounter_list = []
 
-    tmp_dir = os.path.join(image_root, 'tmp')
+    parent = Path(image_root).parent.absolute()
+    tmp_dir = os.path.join(parent, 'all_images')
     os.makedirs(tmp_dir, exist_ok=True)
     
     i = 0
