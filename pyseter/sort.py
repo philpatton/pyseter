@@ -68,39 +68,27 @@ def load_features(image_root: str) -> Tuple[np.ndarray, np.ndarray]:
 
     return image_names, feature_array
 
-def cluster_images(
-        features: np.ndarray, 
-        algo: str, 
-        match_threshold: float
-    ):
+class HierarchicalCluster:
 
-    lab = 'Hierachical Clustering' if algo == 'hac' else 'Network Clustering'
-    print(f'Clustering {features.shape[0]} features with {lab}.')
+    def __init__(self, match_threshold: float=0.5) -> None:
 
-    if algo == 'hac':
-        results = cluster_hac(features, match_threshold)
-    elif algo == 'network':
-        results = cluster_network(features, match_threshold)
-    else:
-        raise ValueError(f'Unknown clustering algorithm: {algo}')
-    
-    return results
+        if (match_threshold > 1.0) or (match_threshold < 0.0):
+            raise ValueError('Match threshold must lie between 0 and 1')
+        self.match_threshold=match_threshold
 
-def cluster_hac(feature_layer: np.ndarray, match_threshold: float) -> np.ndarray:
-    """Cluster features using hierarchical agglomerative clustering."""
+    def cluster_images(self, features: np.ndarray) -> np.ndarray:
 
-    distance_threshold = 1 - match_threshold
+        distance_threshold = 1 - self.match_threshold
 
-    # single linkage is necessary when using cosine distance
-    hac = AgglomerativeClustering(
-        distance_threshold=distance_threshold, 
-        n_clusters=None, metric='cosine', 
-        linkage='complete'
-    ).fit(feature_layer)
+        # single linkage is necessary when using cosine distance
+        hac = AgglomerativeClustering(
+            distance_threshold=distance_threshold, 
+            n_clusters=None, metric='cosine', 
+            linkage='complete'
+        ).fit(features)
 
-    cluster_labels = hac.labels_
-
-    return cluster_labels
+        cluster_labels = hac.labels_
+        return cluster_labels 
 
 class ClusterResults:
     def __init__(self, cluster_labels):
@@ -170,70 +158,78 @@ class ClusterResults:
         plt.tight_layout()
         plt.show()
 
-def cluster_network(features, match_threshold):
-
-    MODULARITY_THRESHOLD = 0.3
-
-    similarity = 1 - pairwise_distances(features, metric='cosine')
-    matches = (similarity > match_threshold) 
-    # matches = np.where(distance < distance_threshold, distance, 0)
-
-    # Get connected components from the graph
-    G = nx.from_numpy_array(matches)
-    connected_components = (G.subgraph(c) for c in nx.connected_components(G))
-
-    # Create a mapping from node index to cluster index
-    file_count, _ = features.shape 
-    cluster_labels = np.empty(file_count, dtype=object)
-    cluster_indices = np.empty(file_count, dtype=int)
-
-    # Assign clusters to the cluster_labels array
-    df_list = []
-    bad_clusters = []
-    bad_cluster_idx = []
-    for cluster_idx, subgraph in enumerate(connected_components):
-
-        cluster_label = f'ID_{cluster_idx:04d}'
-        for node in subgraph:
-            cluster_labels[node] = cluster_label
-            cluster_indices[node] = cluster_idx
-
-        # modularity is the warning sign for a bad cluster
-        community = nx.community.louvain_communities(subgraph) # type: ignore
-        modularity = nx.community.quality.modularity(subgraph, community) # pyright: ignore[reportAttributeAccessIssue]
-
-        if modularity > MODULARITY_THRESHOLD:
-            bad_clusters.append(cluster_label)
-            bad_cluster_idx.append(cluster_idx)
-            
-        for community_idx, comm in enumerate(community):
-            for node in comm:
-                row = pd.DataFrame({
-                    'cluster_id': [cluster_label],
-                    'modularity': modularity,
-                    # 'filename': fnames[node],
-                    'community': community_idx
-                })
-                df_list.append(row)
-
-    if bad_clusters:
-        w = f'Following clusters may contain false positives:\n{bad_clusters}'
-        print(w)
-
-    df = pd.concat(df_list, ignore_index=True)
-
-    results = ClusterResults(cluster_labels)
-    # results.filenames = fnames
-    results.graph = G
-    results.false_positive_df = df
-    results.bad_clusters = bad_clusters
-    results.bad_cluster_idx = bad_cluster_idx
-    results.cluster_idx = format_ids(cluster_indices)
-
-    return results
-
 def format_ids(ids: np.ndarray) -> List:
     return [f'ID-{i:04d}' for i in ids]
+
+class NetworkCluster: 
+
+    def __init__(self, match_threshold: float=0.5) -> None:
+
+        if (match_threshold > 1.0) or (match_threshold < 0.0):
+            raise ValueError('Match threshold must lie between 0 and 1')
+        self.match_threshold=match_threshold
+
+    def cluster_images(self, features: np.ndarray, message: bool=True) -> ClusterResults:
+
+        MODULARITY_THRESHOLD = 0.3
+
+        similarity = 1 - pairwise_distances(features, metric='cosine')
+        matches = (similarity > self.match_threshold) 
+        # matches = np.where(distance < distance_threshold, distance, 0)
+
+        # Get connected components from the graph
+        G = nx.from_numpy_array(matches)
+        connected_components = (G.subgraph(c) for c in nx.connected_components(G))
+
+        # Create a mapping from node index to cluster index
+        file_count, _ = features.shape 
+        cluster_labels = np.empty(file_count, dtype=object)
+        cluster_indices = np.empty(file_count, dtype=int)
+
+        # Assign clusters to the cluster_labels array
+        df_list = []
+        bad_clusters = []
+        bad_cluster_idx = []
+        for cluster_idx, subgraph in enumerate(connected_components):
+
+            cluster_label = f'ID_{cluster_idx:04d}'
+            for node in subgraph:
+                cluster_labels[node] = cluster_label
+                cluster_indices[node] = cluster_idx
+
+            # modularity is the warning sign for a bad cluster
+            community = nx.community.louvain_communities(subgraph) # type: ignore
+            modularity = nx.community.quality.modularity(subgraph, community) # pyright: ignore[reportAttributeAccessIssue]
+
+            if modularity > MODULARITY_THRESHOLD:
+                bad_clusters.append(cluster_label)
+                bad_cluster_idx.append(cluster_idx)
+                
+            for community_idx, comm in enumerate(community):
+                for node in comm:
+                    row = pd.DataFrame({
+                        'cluster_id': [cluster_label],
+                        'modularity': modularity,
+                        # 'filename': fnames[node],
+                        'community': community_idx
+                    })
+                    df_list.append(row)
+
+        if bad_clusters and message:
+            w = f'Following clusters may contain false positives:\n{bad_clusters}'
+            print(w)
+
+        df = pd.concat(df_list, ignore_index=True)
+
+        results = ClusterResults(cluster_labels)
+        # results.filenames = fnames
+        results.graph = G
+        results.false_positive_df = df
+        results.bad_clusters = bad_clusters
+        results.bad_cluster_idx = bad_cluster_idx
+        results.cluster_idx = format_ids(cluster_indices)
+
+        return results
 
 def report_cluster_results(cluster_labs: np.ndarray) -> None:
 
