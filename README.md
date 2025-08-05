@@ -6,33 +6,69 @@ A Python package that sorts images by an automatically generated ID before photo
 
 ### New to Python?
 
-While most biologists use R, it would be challenging to release Pyseter as an R package because Pyseter relies heavily on Pytorch, an deep learning library. If you're new to Python, please follow these steps to installing Python and conda. Conda is an important tool for managing packages in Python. Unlike Python, R handles packages for you, behind the scenes. Python, however, requires a more hands on approach.
+While most biologists use R, we chose to release Pyseter as a Python package because it relies heavily on Pytorch, an deep learning library. If you're new to Python, please follow these steps to getting started with Python and conda. 
 
-   - Download [Python](https://www.python.org/downloads/) (Windows users only)
+#### Step 1: Install conda 
+
+Conda is an important tool for managing packages in Python. Unlike Python, R (for the most part) handles packages for you behind the scenes. Python requires a more hands on approach.
+
    - Download and install [Miniforge](https://conda-forge.org/download/) (a form of conda)
 
-Of course, Anaconda, miniconda, mamba, or any other form of conda will work too.
+After installing, you can verify your installation by opening the **command line interface**, which will depend on your operating system. Are you on Windows? Open the "miniforge prompt" in your start menu. Are you on Mac? Open the Terminal application. Then, run the following command
 
-#### Create a new environment
+```bash
+conda --version
+```
 
-Then, you'll need to open the command line, which will depend on your operating system. Are you on Windows? Open the "miniforge prompt" in your start menu. Are you on Mac? Open the Terminal application. Then, you'll create the environment that the package will live in. Environments are walled off areas where we can install packages. This allows you to have multiple versions of the same package installed on your machine, which can help prevent conflicts.
+You should see something like `conda 25.5.1`. Of course, Anaconda, miniconda, mamba, or any other form of conda will work too.
+
+#### Step 2: Create a new environment
+
+Then, you'll create an environment for the package will live in. Environments are walled off areas where we can install packages. This allows you to have multiple versions of the same package installed on your machine, which can help prevent conflicts. 
 
 ``` bash
 conda create -n pyseter_env
 conda activate pyseter_env
 ```
 
-Now your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and pyseter (see below).
+Here, I name (hence the `-n`) the environment `pyseter_env`, but you can call it anything you like!
+
+Now your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and pyseter (see below). 
 
 ``` bash
 conda install pip -y
 ```
 
-#### Interacting with Python
+#### Step 3: Install Pytorch
 
-There are several different ways to interact with Python. The most common way for data analysts is through a *Jupyter Notebook*, which is similar to an RMarkdown document or a Quarto document. There are several ways to open Jupyter Notebooks. 
+Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. This will be fast for users with an NVIDIA GPU or 16 GB Mac with Apple Silicon. **For all other users, this will be extremely slow.** 
 
-For example, you can try [Jupyter Lab](https://docs.jupyter.org/en/latest/), which is somewhat similar to R Studio. To do so, [install Jupyter](https://jupyter.org/install) via the command line (see below). I also recommend installing the [ipykernel](https://ipython.readthedocs.io/en/stable/install/kernel_install.html#kernels-for-different-environments), which helps you select the right conda environment in Jupyter Lab.
+PyTorch can be a little finicky. I recommend following [these instructions](https://pytorch.org/get-started/locally/). Below is an example for Windows users. If you haven't already, activate your environment before installing.
+
+``` bash
+conda activate pyseter_env
+pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+```
+PyTorch is pretty big (over a gigabyte), so this may take a few minutes.
+
+#### Step 4: Install pyseter
+
+Now, install pyseter. If you haven't already, activate your environment before installing.
+
+``` bash
+conda activate pyseter_env
+pip3 install pyseter
+```
+
+Now you're ready to go!
+
+## Jupyter
+
+There are several different ways to interact with Python. The most common way for data analysts is through a *Jupyter Notebook*, which is similar to an RMarkdown document or a Quarto document. 
+
+Just to make things confusing, there are several ways to open Jupyter Notebooks. Personally, I think the easiest way is through [VS Code](https://code.visualstudio.com/download). VS Code is an IDE (like R Studio) for editing code of all languages, and has great support for [Jupyter notebooks](https://code.visualstudio.com/docs/datascience/jupyter-notebooks). Alternatively, [Positron](https://positron.posit.co) is a VS-Code-based editor developed by the R Studio team.
+
+Alternatively, you can try [Jupyter Lab](https://docs.jupyter.org/en/latest/). To do so, [install Jupyter](https://jupyter.org/install) via the command line (see below). I also recommend installing the [ipykernel](https://ipython.readthedocs.io/en/stable/install/kernel_install.html#kernels-for-different-environments), which helps you select the right conda environment in Jupyter Lab.
 
 ``` bash
 conda activate pyseter_env
@@ -46,37 +82,11 @@ Note that you only need to activate `pyseter_env` when you open a new command li
 jupyter lab
 ```
 
-Alternatively, you can open Jupyter Notebooks with [VS Code](https://code.visualstudio.com/download) (my favorite), or [Positron](https://positron.posit.co) (a hybrid between R Studio and VS Code).
+## Getting started with pyseter
 
-### Install PyTorch with GPU support
-
-Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. **This will only be realistic for users with an NVIDIA GPU or 16 GB Mac**. Without an NVIDIA GPU or Apple Silicon, extracting image features will be painfully slow (hours if not days), compared with minutes. 
-
-PyTorch can be a little finicky. I recommend following [these instructions](https://pytorch.org/get-started/locally/). Below is an example for Windows users. If you haven't already, activate your environment before installing.
-
-```
-conda activate pyseter_env
-pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
-```
-PyTorch is pretty big (over a gigabyte), so this may take a few minutes.
-
-### Install pyseter
-
-Finally, we can install pyseter. If you haven't already, activate your environment before installing.
-
-``` bash
-conda activate pyseter_env
-pip3 install pyseter
-```
-
-And that's it!
-
-## Getting started
-
-Open a Jupyter Notebook. You can do this through Jupyter Lab, VS Code, or Positron. The first step is verifying your PyTorch installation.
+Open a Jupyter Notebook. You can do this through Jupyter Lab, VS Code, or Positron. The first step is to verify your PyTorch installation.
 
 ``` python
 import pyseter
 pyseter.verify_pytorch()
-
 ```
