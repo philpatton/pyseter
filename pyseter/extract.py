@@ -10,7 +10,7 @@ Typical usage example:
   foo = ClassFoo()
   bar = foo.function_bar()
 """
-from typing import Optional
+from typing import Optional, Dict, LiteralString
 import os
 
 from sklearn.preprocessing import normalize
@@ -74,7 +74,7 @@ import torch.utils.checkpoint as cp
     #     out_path = os.path.join(out_dir, 'stochastic_feature_array.npy')
     #     np.save(out_path, features_array)
 
-def verify_pytorch():
+def verify_pytorch() -> None:
     """Verify PyTorch installation and show device options."""
     try:
         import torch
@@ -88,7 +88,7 @@ def verify_pytorch():
             print("✓ Apple Silicon (MPS) GPU available")
         
         if not torch.cuda.is_available() and not torch.backends.mps.is_available():
-            print("! No GPU acceleration available. Expect slow inference.")
+            print("! No GPU acceleration available. Expect slow feature extraction.")
             
         return None
     
@@ -98,7 +98,7 @@ def verify_pytorch():
 
         return None
     
-def get_best_device():
+def get_best_device() -> LiteralString:
     """Select torch device based on expected performance."""
     if torch.cuda.is_available():
         device = "cuda"
@@ -128,7 +128,7 @@ class FeatureExtractor:
         else:
             self.device = device
 
-    def extract(self, image_dir: str):
+    def extract(self, image_dir: str) -> Dict:
 
         print('Loading model...')
         model = self.get_model()
@@ -207,7 +207,7 @@ class FeatureExtractor:
         
         return model
 
-    def extract_features(self, dataloader, model):
+    def extract_features(self, dataloader, model) -> dict:
         """Extract features from images using the model."""
         file_list = []
         feature_list = []
