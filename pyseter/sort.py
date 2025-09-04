@@ -7,7 +7,7 @@ import os
 import shutil
 
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics import pairwise_distances
+from sklearn.metrics.pairwise import cosine_distances
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
@@ -77,17 +77,20 @@ class HierarchicalCluster:
         self.match_threshold=match_threshold
 
     def cluster_images(self, features: np.ndarray) -> np.ndarray:
-
+    
+        # convert similarity threshold to distance
         distance_threshold = 1 - self.match_threshold
 
-        # single linkage is necessary when using cosine distance
-        hac = AgglomerativeClustering(
+        # cluster using average linkage
+        hac_results = AgglomerativeClustering(
+            n_clusters=None, 
             distance_threshold=distance_threshold, 
-            n_clusters=None, metric='cosine', 
-            linkage='complete'
+            linkage='complete',
+            metric='cosine'
         ).fit(features)
 
-        cluster_labels = hac.labels_
+        # report results
+        cluster_labels = hac_results.labels_
         return cluster_labels 
 
 class ClusterResults:
@@ -169,11 +172,10 @@ class NetworkCluster:
             raise ValueError('Match threshold must lie between 0 and 1')
         self.match_threshold=match_threshold
 
-    def cluster_images(self, features: np.ndarray, message: bool=True) -> ClusterResults:
+    def cluster_images(self, similarity: np.ndarray, message: bool=True) -> ClusterResults:
 
         MODULARITY_THRESHOLD = 0.3
 
-        similarity = 1 - pairwise_distances(features, metric='cosine')
         matches = (similarity > self.match_threshold) 
         # matches = np.where(distance < distance_threshold, distance, 0)
 
@@ -182,7 +184,7 @@ class NetworkCluster:
         connected_components = (G.subgraph(c) for c in nx.connected_components(G))
 
         # Create a mapping from node index to cluster index
-        file_count, _ = features.shape 
+        file_count, _ = similarity.shape 
         cluster_labels = np.empty(file_count, dtype=object)
         cluster_indices = np.empty(file_count, dtype=int)
 
