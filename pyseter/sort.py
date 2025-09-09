@@ -23,25 +23,32 @@ def process_images(image_root: str) -> Tuple[List[str], List[str]]:
     image_list = []
     encounter_list = []
 
+    # the temporary directory lies in the image root
     parent = Path(image_root).parent.absolute()
-    tmp_dir = os.path.join(parent, 'all_images')
+    tmp_name = 'all_images'
+    tmp_dir = os.path.join(parent, tmp_name)
     os.makedirs(tmp_dir, exist_ok=True)
     
+    # loop over all the files in the image root 
     i = 0
     for path, dirs, files in os.walk(image_root, topdown=True):
-        dirs[:] = [d for d in dirs if d not in 'tmp']
+
+        # only look at images, not in the tmp dir, or images that have already been sorted
+        dirs[:] = [d for d in dirs if d not in tmp_name]
         dirs[:] = [d for d in dirs if 'cluster' not in d]
         for file in files:
             if not file.lower().endswith('.jpg'):
                 continue
-                
+            
             image_list.append(file)
             
+            # get string identifies for the encounter 
             full_path = os.path.join(path, file)
             p = Path(full_path)
-            encounter = p.parts[-2].replace(' (CROPPED)', '')
+            encounter = p.parts[-2]
             encounter_list.append(encounter)
             
+            # finally, copy all of the images to the tmp dir
             shutil.copy(full_path, tmp_dir)
             i += 1
             
