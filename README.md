@@ -14,7 +14,7 @@ Conda is an important tool for managing packages in Python. Unlike Python, R (fo
 
    - Download and install [Miniforge](https://conda-forge.org/download/) (a form of conda)
 
-After installing, you can verify your installation by opening the **command line interface**, which will depend on your operating system. Are you on Windows? Open the "miniforge prompt" in your start menu. Are you on Mac? Open the Terminal application. Then, run the following command
+After installing, you can verify your installation by opening the **command line interface** (CLI), which will depend on your operating system. Are you on Windows? Open the "miniforge prompt" in your start menu. Are you on Mac? Open the Terminal application. Then, type the following command into the CLI and hit return. 
 
 ```bash
 conda --version
@@ -26,6 +26,8 @@ You should see something like `conda 25.5.1`. Of course, Anaconda, miniconda, ma
 
 Then, you'll create an environment for the package will live in. Environments are walled off areas where we can install packages. This allows you to have multiple versions of the same package installed on your machine, which can help prevent conflicts. 
 
+Enter the following two commands into the CLI:
+
 ``` bash
 conda create -n pyseter_env
 conda activate pyseter_env
@@ -33,7 +35,7 @@ conda activate pyseter_env
 
 Here, I name (hence the `-n`) the environment `pyseter_env`, but you can call it anything you like!
 
-Now your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and pyseter (see below). 
+Now your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and pyseter (see below). To do so, enter the following command into the CLI.
 
 ``` bash
 conda install pip -y
@@ -81,6 +83,10 @@ Note that you only need to activate `pyseter_env` when you open a new command li
 ``` bash
 jupyter lab
 ```
+
+## AnyDorsal weights
+
+Pyseter relies on the [AnyDorsal algorithm](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167) to extract features from images. Please download the weights and place them anywhere you like. You'll reference the file location later when using the `FeatureExtractor`. 
 
 ## Getting started with pyseter
 
