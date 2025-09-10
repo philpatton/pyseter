@@ -3,6 +3,10 @@ dist/
 build/
 *.egg-info/
 
+# jupyter
+examples/.ipynb_checkpoints/
+
+
 # etc
 __pycache__/
 *.py[cod]
