@@ -6,7 +6,7 @@ A Python package that sorts images by an automatically generated ID before photo
 
 ### New to Python?
 
-While most biologists use R, we chose to release Pyseter as a Python package because it relies heavily on Pytorch, an deep learning library. If you're new to Python, please follow these steps to getting started with Python and conda. 
+While most biologists use R, we chose to release Pyseter as a Python package because it relies heavily on Pytorch, a deep learning library. If you're new to Python, please follow these steps to getting started with Python and conda. 
 
 #### Step 1: Install conda 
 
@@ -43,9 +43,9 @@ conda install pip -y
 
 #### Step 3: Install Pytorch
 
-Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. This will be fast for users with an NVIDIA GPU or 16 GB Mac with Apple Silicon. **For all other users, this will be extremely slow.** 
+Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. This will be fast for users with an NVIDIA GPU or 16 GB Mac with Apple Silicon. **For all other users, extracting features from images will be extremely slow.** 
 
-PyTorch can be a little finicky. I recommend following [these instructions](https://pytorch.org/get-started/locally/). Below is an example for Windows users. If you haven't already, activate your environment before installing.
+PyTorch installation can be a little finicky. I recommend following [these instructions](https://pytorch.org/get-started/locally/). Below is an example for Windows users. If you haven't already, activate your environment before installing.
 
 ``` bash
 conda activate pyseter_env
@@ -62,7 +62,27 @@ conda activate pyseter_env
 pip3 install pyseter
 ```
 
-Now you're ready to go!
+Now you're ready to go! You can verify your pyseter installation by opening Python in the CLI (assuming your environment is still activated).
+
+
+``` bash
+python
+```
+
+Then, run the following Python commands.
+
+``` python
+import pyseter
+pyseter.verify_pytorch()
+quit()
+```
+
+If successful, you should see a message like this. 
+
+```
+✓ PyTorch 2.7.0 detected
+✓ Apple Silicon (MPS) GPU available
+```
 
 ## Jupyter
 
@@ -88,11 +108,6 @@ jupyter lab
 
 Pyseter relies on the [AnyDorsal algorithm](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167) to extract features from images. Please download the weights and place them anywhere you like. You'll reference the file location later when using the `FeatureExtractor`. 
 
-## Getting started with pyseter
+## Verify your pyseter installation
 
 Open a Jupyter Notebook. You can do this through Jupyter Lab, VS Code, or Positron. The first step is to verify your PyTorch installation.
-
-``` python
-import pyseter
-pyseter.verify_pytorch()
-```
