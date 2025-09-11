@@ -13,28 +13,24 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-def prep_images(image_dir) -> None:
-    """Copy all images to a tempory directory and return encounter information"""
-    images, encounters = process_images(image_dir)
+def prep_images(image_dir: str, all_img_dir: str) -> None:
+    """Copy all images to a temporary directory and return encounter information"""
+    images, encounters = process_images(image_dir, all_img_dir)
     save_encounter_info(image_dir, encounters, images)
 
-def process_images(image_root: str) -> Tuple[List[str], List[str]]:
-    """Copy all images to a tempory directory and return encounter information"""
+def process_images(image_root: str, all_img_dir: str) -> Tuple[List[str], List[str]]:
+    """Copy all images to a temporary directory and return encounter information"""
     image_list = []
     encounter_list = []
 
     # the temporary directory lies in the image root
-    parent = Path(image_root).parent.absolute()
-    tmp_name = 'all_images'
-    tmp_dir = os.path.join(parent, tmp_name)
-    os.makedirs(tmp_dir, exist_ok=True)
     
     # loop over all the files in the image root 
     i = 0
     for path, dirs, files in os.walk(image_root, topdown=True):
 
         # only look at images, not in the tmp dir, or images that have already been sorted
-        dirs[:] = [d for d in dirs if d not in tmp_name]
+        dirs[:] = [d for d in dirs if d not in all_img_dir]
         dirs[:] = [d for d in dirs if 'cluster' not in d]
         for file in files:
             if not file.lower().endswith('.jpg'):
@@ -49,10 +45,10 @@ def process_images(image_root: str) -> Tuple[List[str], List[str]]:
             encounter_list.append(encounter)
             
             # finally, copy all of the images to the tmp dir
-            shutil.copy(full_path, tmp_dir)
+            shutil.copy(full_path, all_img_dir)
             i += 1
             
-    print(f'Copied {i} images to:', tmp_dir)
+    print(f'Copied {i} images to:', all_img_dir)
     
     return image_list, encounter_list
 
