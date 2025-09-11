@@ -24,6 +24,7 @@ def process_images(image_root: str, all_img_dir: str) -> Tuple[List[str], List[s
     encounter_list = []
 
     # the temporary directory lies in the image root
+    os.makedirs(all_img_dir, exist_ok=True)
     
     # loop over all the files in the image root 
     i = 0
