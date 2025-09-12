@@ -84,6 +84,12 @@ If successful, you should see a message like this.
 ✓ Apple Silicon (MPS) GPU available
 ```
 
+
+## Step 5: AnyDorsal weights
+
+Pyseter relies on the [AnyDorsal algorithm](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167) to extract features from images. Please download the weights and place them anywhere you like. You'll reference the file location later when using the `FeatureExtractor`. 
+
+
 ## Jupyter
 
 There are several different ways to interact with Python. The most common way for data analysts is through a *Jupyter Notebook*, which is similar to an RMarkdown document or a Quarto document. 
@@ -104,10 +110,6 @@ Note that you only need to activate `pyseter_env` when you open a new command li
 jupyter lab
 ```
 
-## AnyDorsal weights
+## Getting Started
 
-Pyseter relies on the [AnyDorsal algorithm](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167) to extract features from images. Please download the weights and place them anywhere you like. You'll reference the file location later when using the `FeatureExtractor`. 
-
-## Verify your pyseter installation
-
-Open a Jupyter Notebook. You can do this through Jupyter Lab, VS Code, or Positron. The first step is to verify your PyTorch installation.
+To get started with pyseter, please check out the "General Overview" [notebook](https://github.com/philpatton/pyseter/blob/main/examples/general-overview.ipynb) in the examples folder of this repository! 
