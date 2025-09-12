@@ -13,25 +13,26 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 
-def prep_images(image_dir: str, all_img_dir: str) -> None:
+def prep_images(image_dir: str, all_image_dir: str) -> None:
     """Copy all images to a temporary directory and return encounter information"""
-    images, encounters = process_images(image_dir, all_img_dir)
-    save_encounter_info(image_dir, encounters, images)
+    images, encounters = process_images(image_dir, all_image_dir)
+    working_dir = Path(image_dir).parent.absolute().as_posix()
+    save_encounter_info(working_dir, encounters, images)
 
-def process_images(image_root: str, all_img_dir: str) -> Tuple[List[str], List[str]]:
+def process_images(image_root: str, all_image_dir: str) -> Tuple[List[str], List[str]]:
     """Copy all images to a temporary directory and return encounter information"""
     image_list = []
     encounter_list = []
 
     # the temporary directory lies in the image root
-    os.makedirs(all_img_dir, exist_ok=True)
+    os.makedirs(all_image_dir, exist_ok=True)
     
     # loop over all the files in the image root 
     i = 0
     for path, dirs, files in os.walk(image_root, topdown=True):
 
         # only look at images, not in the tmp dir, or images that have already been sorted
-        dirs[:] = [d for d in dirs if d not in all_img_dir]
+        dirs[:] = [d for d in dirs if d not in all_image_dir]
         dirs[:] = [d for d in dirs if 'cluster' not in d]
         for file in files:
             if not file.lower().endswith('.jpg'):
@@ -46,10 +47,10 @@ def process_images(image_root: str, all_img_dir: str) -> Tuple[List[str], List[s
             encounter_list.append(encounter)
             
             # finally, copy all of the images to the tmp dir
-            shutil.copy(full_path, all_img_dir)
+            shutil.copy(full_path, all_image_dir)
             i += 1
             
-    print(f'Copied {i} images to:', all_img_dir)
+    print(f'Copied {i} images to:', all_image_dir)
     
     return image_list, encounter_list
 
@@ -244,17 +245,24 @@ def report_cluster_results(cluster_labs: np.ndarray) -> None:
     print(f'Found {len(label)} clusters.')
     print(f'Largest cluster has {np.max(count)} images.')
 
-def sort_images(id_df, input_dir: str, output_dir: str) -> None:
+def sort_images(id_df, all_image_dir: str, output_dir: str) -> None:
     """Sort images into folders based on cluster and encounter."""
 
-    if not os.path.isdir(input_dir):
-        raise ValueError('input_dir', input_dir, 'is not a valid directory')
+    # check that the input directory is a valid derectory
+    if not os.path.isdir(all_image_dir):
+        raise ValueError('input_dir', all_image_dir, 'is not a valid directory')
+    
+    # check that the names are valid
+    required_column_names = ['image', 'proposed_id', 'encounter']
+    names_correct = all([i in id_df.columns for i in required_column_names])
+    if not names_correct:
+        raise ValueError("id_df must contain the column names 'image', 'proposed_id', 'encounter'")
 
     if os.path.exists(output_dir):
         shutil.rmtree(output_dir)
     os.makedirs(output_dir)
 
-    grouped = id_df.groupby(['autosort_id', 'encounter'])
+    grouped = id_df.groupby(['proposed_id', 'encounter'])
     i = 0
     j = 0
     for (clust_id, enc_id), mini_df in grouped:
@@ -268,7 +276,7 @@ def sort_images(id_df, input_dir: str, output_dir: str) -> None:
 
         for img in mini_df['image']:
             j += 1
-            old_path = os.path.join(input_dir, img)
+            old_path = os.path.join(all_image_dir, img)
             shutil.copy(old_path, encounter_dir)
         
     print(f'Sorted {j} images into {i} folders.')
