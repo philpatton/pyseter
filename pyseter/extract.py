@@ -28,52 +28,6 @@ import torch
 import torch.nn.functional as F
 import torch.utils.checkpoint as cp
 
-# def main():
-
-#     # Print the name of the device
-#     if torch.cuda.is_available():
-#         print('... with cuda device:', torch.cuda.get_device_name())
-#         mem = torch.cuda.get_device_properties(0).total_memory
-#         print('... which has', int(mem / 1024**3), 'GB of memory')
-
-#     # sometimes I want to up the batch size depending on which GPU i get
-#     user_input = input('Continue? (y/n): ')
-#     if user_input.lower() != 'y':
-#         print('Exiting...')
-#         return
-    
-#     # Load the configuration file
-#     with open('config.yaml', 'r') as f:
-#         config = yaml.load(f, Loader=yaml.SafeLoader)
-
-#     # create an output directory
-#     root = config['image_root']
-#     out_dir = os.path.join(root, 'features')
-#     os.makedirs(out_dir, exist_ok=True)
-
-#     # extract the features
-#     sample_size = config['sample_size']
-#     for sample in range(sample_size):
-#         print('Sample:', sample)
-#         features = extract(config)
-
-#         # define the output path
-#         if config['stochastic']:
-#             out_path = os.path.join(out_dir, f'features_{sample:>03}.npy')
-#         else:
-#             out_path = os.path.join(out_dir, 'features.npy')
-
-#         # save the features
-#         np.save(out_path, features)
-
-    # # might as well save the features in a single array
-    # if config['stochastic']:
-    #     stochastic_features = [f for f in os.listdir(out_dir) if 'sample' in f]
-    #     files = [k for k in features.keys()]
-    #     features_array = load_all_features(stochastic_features, files)
-    #     out_path = os.path.join(out_dir, 'stochastic_feature_array.npy')
-    #     np.save(out_path, features_array)
-
 def verify_pytorch() -> None:
     """Verify PyTorch installation and show device options."""
     try:
