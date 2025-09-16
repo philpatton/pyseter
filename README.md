@@ -1,14 +1,14 @@
 # Pyseter
 
-A Python package that sorts images by an automatically generated ID before photo-identification. 
+Pyseter is Python package for processing images before photo-identification. 
 
-## Installation
+We expect that most people using Pyseter will be familiar with R, and completely new to Python. Regardless, we chose to release Pyseter as a Python package because it relies heavily on Pytorch, a deep learning library. If you're new to Python, please follow the steps under **Installation: No Python experience**. 
 
-### New to Python?
+If you're already a Pythonista, or just already have Python and conda installed, proceed to **Installation: Python and conda already installed**.
 
-While most biologists use R, we chose to release Pyseter as a Python package because it relies heavily on Pytorch, a deep learning library. If you're new to Python, please follow these steps to getting started with Python and conda. 
+## Installation: No Python experience
 
-#### Step 1: Install conda 
+### Install conda 
 
 Conda is an important tool for managing packages in Python. Unlike Python, R (for the most part) handles packages for you behind the scenes. Python requires a more hands on approach.
 
@@ -22,7 +22,7 @@ conda --version
 
 You should see something like `conda 25.5.1`. Of course, Anaconda, miniconda, mamba, or any other form of conda will work too.
 
-#### Step 2: Create a new environment
+### Create a new environment
 
 Then, you'll create an environment for the package will live in. Environments are walled off areas where we can install packages. This allows you to have multiple versions of the same package installed on your machine, which can help prevent conflicts. 
 
@@ -35,17 +35,21 @@ conda activate pyseter_env
 
 Here, I name (hence the `-n`) the environment `pyseter_env`, but you can call it anything you like!
 
-Now your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and pyseter (see below). To do so, enter the following command into the CLI.
+Now your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and Pyseter (see below). To do so, enter the following command into the CLI.
 
 ``` bash
 conda install pip -y
 ```
 
-#### Step 3: Install Pytorch
+Once this is working, you're ready to proceed to the next section.
+
+## Installation: Python and conda already installed
+
+### Install PyTorch
 
 Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. This will be fast for users with an NVIDIA GPU or 16 GB Mac with Apple Silicon. **For all other users, extracting features from images will be extremely slow.** 
 
-PyTorch installation can be a little finicky. I recommend following [these instructions](https://pytorch.org/get-started/locally/). Below is an example for Windows users. If you haven't already, activate your environment before installing.
+PyTorch installation can be a little finicky. I recommend following [these instructions](https://pytorch.org/get-started/locally/). Below is an example for Windows users. If you haven't already, open you're command line interface (e.g., the miniforge prompt). Then activate your environment before installing.
 
 ``` bash
 conda activate pyseter_env
@@ -53,63 +57,48 @@ pip3 install torch torchvision torchaudio --index-url https://download.pytorch.o
 ```
 PyTorch is pretty big (over a gigabyte), so this may take a few minutes.
 
-#### Step 4: Install pyseter
+### Install Pyseter
 
-Now, install pyseter. If you haven't already, activate your environment before installing.
+Now, install Pyseter. If you haven't already, activate your environment before installing.
 
 ``` bash
 conda activate pyseter_env
 pip3 install pyseter
 ```
 
-Now you're ready to go! You can verify your pyseter installation by opening Python in the CLI (assuming your environment is still activated).
+Now you're ready to go! 
 
+### AnyDorsal weights
 
-``` bash
-python
-```
+Pyseter relies on the [AnyDorsal algorithm](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167) to extract features from images. Please download the weights and place them anywhere you like. You'll reference the file location later when using the `FeatureExtractor`. 
 
-Then, run the following Python commands.
+## Getting Started: No Python Experience
+
+### Install VS Code
+
+Most users will interact with Pyseter via a Jupyter Notebook. There are many methods for opening, editing, running, and saving Jupyter Notebooks. We are personally biased towards VS Code. Of course, you are also welcome to use Jupyter Lab, or even Positron.
+
+First, [download VS Code](https://code.visualstudio.com/download) from the webpage according to your operating system, then follow the installation instructions.
+
+Open VS Code, then click "File -> Open Folder". Navigate to wherever you'd like to work, then click "New Folder." You can call this folder something like "learn-pyseter" or "pyseter-jobs". Open the new folder. Click "File -> New File" then select Jupyter Notebook. Click "Select Kernel" in the top right corner, select "Python environments" and then "pyseter_env", or whatever you named your environment. For more information, check out [this great overview](https://code.visualstudio.com/docs/datascience/jupyter-notebooks) of using Jupyter Notebooks in VS Code. 
+
+Now you're ready to proceed to the next section. 
+
+## Getting Started: Jupyter Notebook ready
+
+Open a Jupyter Notebook and select the appropriate kernel (i.e., the environment you created above). Then, verify the Pyseter installation by running the following cell in your notebook.
 
 ``` python
 import pyseter
 pyseter.verify_pytorch()
-quit()
 ```
 
-If successful, you should see a message like this. 
+If you're on a windows computer with an NVIDIA GPU, you should see something like
 
 ```
-✓ PyTorch 2.7.0 detected
-✓ Apple Silicon (MPS) GPU available
+✓ PyTorch 2.7.1+cu126 detected
+✓ CUDA GPU available: NVIDIA A30 MIG 2g.12gb
 ```
 
+Once this is working, you're ready to check out the "General Overview" [notebook](https://github.com/philpatton/pyseter/blob/main/examples/general-overview.ipynb) in the examples folder of this repository! 
 
-## Step 5: AnyDorsal weights
-
-Pyseter relies on the [AnyDorsal algorithm](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167) to extract features from images. Please download the weights and place them anywhere you like. You'll reference the file location later when using the `FeatureExtractor`. 
-
-
-## Jupyter
-
-There are several different ways to interact with Python. The most common way for data analysts is through a *Jupyter Notebook*, which is similar to an RMarkdown document or a Quarto document. 
-
-Just to make things confusing, there are several ways to open Jupyter Notebooks. Personally, I think the easiest way is through [VS Code](https://code.visualstudio.com/download). VS Code is an IDE (like R Studio) for editing code of all languages, and has great support for [Jupyter notebooks](https://code.visualstudio.com/docs/datascience/jupyter-notebooks). Alternatively, [Positron](https://positron.posit.co) is a VS-Code-based editor developed by the R Studio team.
-
-Alternatively, you can try [Jupyter Lab](https://docs.jupyter.org/en/latest/). To do so, [install Jupyter](https://jupyter.org/install) via the command line (see below). I also recommend installing the [ipykernel](https://ipython.readthedocs.io/en/stable/install/kernel_install.html#kernels-for-different-environments), which helps you select the right conda environment in Jupyter Lab.
-
-``` bash
-conda activate pyseter_env
-conda install jupyter ipykernel -y
-python -m ipykernel install --user --name pyseter --display-name "Python (pyseter)"
-```
-
-Note that you only need to activate `pyseter_env` when you open a new command line (i.e., terminal or miniforge prompt). Then you can open Jupyter Lab with the following command:
-
-``` bash
-jupyter lab
-```
-
-## Getting Started
-
-To get started with pyseter, please check out the "General Overview" [notebook](https://github.com/philpatton/pyseter/blob/main/examples/general-overview.ipynb) in the examples folder of this repository! 
