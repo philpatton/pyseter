@@ -13,6 +13,7 @@ Typical usage example:
 from typing import Optional, Dict, LiteralString
 import os
 
+from huggingface_hub import hf_hub_download
 from sklearn.preprocessing import normalize
 from torch import nn
 from torch.amp import autocast # pyright: ignore[reportPrivateImportUsage] 
@@ -69,18 +70,19 @@ def get_best_device() -> LiteralString:
 
 class FeatureExtractor:
 
-    def __init__(self, batch_size: int, model_path: str, 
+    def __init__(self, batch_size: int, 
                  device: Optional[str]=None, 
                  stochastic: bool=False,
                  bbox_csv: Optional[str]=None):
         self.batch_size = batch_size
-        self.model_path = model_path
         self.stochastic = stochastic
         self.bbox_csv = bbox_csv
         if device is None:
             self.device = get_best_device()
         else:
             self.device = device
+        self.model_repo_id = "philpatton/ristwhales"
+        self.model_filename = "ristwhales_model.pth"
 
     def extract(self, image_dir: str) -> Dict:
 
@@ -105,17 +107,26 @@ class FeatureExtractor:
             drop_path_rate=0.2,
             with_cp=False
         )
+
+        # input/output dimensions for the model
+        efficientnet_out_dim = 5504
+        happywhale_class_count = 15587
         
         # Create the complete model
         model = ImageClassifier(
             backbone=backbone,
-            in_channels=5504,  # Feature dimension for efficientnet_l2_ns
-            num_classes=15587  # Number of classes
+            in_channels=efficientnet_out_dim,  
+            num_classes=happywhale_class_count 
         )
         
+        # download the model from huggingface
+        model_path = hf_hub_download(
+            repo_id=self.model_repo_id,
+            filename=self.model_filename
+        )
+
         # Load the checkpoint
-        print('Loading model from:', self.model_path, )
-        checkpoint = torch.load(self.model_path, map_location=self.device)
+        checkpoint = torch.load(model_path, map_location=self.device)
         
         # Process state dict
         state_dict = checkpoint["state_dict"]
