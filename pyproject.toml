@@ -27,7 +27,8 @@ dependencies = [
     "networkx>=2.6.0",
     "matplotlib>=3.5.0",
     "tqdm>=4.60.0",
-    "timm>=0.6.0"
+    "timm>=0.6.0",
+    "huggingface-hub>=0.16.0"
 ]
 
 [project.urls]
