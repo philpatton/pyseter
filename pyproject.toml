@@ -32,7 +32,8 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/philpatton/pyseter"
+Homepage = "https://pypi.org/project/pyseter/"
+Changelog = "https://github.com/username/your-package/blob/main/CHANGELOG.md"
 # Documentation = "https://pyseter.readthedocs.io"
 Repository = "https://github.com/philpatton/pyseter"
 "Bug Tracker" = "https://github.com/philpatton/pyseter/issues"
