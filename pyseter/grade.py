@@ -3,6 +3,7 @@
 from warnings import warn
 
 from scipy.spatial.distance import cosine
+from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import normalize
 import numpy as np
 
@@ -15,8 +16,9 @@ def rate_distinctiveness(features: np.ndarray, match_threshold: float=0.6) -> np
     warn('Distinctiveness grades are experimental and should be verified.')
 
     # we use single linkage clustering to find the unrecognizable identity (UI)
+    scores = cosine_similarity(features)
     nc = NetworkCluster(match_threshold=match_threshold)
-    results = nc.cluster_images(features, message=False)
+    results = nc.cluster_images(scores, message=False)
 
     # we assume that the largest cluster is the UI
     cluster_ids = np.array(results.cluster_idx)
