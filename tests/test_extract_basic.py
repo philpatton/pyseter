@@ -5,7 +5,6 @@ from pyseter.extract import (
     verify_pytorch,
     get_best_device,
     list_images,
-    load_bounding_boxes
 )
 
 ## basics
