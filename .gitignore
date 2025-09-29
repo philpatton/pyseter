@@ -9,6 +9,8 @@ examples/.ipynb_checkpoints/
 # testing
 .vscode/
 .pytest_cache/
+.coverage
+htmlcov/
 
 # etc
 __pycache__/
