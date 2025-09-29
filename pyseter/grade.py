@@ -13,7 +13,7 @@ def rate_distinctiveness(features: np.ndarray, match_threshold: float=0.6) -> np
     '''Grade images by their distinctiveness.'''
 
     # watch out!
-    warn('Distinctiveness grades are experimental and should be verified.')
+    warn(UserWarning('Distinctiveness grades are experimental and should be verified.'))
 
     # we use single linkage clustering to find the unrecognizable identity (UI)
     scores = cosine_similarity(features)
