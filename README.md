@@ -70,7 +70,7 @@ Now you're ready to go!
 
 ### AnyDorsal weights
 
-Pyseter relies on the [AnyDorsal algorithm](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167) to extract features from images. Please download the weights and place them anywhere you like. You'll reference the file location later when using the `FeatureExtractor`. 
+Pyseter relies on the [AnyDorsal algorithm](https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167) to extract features from images. The first time you use the `FeatureExtractor`, Pyseter will download the AnyDorsal weights from Hugging Face. The weights take up roughly 4.5 GB. As such, to use the `FeatureExtractor`, users must have enough storage space to accommodate the weights. 
 
 ## Getting Started: No Python Experience
 
