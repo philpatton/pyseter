@@ -6,8 +6,9 @@ build/
 # jupyter
 examples/.ipynb_checkpoints/
 
-# vs code
+# testing
 .vscode/
+.pytest_cache/
 
 # etc
 __pycache__/
