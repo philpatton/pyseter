@@ -47,3 +47,9 @@ Repository = "https://github.com/philpatton/pyseter"
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["pyseter*"]
+
+# pyproject.toml
+[tool.pytest.ini_options]
+filterwarnings = [
+    "ignore::UserWarning",
+]
