@@ -7,7 +7,6 @@ import os
 import shutil
 
 from sklearn.cluster import AgglomerativeClustering
-from sklearn.metrics.pairwise import cosine_distances
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
