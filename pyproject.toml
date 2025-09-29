@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "pyseter"
-version = "0.2.0"
+version = "0.2.1"
 description = "Sort images by an automatically generated ID before photo-ID"
 readme = "README.md"
 authors = [{name = "Philip T. Patton", email = "philtpatton@gmail.com"}]
