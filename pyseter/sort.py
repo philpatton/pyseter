@@ -34,7 +34,7 @@ def process_images(image_root: str, all_image_dir: str) -> Tuple[List[str], List
         dirs[:] = [d for d in dirs if d not in all_image_dir]
         dirs[:] = [d for d in dirs if 'cluster' not in d]
         for file in files:
-            if not file.lower().endswith('.jpg'):
+            if not file.lower().endswith(('.jpg', '.jpeg', '.png')):
                 continue
             
             image_list.append(file)
