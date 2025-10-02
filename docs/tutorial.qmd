@@ -25,7 +25,7 @@ date: last-modified
 bibliography: references.bib
 csl: ecology.csl
 number-sections: true
-jupyter: "pymc_env"
+jupyter: "python3"
   
 execute:
   echo: true
