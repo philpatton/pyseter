@@ -13,7 +13,47 @@ import numpy as np
 import pandas as pd
 
 def prep_images(image_dir: str, all_image_dir: str) -> None:
-    """Copy all images to a temporary directory and return encounter information"""
+    """Copy all images to a flat directory and save a csv with encounter info.
+
+    Some users may have their image directory structured such that each image
+    is in a subfolder by encounter, e.g., original_images/enc1/img1.jpg. The
+    `FeatureExtractor` in `pyseter.extract` prefers flat directories. 
+    `prep_images` flattens the `original_images` directory by copying every 
+    image to `all_image_dir`, then saves a csv with encounter information to the
+    working directory. 
+
+    Parameters
+    ----------
+    image_dir : str
+        Path to directory containing images.
+    all_image_dir : str
+        Path to new directory where user wants to copy all their images. 
+    
+    Returns
+    -------
+    None
+        Saves images to the all_image_dir and the encounter information to the 
+        csv in the working_dir.
+
+    Examples
+    --------
+    For a complete working example with real images, see:
+    
+    - [Tutorial](../tutorial.ipynb)
+    
+    Basic usage pattern::
+    
+        from pyseter.sort import prep_images
+
+        # old directory, structured by encounter
+        working_dir = 'working_dir'
+        original_image_dir = working_dir + '/original_images'
+
+        # new, flattened directory containing every image
+        image_dir = working_dir + '/all_images'
+        prep_images(original_image_dir, all_image_dir=image_dir)  
+
+    """
     images, encounters = process_images(image_dir, all_image_dir)
     working_dir = Path(image_dir).parent.absolute().as_posix()
     save_encounter_info(working_dir, encounters, images)
@@ -59,11 +99,24 @@ def save_encounter_info(output_dir: str, encounters: List[str], images: List[str
     encounter_df.to_csv(encounter_path, index=False)
     print('Saved encounter information to:', encounter_path)
 
-def load_features(image_root: str) -> Tuple[np.ndarray, np.ndarray]:
-    """Load features from disk."""
+def load_features(feature_path: str) -> Tuple[np.ndarray, np.ndarray]:
+    """Load previously extracted features.
+    
+    Load features produced by the FeatureExtractor.
+
+    Parameters
+    ----------
+    feature_path : str
+        Path to .npy file
+    
+    Returns
+    -------
+    filenames, feature_array: np.array, np.array 
+        The `filenames` array correspond to each row of the `feature_array`,
+        which has shape `(image_count, feature_count)`
+    """
 
     # the features are stored in a dictionary with image names as keys
-    feature_path = os.path.join(image_root, 'features', 'features.npy')
     feature_dict = np.load(feature_path, allow_pickle=True).item()
 
     # unpack the dictionary into arrays
@@ -73,7 +126,46 @@ def load_features(image_root: str) -> Tuple[np.ndarray, np.ndarray]:
     return image_names, feature_array
 
 class HierarchicalCluster:
+    """Hierarchical clustering of images
+    
+    Cluster images with the hierarchical agglomerative clustering (HAC) 
+    algorithm from scikit-learn.
 
+    Parameters
+    ----------
+    match_threshold : float
+        Threshold dictating how closely knit clusters should be. Must be between
+        zero and one. 
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyseter.sort import HierarchicalCluster
+    >>> from numpy.random import normal
+    >>> 
+    >>> cluster1 = normal(-200, 1, size=(15, 5504))
+    >>> cluster2 = normal(200, 1, size=(5, 5504))
+    >>> feature_array = np.vstack([cluster1, cluster2])
+    >>> 
+    >>> hac = HierarchicalCluster(match_threshold=0.5)
+    >>> cluster_indices = hac.cluster_images(feature_array)
+    >>> len(np.unique(cluster_indices))
+    2
+
+    Attributes
+    ----------
+    match_threshold
+        Threshold indicating how closely knit clusters should be.
+
+    Notes
+    -----
+    HierarchicalCluster works best for larger datasets, say, over 1000 images. 
+    HierarchicalCluster may be prone to false negative errors.
+
+    HierarchicalCluster uses the version of HAC with a distance threshold 
+    specified--i.e., an unknown number of clusters--complete linkage, and cosine
+    as the distance metric.
+    """
     def __init__(self, match_threshold: float=0.5) -> None:
 
         if (match_threshold > 1.0) or (match_threshold < 0.0):
@@ -81,6 +173,23 @@ class HierarchicalCluster:
         self.match_threshold=match_threshold
 
     def cluster_images(self, features: np.ndarray) -> np.ndarray:
+        """Cluster images
+        
+        Cluster feature vectors according to their cosine distance from one 
+        another.
+
+        Parameters
+        ----------
+        features : np.ndarray
+            Array with shape `(image_count, feature_count)` containing the 
+            feature vector for each image.
+        
+        Returns
+        -------
+        np.ndarray
+            NumPy array containing integer labels for each cluster.
+        
+        """
     
         # convert similarity threshold to distance
         distance_threshold = 1 - self.match_threshold
@@ -96,6 +205,128 @@ class HierarchicalCluster:
         # report results
         cluster_labels = hac_results.labels_
         return cluster_labels 
+
+class NetworkCluster: 
+    """Network clustering of images
+    
+    Cluster images with a simple network, where images are nodes and edges
+    are images whose similarity score is above the `match_threshold`
+
+    Parameters
+    ----------
+    match_threshold : float
+        Similarity score threshold above which two images are considered to 
+        contain the same animal. Must lie between [0.0, 1.0]
+
+    Notes
+    -----
+    Network clustering works best with smaller datasets, say, around 1000 images.
+
+    Examples
+    --------
+    >>> import numpy as np
+    >>> from pyseter.sort import NetworkCluster
+    >>> from sklearn.metrics.pairwise import cosine_similarity
+    >>> from numpy.random import normal
+    >>> 
+    >>> cluster1 = normal(-200, 1, size=(15, 5504))
+    >>> cluster2 = normal(200, 1, size=(5, 5504))
+    >>> feature_array = np.vstack([cluster1, cluster2])
+    >>> scores = cosine_similarity(feature_array)
+    >>> 
+    >>> nc = NetworkCluster(match_threshold=0.5)
+    >>> results = nc.cluster_images(scores)
+    >>> len(np.unique(results.cluster_idx))
+    2
+
+    """
+
+    def __init__(self, match_threshold: float=0.5) -> None:
+
+        if (match_threshold > 1.0) or (match_threshold < 0.0):
+            raise ValueError('Match threshold must lie between 0 and 1')
+        self.match_threshold=match_threshold
+
+    def cluster_images(self, similarity: np.ndarray, message: bool=True):
+        """Cluster images
+        
+        Cluster images based on their similarity scores with network clustering.
+
+        Parameters
+        ----------
+        similarity : np.ndarray
+            Array with shape `(image_count, image_count)` indicating the 
+            similarity between each pair of images. 
+        message : bool
+            Should a message about potential false positives be printed to the
+            console?
+        
+        Returns
+        -------
+        results : ClusterResults
+            Object of type `pyster.ClusterResult`. Integer labels for the cluster
+            assignment of each image can be accessed with `results.cluster_idx`.
+        
+        """
+
+        MODULARITY_THRESHOLD = 0.3
+
+        matches = (similarity > self.match_threshold) 
+        # matches = np.where(distance < distance_threshold, distance, 0)
+
+        # Get connected components from the graph
+        G = nx.from_numpy_array(matches)
+        connected_components = (G.subgraph(c) for c in nx.connected_components(G))
+
+        # Create a mapping from node index to cluster index
+        file_count, _ = similarity.shape 
+        cluster_labels = np.empty(file_count, dtype=object)
+        cluster_indices = np.empty(file_count, dtype=int)
+
+        # Assign clusters to the cluster_labels array
+        df_list = []
+        bad_clusters = []
+        bad_cluster_idx = []
+        for cluster_idx, subgraph in enumerate(connected_components):
+
+            cluster_label = f'ID_{cluster_idx:04d}'
+            for node in subgraph:
+                cluster_labels[node] = cluster_label
+                cluster_indices[node] = cluster_idx
+
+            # modularity is the warning sign for a bad cluster
+            community = nx.community.louvain_communities(subgraph) # type: ignore
+            modularity = nx.community.quality.modularity(subgraph, community) # pyright: ignore[reportAttributeAccessIssue]
+
+            if modularity > MODULARITY_THRESHOLD:
+                bad_clusters.append(cluster_label)
+                bad_cluster_idx.append(cluster_idx)
+                
+            for community_idx, comm in enumerate(community):
+                for node in comm:
+                    row = pd.DataFrame({
+                        'cluster_id': [cluster_label],
+                        'modularity': modularity,
+                        # 'filename': fnames[node],
+                        'community': community_idx
+                    })
+                    df_list.append(row)
+
+        if bad_clusters and message:
+            w = f'Following clusters may contain false positives:\n{bad_clusters}'
+            print(w)
+
+        df = pd.concat(df_list, ignore_index=True)
+
+        results = ClusterResults(cluster_labels)
+        # results.filenames = fnames
+        results.graph = G
+        results.false_positive_df = df
+        results.bad_clusters = bad_clusters
+        results.bad_cluster_idx = bad_cluster_idx
+        results.cluster_idx = format_ids(cluster_indices)
+
+        return results
 
 class ClusterResults:
     def __init__(self, cluster_labels):
@@ -168,75 +399,6 @@ class ClusterResults:
 def format_ids(ids: np.ndarray) -> List:
     return [f'ID-{i:04d}' for i in ids]
 
-class NetworkCluster: 
-
-    def __init__(self, match_threshold: float=0.5) -> None:
-
-        if (match_threshold > 1.0) or (match_threshold < 0.0):
-            raise ValueError('Match threshold must lie between 0 and 1')
-        self.match_threshold=match_threshold
-
-    def cluster_images(self, similarity: np.ndarray, message: bool=True) -> ClusterResults:
-
-        MODULARITY_THRESHOLD = 0.3
-
-        matches = (similarity > self.match_threshold) 
-        # matches = np.where(distance < distance_threshold, distance, 0)
-
-        # Get connected components from the graph
-        G = nx.from_numpy_array(matches)
-        connected_components = (G.subgraph(c) for c in nx.connected_components(G))
-
-        # Create a mapping from node index to cluster index
-        file_count, _ = similarity.shape 
-        cluster_labels = np.empty(file_count, dtype=object)
-        cluster_indices = np.empty(file_count, dtype=int)
-
-        # Assign clusters to the cluster_labels array
-        df_list = []
-        bad_clusters = []
-        bad_cluster_idx = []
-        for cluster_idx, subgraph in enumerate(connected_components):
-
-            cluster_label = f'ID_{cluster_idx:04d}'
-            for node in subgraph:
-                cluster_labels[node] = cluster_label
-                cluster_indices[node] = cluster_idx
-
-            # modularity is the warning sign for a bad cluster
-            community = nx.community.louvain_communities(subgraph) # type: ignore
-            modularity = nx.community.quality.modularity(subgraph, community) # pyright: ignore[reportAttributeAccessIssue]
-
-            if modularity > MODULARITY_THRESHOLD:
-                bad_clusters.append(cluster_label)
-                bad_cluster_idx.append(cluster_idx)
-                
-            for community_idx, comm in enumerate(community):
-                for node in comm:
-                    row = pd.DataFrame({
-                        'cluster_id': [cluster_label],
-                        'modularity': modularity,
-                        # 'filename': fnames[node],
-                        'community': community_idx
-                    })
-                    df_list.append(row)
-
-        if bad_clusters and message:
-            w = f'Following clusters may contain false positives:\n{bad_clusters}'
-            print(w)
-
-        df = pd.concat(df_list, ignore_index=True)
-
-        results = ClusterResults(cluster_labels)
-        # results.filenames = fnames
-        results.graph = G
-        results.false_positive_df = df
-        results.bad_clusters = bad_clusters
-        results.bad_cluster_idx = bad_cluster_idx
-        results.cluster_idx = format_ids(cluster_indices)
-
-        return results
-
 def report_cluster_results(cluster_labs: np.ndarray) -> None:
 
     # quick summary of the cluster_labs results
@@ -245,7 +407,32 @@ def report_cluster_results(cluster_labs: np.ndarray) -> None:
     print(f'Largest cluster has {np.max(count)} images.')
 
 def sort_images(id_df, all_image_dir: str, output_dir: str) -> None:
-    """Sort images into folders based on cluster and encounter."""
+    """Sort images into subfolders by proposed ID then encounter.
+
+    Copy images from the flat `all_image_dir` into the `output_dir`, where the 
+    `output_dir` is now divided in subfolders by proposed ID then encounter. 
+
+    Parameters
+    ----------
+    id_df : pd.DataFrame
+        Pandas DataFrame with columns `['image', 'proposed_id', 'encounter']`. 
+    all_image_dir : str
+        Path to flat directory with every image in the `id_df`.
+    output_dir : str
+        Path to new directory into which `sort_images` will copy files. 
+    
+    Returns
+    -------
+    None
+        Copies images to the output_dir.
+
+    Examples
+    --------
+    For a complete working example with real images, see:
+    
+    - [Tutorial](../tutorial.ipynb) 
+
+    """
 
     # check that the input directory is a valid derectory
     if not os.path.isdir(all_image_dir):

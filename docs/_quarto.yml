@@ -1,0 +1,72 @@
+project:
+  type: website
+  output-dir: _site
+
+website:
+  title: "Pyseter"
+  site-url: "https://philpatton.github.io/pyseter"
+  repo-url: "https://github.com/philpatton/pyseter"
+  repo-actions: [edit, issue]
+  
+  navbar:
+    background: primary
+    left:
+      - text: "Install"
+        file: install.qmd
+      - text: "Tutorial"
+        file: tutorial.ipynb
+      - text: "API Reference"
+        file: api/index.qmd  # Quartodoc generates this
+
+    right:
+      - icon: github
+        href: "https://github.com/philpatton/pyseter"
+
+  sidebar:
+    - title: "Installation"
+      style: "docked"
+      # background: light
+      contents:
+        - install.qmd
+        - install-r.qmd
+
+format:
+  html:
+    theme: 
+      light: flatly
+      dark: darkly
+    toc: true
+    code-copy: true
+    code-fold: false
+
+quartodoc:
+  style: pkgdown  # or "single-page"
+  dir: api
+  package: pyseter
+  title: API Reference
+  sections:
+
+    - title: Feature Extraction
+      desc: Extracting feature vectors from images
+      contents:
+        - extract.FeatureExtractor
+
+    - title: Sorting and Clustering
+      desc: Clustering images by proposed IDs
+      contents:
+        - sort.HierarchicalCluster
+        - sort.NetworkCluster
+        - sort.prep_images
+        - sort.sort_images
+        - sort.load_features
+    
+    - title: Grading
+      desc: Grade images by distinctiveness
+      contents:
+        - grade.rate_distinctiveness
+
+    - title: Verifying Installation
+      desc: Functions to make sure PyTorch is working
+      contents:
+        - get_best_device
+        - verify_pytorch

@@ -1,0 +1,73 @@
+# extract.FeatureExtractor { #pyseter.extract.FeatureExtractor }
+
+```python
+extract.FeatureExtractor(batch_size, device=None, stochastic=False)
+```
+
+Extract features from images.
+
+Extract feature vectors for individual identification from images. 
+Currently, FeatureExtractor only includes the AnyDorsal algorithm.
+
+## Parameters {.doc-section .doc-section-parameters}
+
+| Name       | Type                   | Description                                                                                                       | Default    |
+|------------|------------------------|-------------------------------------------------------------------------------------------------------------------|------------|
+| batch_size | int                    | The number of images the GPU will process.                                                                        | _required_ |
+| device     | (None, cuda, mps, cpu) | Device with which to extract the features. By default, the best device is chosen for the user (cuda, mps, or cpu) | `None`     |
+| stochastic | boolean                | Currently unused.                                                                                                 | `False`    |
+
+## Examples {.doc-section .doc-section-examples}
+
+For a complete working example with real images, see:
+
+- [Tutorial](../tutorial.ipynb)
+
+Basic usage pattern::
+
+    from pyseter.extract import FeatureExtractor
+    
+    # Initialize extractor
+    extractor = FeatureExtractor(batch_size=16)
+    
+    # Extract features from all images
+    features = extractor.extract('path/to/images/')
+    
+    # Access individual image features
+    img_features = features['my_image.jpg']
+
+## Methods
+
+| Name | Description |
+| --- | --- |
+| [extract](#pyseter.extract.FeatureExtractor.extract) | Extracts features from images. |
+
+### extract { #pyseter.extract.FeatureExtractor.extract }
+
+```python
+extract.FeatureExtractor.extract(image_dir, bbox_csv=None)
+```
+
+Extracts features from images.
+
+Extracts feature vectors for every image in a directory with the 
+AnyDorsal algorithm.  
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name      | Type   | Description                                                                                                                               | Default    |
+|-----------|--------|-------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| image_dir | str    | Directory of images to from which to extract features. Directory  should be flat, in that there should not be subdirectories with images. | _required_ |
+| bbox_csv  | str    | Optional path to csv file with bounding boxes for each image in the  image_dir.                                                           | `None`     |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description                                                                                                                                                                                                                                                                                                               |
+|--------|--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|        | dict   | A mapping image file names to the corresponding feature vector.  The file names are represented as strings, while the feature vector. is a NumPy array. For example: ``` {'img1.jpg': np.array([0.1, 0.1, 0.2, ..., 0.9]),  'img2.jpg': np.array([0.2, 0.3, 0.4, ..., 0.1])} ``` The numpy array should have length 5504. |
+
+#### Raises {.doc-section .doc-section-raises}
+
+| Name   | Type             | Description                                                                                                             |
+|--------|------------------|-------------------------------------------------------------------------------------------------------------------------|
+|        | OutOfMemoryError | The GPU has run out of memory. Try reducing your batch size, or  reducing the file size of the images in the directory. |

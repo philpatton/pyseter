@@ -1,0 +1,38 @@
+# sort.prep_images { #pyseter.sort.prep_images }
+
+```python
+sort.prep_images(image_dir, all_image_dir)
+```
+
+Copy all images to a flat directory and save a csv with encounter info.
+
+Some users may have their image directory structured such that each image
+is in a subfolder by encounter, e.g., original_images/enc1/img1.jpg. The
+`FeatureExtractor` in `pyseter.extract` prefers flat directories. 
+`prep_images` flattens the `original_images` directory by copying every 
+image to `all_image_dir`, then saves a csv with encounter information to the
+working directory. 
+
+## Parameters {.doc-section .doc-section-parameters}
+
+| Name          | Type   | Description                                                      | Default    |
+|---------------|--------|------------------------------------------------------------------|------------|
+| image_dir     | str    | Path to directory containing images.                             | _required_ |
+| all_image_dir | str    | Path to new directory where user wants to copy all their images. | _required_ |
+
+## Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description                                                                                     |
+|--------|--------|-------------------------------------------------------------------------------------------------|
+|        | None   | Saves images to the all_image_dir and the encounter information to the  csv in the working_dir. |
+
+## Examples {.doc-section .doc-section-examples}
+
+For a complete working example with real images, see:
+
+- [Tutorial](../tutorial.ipynb)
+
+Basic usage pattern::
+
+    from pyseter.sort import prep_images
+    prep_images('working_dir/original_images/')

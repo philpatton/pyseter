@@ -1,0 +1,66 @@
+---
+title: "Python users"
+---
+
+This page has information on how to install for users who have some familiarity with Python. R users should [see this page](install-r.qmd), which has more thorough instructions and introductions to Python concepts. 
+
+Users can use whatever package management utility they like, such as conda, venv, pixi, or uv. Both PyTorch and 
+Pyseter can be installed with pip. 
+
+## Install PyTorch
+
+Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. Extracting features should be fast for users with an NVIDIA GPU, and reasonable for users with a Mac with Apple Silicon. 
+
+:::{.callout-warning}
+For all other users, extracting features from images will be extremely slow.
+:::
+
+PyTorch installation can be a little finicky. Essentially, it depends on what operating system you're using, and what version of CUDA you're using. To install PyTorch, I recommend following [these instructions](https://pytorch.org/get-started/locally/). 
+
+### Windows users
+
+Below is an example for Windows users. This relies on CUDA 12.8, which should work for most people. 
+
+``` bash
+pip3 install torch torchvision --index-url https://download.pytorch.org/whl/cu128
+```
+PyTorch is pretty big (over a gigabyte), so this may take a few minutes.
+
+### Mac Users
+
+Below is an example for Mac users. The Mac version of PyTorch relies on [MPS acceleration](https://docs.pytorch.org/docs/stable/notes/mps.html), which is good but not at the level of CUDA.
+
+``` bash
+pip3 install torch torchvision 
+```
+PyTorch is pretty big (over a gigabyte), so this may take a few minutes.
+
+:::{.callout-warning}
+Mac users will need to have an Apple Silicon processor, e.g., an M1 chip. Additionally, they will need at least 16 GB of memory (RAM) to use AnyDorsal.
+:::
+
+## Install Pyseter
+
+Now, install Pyseter from PyPI. 
+
+``` bash
+pip3 install pyseter
+```
+
+Now you're ready to go! 
+
+## Verify the installation
+
+Verify the Pyseter installation by running the following commands.
+
+``` python
+import pyseter
+pyseter.verify_pytorch()
+```
+
+If you have access to an NVIDIA GPU, you should see something like
+
+```
+✓ PyTorch 2.7.1+cu126 detected
+✓ CUDA GPU available: NVIDIA A30 MIG 2g.12gb
+```

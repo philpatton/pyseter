@@ -1,0 +1,38 @@
+# API Reference {.doc .doc-index}
+
+## Feature Extraction
+
+Extracting feature vectors from images
+
+| | |
+| --- | --- |
+| [extract.FeatureExtractor](extract.FeatureExtractor.qmd#pyseter.extract.FeatureExtractor) | Extract features from images. |
+
+## Sorting and Clustering
+
+Clustering images by proposed IDs
+
+| | |
+| --- | --- |
+| [sort.HierarchicalCluster](sort.HierarchicalCluster.qmd#pyseter.sort.HierarchicalCluster) | Hierarchical clustering of images |
+| [sort.NetworkCluster](sort.NetworkCluster.qmd#pyseter.sort.NetworkCluster) | Network clustering of images |
+| [sort.prep_images](sort.prep_images.qmd#pyseter.sort.prep_images) | Copy all images to a flat directory and save a csv with encounter info. |
+| [sort.sort_images](sort.sort_images.qmd#pyseter.sort.sort_images) | Sort images into subfolders by proposed ID then encounter. |
+| [sort.load_features](sort.load_features.qmd#pyseter.sort.load_features) | Load previously extracted features. |
+
+## Grading
+
+Grade images by distinctiveness
+
+| | |
+| --- | --- |
+| [grade.rate_distinctiveness](grade.rate_distinctiveness.qmd#pyseter.grade.rate_distinctiveness) | Grade images by their distinctiveness. |
+
+## Verifying Installation
+
+Functions to make sure PyTorch is working
+
+| | |
+| --- | --- |
+| [get_best_device](get_best_device.qmd#pyseter.get_best_device) | Select torch device based on expected performance. |
+| [verify_pytorch](verify_pytorch.qmd#pyseter.verify_pytorch) | Verify PyTorch installation and show device options. |
