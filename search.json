@@ -298,6 +298,13 @@
     "text": "get_best_device\nget_best_device()\nSelect torch device based on expected performance."
   },
   {
+    "objectID": "api/sort.ClusterResults.html",
+    "href": "api/sort.ClusterResults.html",
+    "title": "sort.ClusterResults",
+    "section": "",
+    "text": "sort.ClusterResults\nsort.ClusterResults(cluster_labels)\nStoring NetworkCluster results."
+  },
+  {
     "objectID": "api/sort.process_images.html",
     "href": "api/sort.process_images.html",
     "title": "sort.process_images",
@@ -309,7 +316,7 @@
     "href": "api/index.html",
     "title": "API Reference",
     "section": "",
-    "text": "Extracting feature vectors from images\n\n\n\nextract.FeatureExtractor\nExtract features from images.\n\n\n\n\n\n\nClustering images by proposed IDs\n\n\n\nsort.HierarchicalCluster\nHierarchical clustering of images\n\n\nsort.NetworkCluster\nNetwork clustering of images\n\n\nsort.prep_images\nCopy all images to a flat directory and save a csv with encounter info.\n\n\nsort.sort_images\nSort images into subfolders by proposed ID then encounter.\n\n\nsort.load_features\nLoad previously extracted features.\n\n\n\n\n\n\nGrade images by distinctiveness\n\n\n\ngrade.rate_distinctiveness\nGrade images by their distinctiveness.\n\n\n\n\n\n\nFunctions to make sure PyTorch is working\n\n\n\nget_best_device\nSelect torch device based on expected performance.\n\n\nverify_pytorch\nVerify PyTorch installation and show device options."
+    "text": "Extracting feature vectors from images\n\n\n\nextract.FeatureExtractor\nExtract features from images.\n\n\n\n\n\n\nClustering images by proposed IDs\n\n\n\nsort.HierarchicalCluster\nHierarchical clustering of images\n\n\nsort.NetworkCluster\nNetwork clustering of images\n\n\nsort.ClusterResults\nStoring NetworkCluster results.\n\n\nsort.prep_images\nCopy all images to a flat directory and save a csv with encounter info.\n\n\nsort.sort_images\nSort images into subfolders by proposed ID then encounter.\n\n\nsort.load_features\nLoad previously extracted features.\n\n\n\n\n\n\nGrade images by distinctiveness\n\n\n\ngrade.rate_distinctiveness\nGrade images by their distinctiveness.\n\n\n\n\n\n\nFunctions to make sure PyTorch is working\n\n\n\nget_best_device\nSelect torch device based on expected performance.\n\n\nverify_pytorch\nVerify PyTorch installation and show device options."
   },
   {
     "objectID": "api/index.html#feature-extraction",
@@ -323,7 +330,7 @@
     "href": "api/index.html#sorting-and-clustering",
     "title": "API Reference",
     "section": "",
-    "text": "Clustering images by proposed IDs\n\n\n\nsort.HierarchicalCluster\nHierarchical clustering of images\n\n\nsort.NetworkCluster\nNetwork clustering of images\n\n\nsort.prep_images\nCopy all images to a flat directory and save a csv with encounter info.\n\n\nsort.sort_images\nSort images into subfolders by proposed ID then encounter.\n\n\nsort.load_features\nLoad previously extracted features."
+    "text": "Clustering images by proposed IDs\n\n\n\nsort.HierarchicalCluster\nHierarchical clustering of images\n\n\nsort.NetworkCluster\nNetwork clustering of images\n\n\nsort.ClusterResults\nStoring NetworkCluster results.\n\n\nsort.prep_images\nCopy all images to a flat directory and save a csv with encounter info.\n\n\nsort.sort_images\nSort images into subfolders by proposed ID then encounter.\n\n\nsort.load_features\nLoad previously extracted features."
   },
   {
     "objectID": "api/index.html#grading",

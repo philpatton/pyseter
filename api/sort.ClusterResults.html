@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>index – Pyseter</title>
+<title>sort.clusterresults – Pyseter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -266,7 +301,7 @@ ul.task-list li input[type="checkbox"] {
 <span class="menu-text">Tutorial</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="../api/index.html" aria-current="page"> 
+    <a class="nav-link" href="../api/index.html"> 
 <span class="menu-text">API Reference</span></a>
   </li>  
 </ul>
@@ -293,15 +328,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#api-reference" id="toc-api-reference" class="nav-link active" data-scroll-target="#api-reference">API Reference</a>
-  <ul class="collapse">
-  <li><a href="#feature-extraction" id="toc-feature-extraction" class="nav-link" data-scroll-target="#feature-extraction">Feature Extraction</a></li>
-  <li><a href="#sorting-and-clustering" id="toc-sorting-and-clustering" class="nav-link" data-scroll-target="#sorting-and-clustering">Sorting and Clustering</a></li>
-  <li><a href="#grading" id="toc-grading" class="nav-link" data-scroll-target="#grading">Grading</a></li>
-  <li><a href="#verifying-installation" id="toc-verifying-installation" class="nav-link" data-scroll-target="#verifying-installation">Verifying Installation</a></li>
-  </ul></li>
+  <li><a href="#pyseter.sort.ClusterResults" id="toc-pyseter.sort.ClusterResults" class="nav-link active" data-scroll-target="#pyseter.sort.ClusterResults">sort.ClusterResults</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/api/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/api/sort.ClusterResults.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
@@ -310,82 +339,12 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<section id="api-reference" class="level1 doc doc-index">
-<h1 class="doc doc-index">API Reference</h1>
-<section id="feature-extraction" class="level2">
-<h2 class="anchored" data-anchor-id="feature-extraction">Feature Extraction</h2>
-<p>Extracting feature vectors from images</p>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td><a href="../api/extract.FeatureExtractor.html#pyseter.extract.FeatureExtractor">extract.FeatureExtractor</a></td>
-<td>Extract features from images.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="sorting-and-clustering" class="level2">
-<h2 class="anchored" data-anchor-id="sorting-and-clustering">Sorting and Clustering</h2>
-<p>Clustering images by proposed IDs</p>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td><a href="../api/sort.HierarchicalCluster.html#pyseter.sort.HierarchicalCluster">sort.HierarchicalCluster</a></td>
-<td>Hierarchical clustering of images</td>
-</tr>
-<tr class="even">
-<td><a href="../api/sort.NetworkCluster.html#pyseter.sort.NetworkCluster">sort.NetworkCluster</a></td>
-<td>Network clustering of images</td>
-</tr>
-<tr class="odd">
-<td><a href="../api/sort.ClusterResults.html#pyseter.sort.ClusterResults">sort.ClusterResults</a></td>
-<td>Storing NetworkCluster results.</td>
-</tr>
-<tr class="even">
-<td><a href="../api/sort.prep_images.html#pyseter.sort.prep_images">sort.prep_images</a></td>
-<td>Copy all images to a flat directory and save a csv with encounter info.</td>
-</tr>
-<tr class="odd">
-<td><a href="../api/sort.sort_images.html#pyseter.sort.sort_images">sort.sort_images</a></td>
-<td>Sort images into subfolders by proposed ID then encounter.</td>
-</tr>
-<tr class="even">
-<td><a href="../api/sort.load_features.html#pyseter.sort.load_features">sort.load_features</a></td>
-<td>Load previously extracted features.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="grading" class="level2">
-<h2 class="anchored" data-anchor-id="grading">Grading</h2>
-<p>Grade images by distinctiveness</p>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td><a href="../api/grade.rate_distinctiveness.html#pyseter.grade.rate_distinctiveness">grade.rate_distinctiveness</a></td>
-<td>Grade images by their distinctiveness.</td>
-</tr>
-</tbody>
-</table>
-</section>
-<section id="verifying-installation" class="level2">
-<h2 class="anchored" data-anchor-id="verifying-installation">Verifying Installation</h2>
-<p>Functions to make sure PyTorch is working</p>
-<table class="caption-top table">
-<tbody>
-<tr class="odd">
-<td><a href="../api/get_best_device.html#pyseter.get_best_device">get_best_device</a></td>
-<td>Select torch device based on expected performance.</td>
-</tr>
-<tr class="even">
-<td><a href="../api/verify_pytorch.html#pyseter.verify_pytorch">verify_pytorch</a></td>
-<td>Verify PyTorch installation and show device options.</td>
-</tr>
-</tbody>
-</table>
+<section id="pyseter.sort.ClusterResults" class="level1">
+<h1>sort.ClusterResults</h1>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>sort.ClusterResults(cluster_labels)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>Storing NetworkCluster results.</p>
 
 
-</section>
 </section>
 
 </main> <!-- /main -->
@@ -807,4 +766,4 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/api/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/api/sort.ClusterResults.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
