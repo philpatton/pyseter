@@ -1,0 +1,21 @@
+# sort.load_features { #pyseter.sort.load_features }
+
+```python
+sort.load_features(feature_path)
+```
+
+Load previously extracted features.
+
+Load features produced by the FeatureExtractor.
+
+## Parameters {.doc-section .doc-section-parameters}
+
+| Name         | Type   | Description       | Default    |
+|--------------|--------|-------------------|------------|
+| feature_path | str    | Path to .npy file | _required_ |
+
+## Returns {.doc-section .doc-section-returns}
+
+| Name   | Type                                         | Description                                                                                                         |
+|--------|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------|
+|        | filenames, feature_array: np.array, np.array | The `filenames` array correspond to each row of the `feature_array`, which has shape `(image_count, feature_count)` |

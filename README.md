@@ -1,6 +1,6 @@
 # Pyseter
 
-Pyseter is Python package for processing images before photo-identification. 
+Pyseter is a Python package for processing images before photo-identification. 
 
 We expect that most people using Pyseter will be familiar with R, and completely new to Python. Regardless, we chose to release Pyseter as a Python package because it relies heavily on Pytorch, a deep learning library. If you're new to Python, please follow the steps under **Installation: No Python experience**. 
 

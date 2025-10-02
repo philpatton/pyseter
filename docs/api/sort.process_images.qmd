@@ -1,0 +1,7 @@
+# sort.process_images { #pyseter.sort.process_images }
+
+```python
+sort.process_images(image_root, all_image_dir)
+```
+
+Copy all images to a temporary directory and return encounter information

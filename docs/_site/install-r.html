@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>About – Pyseter</title>
+<title>R users who are new to Python – Pyseter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -19,6 +19,41 @@ ul.task-list li input[type="checkbox"] {
   width: 0.8em;
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 </style>
 
@@ -75,7 +110,7 @@ ul.task-list li input[type="checkbox"] {
 
 </head>
 
-<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar docked nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -253,29 +288,17 @@ ul.task-list li input[type="checkbox"] {
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-<<<<<<< HEAD
-    <a class="nav-link" href="./install.html"> 
+    <a class="nav-link active" href="./install.html" aria-current="page"> 
 <span class="menu-text">Install</span></a>
-=======
-    <a class="nav-link" href="./index.html"> 
-<span class="menu-text">Home</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./installation.html"> 
-<span class="menu-text">Installation</span></a>
->>>>>>> 64bc5ff304277c7d796650ad220aa602c91dccee
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./tutorial.html"> 
 <span class="menu-text">Tutorial</span></a>
   </li>  
-<<<<<<< HEAD
   <li class="nav-item">
     <a class="nav-link" href="./api/index.html"> 
 <span class="menu-text">API Reference</span></a>
   </li>  
-=======
->>>>>>> 64bc5ff304277c7d796650ad220aa602c91dccee
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
@@ -290,13 +313,59 @@ ul.task-list li input[type="checkbox"] {
 </div>
       </div> <!-- /container-fluid -->
     </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./install-r.html">R users who are new to Python</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
 </header>
 <!-- content -->
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./install.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Python users</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./install-r.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">R users who are new to Python</span></a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
-        
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#install-conda" id="toc-install-conda" class="nav-link active" data-scroll-target="#install-conda">Install conda</a></li>
+  <li><a href="#create-a-new-environment" id="toc-create-a-new-environment" class="nav-link" data-scroll-target="#create-a-new-environment">Create a new environment</a></li>
+  <li><a href="#install-pytorch" id="toc-install-pytorch" class="nav-link" data-scroll-target="#install-pytorch">Install PyTorch</a>
+  <ul class="collapse">
+  <li><a href="#windows-users" id="toc-windows-users" class="nav-link" data-scroll-target="#windows-users">Windows users</a></li>
+  <li><a href="#mac-users" id="toc-mac-users" class="nav-link" data-scroll-target="#mac-users">Mac users</a></li>
+  <li><a href="#linux-users" id="toc-linux-users" class="nav-link" data-scroll-target="#linux-users">Linux users</a></li>
+  </ul></li>
+  <li><a href="#install-pyseter" id="toc-install-pyseter" class="nav-link" data-scroll-target="#install-pyseter">Install Pyseter</a></li>
+  <li><a href="#install-vs-code-or-positron" id="toc-install-vs-code-or-positron" class="nav-link" data-scroll-target="#install-vs-code-or-positron">Install VS Code or Positron</a></li>
+  <li><a href="#verify-the-installation" id="toc-verify-the-installation" class="nav-link" data-scroll-target="#verify-the-installation">Verify the installation</a></li>
+  <li><a href="#anydorsal-weights" id="toc-anydorsal-weights" class="nav-link" data-scroll-target="#anydorsal-weights">AnyDorsal weights</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/install-r.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -304,7 +373,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">About</h1>
+<h1 class="title">R users who are new to Python</h1>
 </div>
 
 
@@ -321,9 +390,111 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>About this site</p>
+<p>We expect that most people using Pyseter will be familiar with R, and completely new to Python. This raises the question: why release Pyseter as a Python package? The answer is that Python is much more suited to deep learning than R, and most of the new developments in automated photo-identification rely on deep learning.</p>
+<p>As such, Pyseter users will have to familiarize themselves with a few Python concepts, such as conda and Jupyter, before getting started.</p>
+<section id="install-conda" class="level2">
+<h2 class="anchored" data-anchor-id="install-conda">Install conda</h2>
+<p>Conda is an important tool for managing packages in Python. While R, for the most part, handles packages for you behind the scenes, Python requires a more hands on approach.</p>
+<p>To get started, we first need to install a package manager called conda. There are many forms of conda, with Anaconda being the most popular. For several reasons, we prefer another form of conda called Miniforge.</p>
+<ul>
+<li>Download and install <a href="https://conda-forge.org/download/">Miniforge</a> (a form of conda)</li>
+</ul>
+<p>After installing, you can verify your installation by opening the <strong>command line interface</strong> (CLI), which will depend on your operating system. Are you on Windows? Open the “miniforge prompt” in your start menu. Are you on Mac? Open the Terminal application. Then, type the following command into the CLI and hit return.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> <span class="at">--version</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>You should see something like <code>conda 25.5.1</code>. Of course, Anaconda, miniconda, mamba, or any other form of conda will work too.</p>
+</section>
+<section id="create-a-new-environment" class="level2">
+<h2 class="anchored" data-anchor-id="create-a-new-environment">Create a new environment</h2>
+<p>Then, you’ll create an environment for the package will live in. Environments are walled off areas where we can install packages. This allows you to have multiple versions of the same package installed on your machine, which can help prevent conflicts.</p>
+<p>Enter the following two commands into the CLI:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> pyseter_env</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate pyseter_env</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here, I name (hence the <code>-n</code>) the environment <code>pyseter_env</code>, but you can call it anything you like!</p>
+<p>Now your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and Pyseter (see below). To do so, enter the following command into the CLI.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install pip <span class="at">-y</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case, we include the <code>-y</code> argument so we don’t have to immediately answer <code>yes</code> to the next question. Once this is working, you’re ready to proceed to the next section.</p>
+</section>
+<section id="install-pytorch" class="level2">
+<h2 class="anchored" data-anchor-id="install-pytorch">Install PyTorch</h2>
+<p>Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. Extracting features should be fast for users with an NVIDIA GPU, and reasonable for users with a Mac with Apple Silicon.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>For all other users, extracting features from images will be extremely slow.</p>
+</div>
+</div>
+<p>PyTorch installation can be a little finicky. Essentially, it depends on what operating system you’re using, and what version of <strong>CUDA</strong> you’re using. CUDA is the technology that turns your NVIDIA GPU into a deep learning machine. To install PyTorch, I recommend following <a href="https://pytorch.org/get-started/locally/">these instructions</a>.</p>
+<section id="windows-users" class="level3">
+<h3 class="anchored" data-anchor-id="windows-users">Windows users</h3>
+<p>Below is an example for Windows users. This relies on CUDA 12.8, which should work for most people. If you haven’t already, open the CLI (e.g., the miniforge prompt). Then activate your environment before installing.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate pyseter_env</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip3</span> install torch torchvision <span class="at">--index-url</span> https://download.pytorch.org/whl/cu128</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>PyTorch is pretty big (over a gigabyte), so this may take a few minutes.</p>
+</section>
+<section id="mac-users" class="level3">
+<h3 class="anchored" data-anchor-id="mac-users">Mac users</h3>
+<p>Below is an example for Mac users. The Mac version of PyTorch relies on <a href="https://docs.pytorch.org/docs/stable/notes/mps.html">MPS acceleration</a>, which is good but not at the level of CUDA. If you haven’t already, open you’re command line interface (e.g., the miniforge prompt). Then activate your environment before installing.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate pyseter_env</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip3</span> install torch torchvision </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>PyTorch is pretty big (over a gigabyte), so this may take a few minutes.</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Mac users will need to have an Apple Silicon processor, e.g., an M1 chip. Additionally, they will need at least 16 GB of memory (RAM) to use AnyDorsal.</p>
+</div>
+</div>
+</section>
+<section id="linux-users" class="level3">
+<h3 class="anchored" data-anchor-id="linux-users">Linux users</h3>
+<p>You run Linux, but you’ve never used Python?</p>
+</section>
+</section>
+<section id="install-pyseter" class="level2">
+<h2 class="anchored" data-anchor-id="install-pyseter">Install Pyseter</h2>
+<p>Now, install Pyseter. If you haven’t already, activate your environment before installing.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate pyseter_env</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip3</span> install pyseter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now you’re ready to go!</p>
+</section>
+<section id="install-vs-code-or-positron" class="level2">
+<h2 class="anchored" data-anchor-id="install-vs-code-or-positron">Install VS Code or Positron</h2>
+<p>Most users will interact with Pyseter via a Jupyter Notebook. There are many methods for opening, editing, running, and saving Jupyter Notebooks. We are personally biased towards VS Code. Alternatively, R users might also try out <a href="https://positron.posit.co">Positron</a>. The team at Posit (formerly, R Studio) developed Positron from the open source version of VS Code, but with R users in mind. As such, it might be a nice hybrid option. That said, we have found Positron to throw confusing errors and have found VS Code to be more stable.</p>
+<ul>
+<li>Download and install <a href="https://code.visualstudio.com/download">VS Code</a></li>
+</ul>
+<p>Open VS Code, then click “File -&gt; Open Folder”. Navigate to wherever you’d like to work, then click “New Folder.” You can call this folder something like “learn-pyseter” or “pyseter-jobs”. Open the new folder. Click “File -&gt; New File” then select Jupyter Notebook. Click “Select Kernel” in the top right corner, select “Python environments” and then “pyseter_env”, or whatever you named your environment. For more information, check out <a href="https://code.visualstudio.com/docs/datascience/jupyter-notebooks">this great overview</a> of using Jupyter Notebooks in VS Code.</p>
+<p>Now you’re ready to proceed to the next section.</p>
+</section>
+<section id="verify-the-installation" class="level2">
+<h2 class="anchored" data-anchor-id="verify-the-installation">Verify the installation</h2>
+<p>Verify the Pyseter installation by running the following cell in your notebook.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyseter</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pyseter.verify_pytorch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If you’re on a windows computer with an NVIDIA GPU, you should see something like</p>
+<pre><code>✓ PyTorch 2.7.1+cu126 detected
+✓ CUDA GPU available: NVIDIA A30 MIG 2g.12gb</code></pre>
+<p>Once this is working, you’re ready to check out the “General Overview” <a href="https://github.com/philpatton/pyseter/blob/main/examples/general-overview.ipynb">notebook</a> in the examples folder of this repository!</p>
+</section>
+<section id="anydorsal-weights" class="level2">
+<h2 class="anchored" data-anchor-id="anydorsal-weights">AnyDorsal weights</h2>
+<p>Pyseter relies on the <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167">AnyDorsal algorithm</a> to extract features from images. The first time you use the <code>FeatureExtractor</code>, Pyseter will download the AnyDorsal weights from Hugging Face. The weights take up roughly 4.5 GB. As such, to use the <code>FeatureExtractor</code>, users must have enough storage space to accommodate the weights.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -743,4 +914,4 @@ ul.task-list li input[type="checkbox"] {
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/about.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/install-r.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

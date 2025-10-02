@@ -1,0 +1,7 @@
+# verify_pytorch { #pyseter.verify_pytorch }
+
+```python
+verify_pytorch()
+```
+
+Verify PyTorch installation and show device options.

@@ -1,0 +1,22 @@
+---
+title: "Pyseter"
+about:
+  template: marquee
+  image: images/sort-figure.png
+---
+
+Pyseter is a Python package for processing images before photo-identification. Pyseter includes functions for:
+
+- Extracting feature vectors from images with AnyDorsal
+- Clustering images by a proposed ID
+- Sorting images into directories by proposed ID then encounter (as shown above)
+
+## Introduction 
+
+Please see the [Tutorial](tutorial.ipynb) for a longer form demonstration on working with Pyseter, including tips for R users. 
+
+## Installation
+
+R users will also find a [seperate page for installation instructions](install-r.qmd).
+
+## Citation

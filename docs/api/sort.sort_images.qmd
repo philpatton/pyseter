@@ -1,0 +1,30 @@
+# sort.sort_images { #pyseter.sort.sort_images }
+
+```python
+sort.sort_images(id_df, all_image_dir, output_dir)
+```
+
+Sort images into subfolders by proposed ID then encounter.
+
+Copy images from the flat `all_image_dir` into the `output_dir`, where the 
+`output_dir` is now divided in subfolders by proposed ID then encounter. 
+
+## Parameters {.doc-section .doc-section-parameters}
+
+| Name          | Type         | Description                                                            | Default    |
+|---------------|--------------|------------------------------------------------------------------------|------------|
+| id_df         | pd.DataFrame | Pandas DataFrame with columns `['image', 'proposed_id', 'encounter']`. | _required_ |
+| all_image_dir | str          | Path to flat directory with every image in the `id_df`.                | _required_ |
+| output_dir    | str          | Path to new directory into which `sort_images` will copy files.        | _required_ |
+
+## Returns {.doc-section .doc-section-returns}
+
+| Name   | Type   | Description                      |
+|--------|--------|----------------------------------|
+|        | None   | Copies images to the output_dir. |
+
+## Examples {.doc-section .doc-section-examples}
+
+For a complete working example with real images, see:
+
+- [Tutorial](../tutorial.ipynb)

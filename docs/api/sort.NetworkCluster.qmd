@@ -1,0 +1,68 @@
+# sort.NetworkCluster { #pyseter.sort.NetworkCluster }
+
+```python
+sort.NetworkCluster(match_threshold=0.5)
+```
+
+Network clustering of images
+
+Cluster images with a simple network, where images are nodes and edges
+are images whose similarity score is above the `match_threshold`
+
+## Parameters {.doc-section .doc-section-parameters}
+
+| Name            | Type   | Description                                                                                                               | Default   |
+|-----------------|--------|---------------------------------------------------------------------------------------------------------------------------|-----------|
+| match_threshold | float  | Similarity score threshold above which two images are considered to  contain the same animal. Must lie between [0.0, 1.0] | `0.5`     |
+
+## Notes {.doc-section .doc-section-notes}
+
+Network clustering works best with smaller datasets, say, around 1000 images.
+
+## Examples {.doc-section .doc-section-examples}
+
+```python
+>>> import numpy as np
+>>> from pyseter.sort import NetworkCluster
+>>> from sklearn.metrics.pairwise import cosine_similarity
+>>> from numpy.random import normal
+>>> 
+>>> cluster1 = normal(-200, 1, size=(15, 5504))
+>>> cluster2 = normal(200, 1, size=(5, 5504))
+>>> feature_array = np.vstack([cluster1, cluster2])
+>>> scores = cosine_similarity(feature_array)
+>>> 
+>>> nc = NetworkCluster(match_threshold=0.5)
+>>> results = nc.cluster_images(scores)
+>>> len(np.unique(results.cluster_idx))
+2
+```
+
+## Methods
+
+| Name | Description |
+| --- | --- |
+| [cluster_images](#pyseter.sort.NetworkCluster.cluster_images) | Cluster images |
+
+### cluster_images { #pyseter.sort.NetworkCluster.cluster_images }
+
+```python
+sort.NetworkCluster.cluster_images(similarity, message=True)
+```
+
+Cluster images
+
+Cluster images based on their similarity scores with network clustering.
+
+#### Parameters {.doc-section .doc-section-parameters}
+
+| Name       | Type       | Description                                                                                           | Default    |
+|------------|------------|-------------------------------------------------------------------------------------------------------|------------|
+| similarity | np.ndarray | Array with shape `(image_count, image_count)` indicating the  similarity between each pair of images. | _required_ |
+| message    | bool       | Should a message about potential false positives be printed to the console?                           | `True`     |
+
+#### Returns {.doc-section .doc-section-returns}
+
+| Name    | Type           | Description                                                                                                                                |
+|---------|----------------|--------------------------------------------------------------------------------------------------------------------------------------------|
+| results | ClusterResults | Object of type `pyster.ClusterResult`. Integer labels for the cluster assignment of each image can be accessed with `results.cluster_idx`. |

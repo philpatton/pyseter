@@ -1,0 +1,7 @@
+# get_best_device { #pyseter.get_best_device }
+
+```python
+get_best_device()
+```
+
+Select torch device based on expected performance.

@@ -10,7 +10,26 @@ import numpy as np
 from pyseter.sort import NetworkCluster
 
 def rate_distinctiveness(features: np.ndarray, match_threshold: float=0.6) -> np.ndarray:
-    '''Grade images by their distinctiveness.'''
+    '''Grade images by their distinctiveness.
+    
+    Compute the embedding recognizability score (ERS) for each image in the 
+    feature array.
+
+    Parameters
+    ----------
+    features : np.ndarray
+        NumPy array of shape (image_count, feature_count) containing feature 
+        vectors for each image
+    match_threshold: float
+        The threshold above which two images are considered a match. Must be 
+        between (0, 1)
+    
+    Returns
+    -------
+    np.array
+        Embedding recognizability score (ERS), a measure of distinctiveness,
+        for every image in the dataset.
+    '''
 
     # watch out!
     warn(UserWarning('Distinctiveness grades are experimental and should be verified.'))
