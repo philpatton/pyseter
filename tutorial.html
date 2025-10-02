@@ -1,0 +1,1208 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.7.25">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Introduction to pyseter – Pyseter</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-fe31d7bd2deb2a321418d01dba375a64.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-f22e6b1ee40b1f8b08691e31e3ed3812.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-fe31d7bd2deb2a321418d01dba375a64.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-f7d99b3b2b4c261acce8ea5be0c17381.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-93b50eda8d8c6572986006a94ac77932.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-f7d99b3b2b4c261acce8ea5be0c17381.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" integrity="sha512-c3Nl8+7g4LMSTdrm621y7kf9v3SDPnhxLNhcjFJbKECVnmZHTdo+IRO05sNLTH/D3vA6u1X32ehoLC7WFVdheg==" crossorigin="anonymous"></script>
+
+<script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
+
+
+</head>
+
+<body class="nav-fixed quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    window.setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      window.setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    window.hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(darkModeDefault) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const darkModeDefault = false;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !window.hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+    };
+    // Switch to dark mode if need be
+    if (window.hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Pyseter</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./install.html"> 
+<span class="menu-text">Install</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link active" href="./tutorial.html" aria-current="page"> 
+<span class="menu-text">Tutorial</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./api/index.html"> 
+<span class="menu-text">API Reference</span></a>
+  </li>  
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/philpatton/pyseter"> <i class="bi bi-github" role="img">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#optional-folder-management" id="toc-optional-folder-management" class="nav-link active" data-scroll-target="#optional-folder-management">Optional: Folder management</a></li>
+  <li><a href="#extracting-features" id="toc-extracting-features" class="nav-link" data-scroll-target="#extracting-features">1. Extracting features</a></li>
+  <li><a href="#clustering-images-by-proposed-id" id="toc-clustering-images-by-proposed-id" class="nav-link" data-scroll-target="#clustering-images-by-proposed-id">2. Clustering images by proposed ID</a></li>
+  <li><a href="#sorting-images-by-proposed-id" id="toc-sorting-images-by-proposed-id" class="nav-link" data-scroll-target="#sorting-images-by-proposed-id">3. Sorting images by proposed ID</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.dev/philpatton/pyseter/blob/main/tutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Introduction to pyseter</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p>Pyseter is an Python package for sorting images by an automatically generated ID. The main functions of Pyseter are:</p>
+<ol type="1">
+<li>Extracting features from images</li>
+<li>Clustering images by proposed ID</li>
+<li>Sorting images by cluster</li>
+<li>Grading images by distinctiveness</li>
+</ol>
+<p>This notebook will walk you through each major function. First, let’s make sure that Pyseter is properly installed, and that it can access Pytorch.</p>
+<div id="7b682038-990e-4ee6-b4ce-a4e8ec3d77b4" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyseter</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pyseter.verify_pytorch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>✓ PyTorch 2.7.1+cu126 detected
+✓ CUDA GPU available: NVIDIA RTX A4000</code></pre>
+</div>
+</div>
+<p>If you’re on a Mac, you should see something like</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">✓</span> PyTorch 2.7.0 detected</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">✓</span> Apple Silicon <span class="er">(</span><span class="ex">MPS</span><span class="kw">)</span> <span class="ex">GPU</span> available</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Please note, however, that AnyDorsal consumes quite a bit of memory. As such, only Apple Silicon devices with 16 GB or more of memory will work. Ideally, future versions of Pyseter will use a smaller model.</p>
+<p>If neither Apple Silicon or an NVIDIA GPU are available, you will see a message like this.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">✓</span> PyTorch 2.7.1+cu126 detected</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ot">! </span><span class="ex">No</span> GPU acceleration available. Expect slow feature extraction.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Packages in Python tend to be subdivided into modules based on their functions. In Pyseter, the <code>sort</code> module contains functions for sorting files, including other forms of file management.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R user tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In R, the above code block would look something like</p>
+<pre><code>library(pyseter)
+verify_pytorch()</code></pre>
+<p>or,</p>
+<pre><code>pyseter::verify_pytorch()</code></pre>
+<p>Imports work a little differently in Python. First, we need tell Python that this package is available for imports, <code>import pyseter</code>, then we need to explicitly call the function from the library <code>pyseter.verify_pytorch()</code>. To an R user, this can feel overly wordy. Nevertheless, this wordiness helps keep the global environment clean. Whereas R sessions frequently have to deal with <a href="https://adv-r.hadley.nz/functions.html?q=masking#lexical-scoping">masking names</a>, this rarely happens in Python.</p>
+</div>
+</div>
+<section id="optional-folder-management" class="level2">
+<h2 class="anchored" data-anchor-id="optional-folder-management">Optional: Folder management</h2>
+<p>The main purpose of Pyseter is organizing images into folders. To do keep things clean and tidy, we recommend establishing a <code>working directory</code> with a subfolder, e.g., called, <code>all images</code>, that contains every image you want to be sorted (see below for a different case). Optionally, you might want to have a .csv with encounter information in the working directory. This .csv would contain two columns: one for the image name, i.e., every image in <code>all images</code>, and another for the encounter. As such, the working directory would look like this.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">working</span> directory</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> encounter_info.csv</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> all images</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──00cef32dc62b0f.jpg</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──3ecc025ea6f9bf.jpg</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──9f18762a48696b.jpg</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──36f78517a512dd.jpg</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──470d524b4d5303.jpg</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>       <span class="ex">...</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──4511c9e5cb7acb.jpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Sometimes, you might have your images organized into subfolders by encounter.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">working_dir</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> original_images</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">├──</span> SL_HI_006_20220616 <span class="er">(</span><span class="ex">CROPPED</span><span class="kw">)</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_006.JPG</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_007.JPG</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_008.JPG</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_021.JPG</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_042.JPG</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">├──</span> SL_HI_007_20220616 <span class="er">(</span><span class="ex">CROPPED</span><span class="kw">)</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_346.JPG</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_347.JPG</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_371.JPG</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_372.JPG</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>In this case, you might want to accomplish two tasks: move all these images to one folder, e.g., <code>all_images</code>, and create a .csv that indicates which image belongs to which encounter (i.e., a map from image to encounter). The <code>prep_images()</code> function does just that.</p>
+<div id="9f46f939-2856-46be-add5-2d42796ce817" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> prep_images</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># various directories we'll be working with</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>working_dir <span class="op">=</span> <span class="st">'/home/pattonp/koa_scratch/id_data/working_dir'</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>original_image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/original_images'</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># new directory containing every image</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/all_images'</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># copy images to a single folder, then </span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>prep_images(original_image_dir, all_image_dir<span class="op">=</span>image_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Copied 1230 images to: /home/pattonp/koa_scratch/id_data/working_dir/all_images
+Saved encounter information to: /home/pattonp/koa_scratch/id_data/working_dir/encounter_info.csv</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R user tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In python, you can concatenate strings with the <code>+</code> operator. This is equivalent to <code>paste0(working_dir, '/original_images')</code> in R.</p>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R user tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Packages in Python tend to be subdivided into modules based on their functions. In Pyseter, the <code>sort</code> module contains functions for sorting files, including other forms of file management.</p>
+</div>
+</div>
+</section>
+<section id="extracting-features" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-features">1. Extracting features</h2>
+<p>Pyseter identifies individuals by extracting <em>feature vectors</em> from images. Feature vectors summarize three-dimensional images into one-dimensional vectors that are useful for the task at hand, in this case, individual identification.</p>
+<p>Pyseter extracts feature vectors with <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167">AnyDorsal</a>, an algorithm for identifying whales and dolphins of many species. AnyDorsal is the same dorsal identification algorithm that’s included with <a href="https://happywhale.com/home">Happywhale</a> (although not to be confused with their humpback whale fluke ID algorithm).</p>
+<p>Before we extract the feature vectors, let’s first create a subfolder within our working directory to save them in. This isn’t necessary, yet keeps things tidy.</p>
+<div id="82e70d3d-832d-4a24-aa75-0b8a831a973e" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># in case you want to save the features after extracting them </span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/features'</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>os.makedirs(feature_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R user tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The module, <code>os</code>, is part of Python’s <em>standard library</em>. People often refer to R and its standard libraries as “base R.” Base R includes the stats library, which provides the function <code>rnorm</code>. The <code>os</code> module has many functions for tinkering with your operating system.</p>
+</div>
+</div>
+<p>We will extract features with the <code>FeatureExtractor</code> class. To do so, we first need to initialize the class. This sets up important parameters, such as the <code>batch_size</code>, which is the number of images that will be processed in parallel. Larger batches should run faster, although your mileage may vary. If you specify too large of a batch, you may encounter an <code>OutOfMemoryError</code> (see below for an example). If you encounter this error, try specifying a larger batch size. If you encounter this error with a very small batch size (say, 2), you may need to resize your images. You can do this manually by reducing the file size in an image editing software, or <a href="https://imagekit.io/blog/image-resizing-in-python/">with Python</a></p>
+<pre style="white-space: pre-wrap; word-wrap: break-word;">OutOfMemoryError: CUDA out of memory. Tried to allocate 12.00 MiB. GPU 0 has a total capacity of 5.81 GiB of which 9.06 MiB is free. Including non-PyTorch memory, this process has 5.76 GiB memory in use. Of the allocated memory 5.64 GiB is allocated by PyTorch, and 50.21 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
+</pre>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R user tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Python error messages are comically long, putting CVS receipts to shame. This is because they show the entire traceback, i.e., this error caused this error caused this error, etc. To quickly diagnose the problem, scroll to the bottom of the message. Then, you can further dissect it by scrolling up.</p>
+</div>
+</div>
+<div id="b6c85063-614a-433d-8bdb-867c8c965122" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.extract <span class="im">import</span> FeatureExtractor</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the configuration for the extractor </span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fe <span class="op">=</span> FeatureExtractor(batch_size<span class="op">=</span><span class="dv">4</span>,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Using device: cuda (NVIDIA RTX A4000)</code></pre>
+</div>
+</div>
+<p>Once we’ve initialize the class, we can use its associated methods (functions). In this case, the only one we are interested in is <code>extract()</code>, which extracts a feature vector for every image in a specified directory. This can take several minutes, so we typically save the results afterwards.</p>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R user tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Classes and methods also exist in R, but operate more behind the scenes. For example, <code>x &lt;- data.frame()</code> initializes an object of class data.frame, and <code>summary(x)</code> calls the summary method for data.frames. Python makes this relationship more explicit. For example, the equivalent (although nonsensical) Python code would be <code>x = data.frame()</code> and <code>x.summary()</code>.</p>
+</div>
+</div>
+<div id="dff8c63c-3268-44b6-8703-66fcb03b6907" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the features for the input directory then save them</span></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> fe.extract(image_dir<span class="op">=</span>image_dir)</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># this saves them as an numpy array</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>np.save(out_path, features)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Loading model...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/home/pattonp/.conda/envs/pyseter/lib/python3.13/site-packages/timm/models/_factory.py:138: UserWarning: Mapping deprecated model name tf_efficientnet_l2_ns to current tf_efficientnet_l2.ns_jft_in1k.
+  model = create_fn(</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Warning: Missing keys when loading pretrained weights: ['head.weight']
+Warning: Unexpected keys when loading pretrained weights: ['head.fc.weight']
+Extracting features...</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>100%|██████████| 308/308 [01:48&lt;00:00,  2.84it/s]</code></pre>
+</div>
+</div>
+<p>The object <code>features</code> is a dictionary, whose keys are the filenames and whose values are the feature vectors associated with each filename. This helps ensure that each image is associated with the correct feature vector. Nevertheless, it can be easier to work with actual numpy arrays. To do so, convert the keys to a list, then to a numpy array.</p>
+<div id="db9bb733-aad3-4cee-909a-f6e6ddcf5a99" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>filenames <span class="op">=</span> np.array(<span class="bu">list</span>(features.keys()))</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>feature_array <span class="op">=</span> np.array(<span class="bu">list</span>(features.values()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R user tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The R objects that Python’s dictionary most resemble is the <a href="https://adv-r.hadley.nz/vectors-chap.html?q=named%20vector#attr-names">named vector</a> or the <a href="https://adv-r.hadley.nz/vectors-chap.html?q=named%20vector#lists">list</a>. Like a list, dictionaries can hold different data types. Unlike a list, dictionaries have no order, and therefore cannot be integer indexed.</p>
+</div>
+</div>
+<p>If you’ve already extracted and saved features, you can load them with the code below.</p>
+<div id="4e6893da-ec27-44c6-acbd-54baaa773bb9" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import numpy as np</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># out_path = feature_dir + '/features.npy'</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># features = np.load(out_path, allow_pickle=True).item()</span></span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># filenames = np.array(list(features.keys()))</span></span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># feature_array = np.array(list(features.values()))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="clustering-images-by-proposed-id" class="level2">
+<h2 class="anchored" data-anchor-id="clustering-images-by-proposed-id">2. Clustering images by proposed ID</h2>
+<p>Pyseter comes with two algorithm’s for clustering images by proposed ID. Network clustering works better for small datasets. To use network clustering, we first need to compute the similarity scores between each pair of images.</p>
+<div id="7734d4d3-d029-4dc2-bc8d-cf3ed3a05490" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>similarity_scores <span class="op">=</span> cosine_similarity(feature_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>This indicates how similar the individuals in each image are.</p>
+<p>Next, we can perform the clustering. Each cluster represents a proposed ID. To access the “cluster labels” (these are just integers representing the cluster), we can access the cluster_idx attribute, i.e, <code>results.cluster_idx</code>.</p>
+<div id="f7fd95c1-c9ae-402f-818a-ccc1936b1ea3" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> NetworkCluster, report_cluster_results</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>nc <span class="op">=</span> NetworkCluster(match_threshold<span class="op">=</span><span class="fl">0.55</span>)</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> nc.cluster_images(similarity_scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Following clusters may contain false positives:
+['ID_0013', 'ID_0040', 'ID_0061', 'ID_0079', 'ID_0086', 'ID_0110']</code></pre>
+</div>
+</div>
+<p>Network clustering has one major hyperparameter, namely, the <code>match_threshold</code>, which indicates whether two images should be grouped within a cluster. That is, if the similarity score between two images is above a certain threshold, we cluster them into a proposed ID. High thresholds mean that few images will be clustered together, creating many clusters. Very low thresholds mean that many images will be clustered together, creating few clusters. <code>report_cluster_results</code> produces a quick and dirty summary of the number of clusters created, and the size of the largest cluster (i.e., the number of images associated to the most photographed individual). This is a quick sanity check.</p>
+<div id="1fcc6989" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>network_idx <span class="op">=</span> results.cluster_idx</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>report_cluster_results(network_idx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Found 245 clusters.
+Largest cluster has 30 images.</code></pre>
+</div>
+</div>
+<p>You’ll also note that <code>nc.cluster_images()</code> warns that some clusters may contain “false positives.” False positive matches occur when two separate individuals fall under the same proposed ID. We can diagnose possible false positives by evaluating the network. In this case, the network consists of nodes (images) and edges, which represent connections between images. Two images are connected when they have a similarity score above the threshold. A blob of connected nodes (i.e., connected components) represents a proposed ID.</p>
+<p>Sometimes, the connected components look less like a blob and more like a barbell, where two sets of images have many connections amongst each other, yet these two blobs are only connected by one link. We suspect that such clusters contain false positives, i.e., two sets of images for two individuals connected by one spurious link. We can plot the networks of the suspicious clusters with <code>results.plot_suspicious()</code>.</p>
+<div id="79e2998b" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>results.plot_suspicious()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><code>ID_0033</code> clearly has a barbell shape, suggesting that this cluster consists of images for two individuals linked together by one spurious connection.<code>ID_0013</code> also seems dubious, and <code>ID_0060</code> might consist of four separate individuals.</p>
+<p>Users can deal with suspicious clusters in several ways. First, raising the match threshold should reduce the number of false positive matches. That said, this will increase the <em>false negative rate</em>, whereby images of one individual are spread across multiple proposed IDs. Alternatively, users can manually inspect the images within the clusters and, if need be, divide up the images.</p>
+<p>As the number of images being clustered grows, the overall false positive rate also grows (this is analogous the <a href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">multiple comparison problem</a> in statistics). At some point,the network matching becomes untenable; all but the highest match thresholds would produce too many false positives to be useful.</p>
+<p>For these cases, there is <code>HierarchicalCluster</code>, which relies on the <a href="https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering">Hierarchical Agglomerative Clustering</a> algorithm provided by the popular machine learning package, scikit-learn. Note that <code>HierarchicalCluster</code> will run noticeably slower than the <code>NetworkCluster</code>.</p>
+<div id="d9495f97-18bc-443c-9765-339f20387ea1" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> HierarchicalCluster, format_ids</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize the object then cluster away! </span></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>hc <span class="op">=</span> HierarchicalCluster(match_threshold<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>hac_idx <span class="op">=</span> hc.cluster_images(feature_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>HierarchicalCluster</code> results object is much simpler, in that it just returns the cluster indices for each image. We can make these labels a little prettier with the <code>format_ids</code> function.</p>
+<div id="d3e56cfc" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>hac_labels <span class="op">=</span> format_ids(hac_idx)</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(hac_labels[:<span class="dv">5</span>])</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># quick summary of the clustering results</span></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>report_cluster_results(hac_labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['ID-0092', 'ID-0159', 'ID-0075', 'ID-0000', 'ID-0034']
+Found 306 clusters.
+Largest cluster has 19 images.</code></pre>
+</div>
+</div>
+<p><code>HierarchicalCluster</code> is useful for large datasets, yet will be more prone to false negative errors. In this example, it found 60 more clusters (proposed IDs) than the network matching, which may be dubious. Users will have to decide for themselves how to balance false positive versus false negative matches. For example, we recommend that users preprocess their images with Pyseter, then identify animals in the pre-processed images manually or with Happywhale. This second round of identification should help clean up false negative matches. As such, users following this approach might be more averse to false positive errors in the first stage.</p>
+</section>
+<section id="sorting-images-by-proposed-id" class="level2">
+<h2 class="anchored" data-anchor-id="sorting-images-by-proposed-id">3. Sorting images by proposed ID</h2>
+<p>Once we’ve identified individuals, we can sort them into folder by proposed ID and encounter. To do so, we need to create a pandas <code>DataFrame</code> that indicates the proposed ID and encounter for each filename. Recall that we created the <code>encounter_info.csv</code> with the <code>prep_images()</code> function above. For this sort, we’ll use the NetworkCluster results</p>
+<div id="638860fc-994f-4b1c-990f-a5ae49586aa6" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create a dataframe proposed id and encounter for each image</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>network_df <span class="op">=</span> pd.DataFrame({<span class="st">'image'</span>: filenames, <span class="st">'proposed_id'</span>: network_idx})</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>encounter_info <span class="op">=</span> pd.read_csv(working_dir <span class="op">+</span> <span class="st">'/encounter_info.csv'</span>)</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>network_df <span class="op">=</span> network_df.merge(encounter_info)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>network_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="14">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">image</th>
+<th data-quarto-table-cell-role="th">proposed_id</th>
+<th data-quarto-table-cell-role="th">encounter</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">0</td>
+<td>2022-06-25_CLD500_CL_735.jpg</td>
+<td>ID-0000</td>
+<td>SL_HI_016_20220625 (CROPPED)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">1</td>
+<td>2021-11-17_Hilo_AP_2_UNK_0330.jpg</td>
+<td>ID-0001</td>
+<td>SL_Hilo_13_20211117 (CROPPED)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">2</td>
+<td>2022-06-20_CLD500_CL_1166.jpg</td>
+<td>ID-0002</td>
+<td>SL_HI_010_20220620 (CROPPED)</td>
+</tr>
+<tr class="even">
+<td data-quarto-table-cell-role="th">3</td>
+<td>2022-06-16_D750_ANNM_062.JPG</td>
+<td>ID-0003</td>
+<td>SL_HI_006_20220616 (CROPPED)</td>
+</tr>
+<tr class="odd">
+<td data-quarto-table-cell-role="th">4</td>
+<td>2022-06-20_CLD500_CL_453.jpg</td>
+<td>ID-0004</td>
+<td>SL_HI_010_20220620 (CROPPED)</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Formatting the ID DataFrame
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The ID DataFrame must have columns named image, proposed_id, and encounter. Otherwise sort_images will not work. Luckily, changing column names in pandas is straightforward.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>network_df.columns <span class="op">=</span> [<span class="st">'image'</span>, <span class="st">'proposed_id'</span>, <span class="st">'encounter'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+R user tip
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Pandas is a package for managing dataframes, and is a straight knock-off of R’s data.frame. In my experience, most R users lose patience not with Python, but with pandas. Pandas is <em>just</em> similar enough to R that one should be able to directly port R ideas over. However, key differences between pandas and R prevent this, causing immense frustration (especially for yours truly!)</p>
+</div>
+</div>
+<p>To sort the images, we need to specify an output directory, then run the <code>sort_images</code> function.</p>
+<div id="babf447f-c801-4a5f-9412-7e148db68b11" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> sort_images</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># make an output directory </span></span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>sorted_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/sorted_images'</span></span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>os.makedirs(sorted_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># sort the images into folders based on proposed id</span></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>sort_images(network_df, all_image_dir<span class="op">=</span>image_dir, output_dir<span class="op">=</span>sorted_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Sorted 1230 images into 335 folders.</code></pre>
+</div>
+</div>
+<p>We can check to see that this worked by plotting a grid of images with matplotlib.</p>
+<div id="8f6aa0da-7583-4cd9-80e4-2ae57f768a9f" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get the files associated with the first ID</span></span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>first_id_dir <span class="op">=</span> sorted_dir <span class="op">+</span> <span class="st">'/ID-0000'</span></span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>this_encounter <span class="op">=</span> os.listdir(first_id_dir)[<span class="dv">0</span>]</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>encounter_dir <span class="op">=</span> first_id_dir <span class="op">+</span> <span class="st">'/'</span> <span class="op">+</span> this_encounter</span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>encounter_files <span class="op">=</span> os.listdir(encounter_dir)</span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plot a grid of images </span></span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">3</span>, tight_layout<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, filename <span class="kw">in</span> <span class="bu">enumerate</span>(encounter_files[:<span class="dv">9</span>]):</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> encounter_dir <span class="op">+</span> <span class="st">'/'</span> <span class="op">+</span> filename</span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> Image.<span class="bu">open</span>(path)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    axes.flat[i].imshow(image)</span>
+<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    axes.flat[i].axis(<span class="st">'off'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="tutorial_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    window.setColorSchemeToggle(window.hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+        const codeEl = trigger.previousElementSibling.cloneNode(true);
+        for (const childEl of codeEl.children) {
+          if (isCodeAnnotation(childEl)) {
+            childEl.remove();
+          }
+        }
+        return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/philpatton\.github\.io\/pyseter");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.dev/philpatton/pyseter/blob/main/tutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
