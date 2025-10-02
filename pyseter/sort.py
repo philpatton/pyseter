@@ -329,6 +329,8 @@ class NetworkCluster:
         return results
 
 class ClusterResults:
+    """Storing NetworkCluster results.
+    """
     def __init__(self, cluster_labels):
         self.cluster_labels = cluster_labels
         self.cluster_idx = [None]
