@@ -2,6 +2,9 @@ project:
   type: website
   output-dir: _site
 
+execute:
+  freeze: auto
+
 website:
   title: "Pyseter"
   site-url: "https://philpatton.github.io/pyseter"
@@ -11,7 +14,7 @@ website:
   navbar:
     background: primary
     left:
-      - text: "Install"
+      - text: "Install" 
         file: install.qmd
       - text: "Tutorial"
         file: tutorial.qmd
