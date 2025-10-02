@@ -1,14 +1,12 @@
 """Extract features from images with AnyDorsal.
 
-Leave one blank line.  The rest of this docstring should contain an
-overall description of the module or program.  Optionally, it may also
-contain a brief description of exported classes and functions and/or usage
-examples.
+Description 
 
 Typical usage example:
 
-  foo = ClassFoo()
-  bar = foo.function_bar()
+    fe = FeatureExctractor(batch_size=4)
+    image_directory = 'working_dir/all_images'
+    feature_dict = fe.extract_images(image_directory)
 """
 from typing import Optional, Dict, LiteralString
 import os
@@ -30,7 +28,8 @@ import torch.nn.functional as F
 import torch.utils.checkpoint as cp
 
 def verify_pytorch() -> None:
-    """Verify PyTorch installation and show device options."""
+    """Verify PyTorch installation and show device options.
+    """
     try:
         import torch
         print(f"✓ PyTorch {torch.__version__} detected")
@@ -54,7 +53,8 @@ def verify_pytorch() -> None:
         return None
     
 def get_best_device() -> LiteralString:
-    """Select torch device based on expected performance."""
+    """Select torch device based on expected performance.
+    """
     if torch.cuda.is_available():
         device = "cuda"
         device_name = torch.cuda.get_device_name(0)
@@ -69,14 +69,47 @@ def get_best_device() -> LiteralString:
     return device
 
 class FeatureExtractor:
+    """Extract features from images.
 
+    Extract feature vectors for individual identification from images. 
+    Currently, FeatureExtractor only includes the AnyDorsal algorithm.
+
+    Parameters
+    ----------
+    batch_size : int
+        The number of images the GPU will process.
+    device : {None, 'cuda', 'mps', 'cpu'}
+        Device with which to extract the features. By default, the best
+        device is chosen for the user (cuda, mps, or cpu)
+    stochastic : boolean, optional
+        Currently unused. 
+
+    Examples
+    --------
+    For a complete working example with real images, see:
+    
+    - [Tutorial](../tutorial.ipynb)
+    
+    Basic usage pattern::
+    
+        from pyseter.extract import FeatureExtractor
+        
+        # Initialize extractor
+        extractor = FeatureExtractor(batch_size=16)
+        
+        # Extract features from all images
+        features = extractor.extract('path/to/images/')
+        
+        # Access individual image features
+        img_features = features['my_image.jpg']
+    
+
+    """
     def __init__(self, batch_size: int, 
                  device: Optional[str]=None, 
-                 stochastic: bool=False,
-                 bbox_csv: Optional[str]=None):
+                 stochastic: bool=False,):
         self.batch_size = batch_size
         self.stochastic = stochastic
-        self.bbox_csv = bbox_csv
         if device is None:
             self.device = get_best_device()
         else:
@@ -84,23 +117,55 @@ class FeatureExtractor:
         self.model_repo_id = "philpatton/ristwhales"
         self.model_filename = "ristwhales_model.pth"
 
-    def extract(self, image_dir: str) -> Dict:
+    def extract(self, image_dir: str, bbox_csv: Optional[str]=None) -> Dict:
+        """Extracts features from images.
 
+        Extracts feature vectors for every image in a directory with the 
+        AnyDorsal algorithm.  
+
+        Parameters
+        ----------
+        image_dir : str
+            Directory of images to from which to extract features. Directory 
+            should be flat, in that there should not be subdirectories with images.
+        bbox_csv : str
+            Optional path to csv file with bounding boxes for each image in the 
+            image_dir.
+
+        Returns
+        -------
+        dict
+            A mapping image file names to the corresponding feature vector. 
+            The file names are represented as strings, while the feature vector.
+            is a NumPy array. For example:
+            ```
+            {'img1.jpg': np.array([0.1, 0.1, 0.2, ..., 0.9]),
+             'img2.jpg': np.array([0.2, 0.3, 0.4, ..., 0.1])}
+            ```
+            The numpy array should have length 5504.
+
+        Raises
+        ------
+        OutOfMemoryError
+            The GPU has run out of memory. Try reducing your batch size, or 
+            reducing the file size of the images in the directory.
+        """
         print('Loading model...')
-        model = self.get_model()
+        model = self._get_model()
         
         if not self.stochastic:
             model.eval()
 
-        test_dataloader = get_test_data(image_dir, self.batch_size, self.bbox_csv)
+        test_dataloader = get_test_data(image_dir, self.batch_size, bbox_csv)
 
         print('Extracting features...')
-        features = self.extract_features(test_dataloader, model)
+        features = self._extract_features(test_dataloader, model)
 
         return features
     
-    def get_model(self):
-        """Build the model from the checkpoint."""
+    def _get_model(self):
+        """Build the model from the checkpoint.
+        """
         # Create the backbone
         backbone = EfficientNetCustomBackbone(
             model_name='tf_efficientnet_l2_ns',
@@ -172,7 +237,7 @@ class FeatureExtractor:
         
         return model
 
-    def extract_features(self, dataloader, model) -> dict:
+    def _extract_features(self, dataloader, model) -> dict:
         """Extract features from images using the model."""
         file_list = []
         feature_list = []
