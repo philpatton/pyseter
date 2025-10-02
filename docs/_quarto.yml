@@ -56,6 +56,7 @@ quartodoc:
       contents:
         - sort.HierarchicalCluster
         - sort.NetworkCluster
+        - sort.ClusterResults
         - sort.prep_images
         - sort.sort_images
         - sort.load_features
