@@ -1,0 +1,6 @@
+# sort.ClusterResults { #pyseter.sort.ClusterResults }
+
+```python
+sort.ClusterResults(cluster_labels)
+```
+

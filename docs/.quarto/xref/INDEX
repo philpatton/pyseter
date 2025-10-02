@@ -59,5 +59,11 @@
   },
   "api/sort.load_features.qmd": {
     "sort.load_features.html": "613761b1"
+  },
+  "tutorial.qmd": {
+    "tutorial.html": "16725579"
+  },
+  "api/sort.ClusterResults.qmd": {
+    "sort.ClusterResults.html": "d22cb309"
   }
 }

@@ -14,7 +14,7 @@ website:
       - text: "Install"
         file: install.qmd
       - text: "Tutorial"
-        file: tutorial.ipynb
+        file: tutorial.qmd
       - text: "API Reference"
         file: api/index.qmd  # Quartodoc generates this
 

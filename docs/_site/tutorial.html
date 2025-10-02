@@ -6,8 +6,13 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="author" content="Philip T. Patton">
+<meta name="author" content="Claire Lacey">
+<meta name="author" content="Lars Bejder">
+<meta name="dcterms.date" content="2025-10-02">
+<meta name="keywords" content="computer vision, deep learning, clustering, whale, dolphin">
 
-<title>Introduction to pyseter – Pyseter</title>
+<title>Pyseter: a Python package for processing images before photo-identification – Pyseter</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,7 +60,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script><script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -110,6 +135,35 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <script type="application/javascript">define('jquery', [],function() {return window.jQuery;})</script>
 
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -326,12 +380,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#optional-folder-management" id="toc-optional-folder-management" class="nav-link active" data-scroll-target="#optional-folder-management">Optional: Folder management</a></li>
-  <li><a href="#extracting-features" id="toc-extracting-features" class="nav-link" data-scroll-target="#extracting-features">1. Extracting features</a></li>
-  <li><a href="#clustering-images-by-proposed-id" id="toc-clustering-images-by-proposed-id" class="nav-link" data-scroll-target="#clustering-images-by-proposed-id">2. Clustering images by proposed ID</a></li>
-  <li><a href="#sorting-images-by-proposed-id" id="toc-sorting-images-by-proposed-id" class="nav-link" data-scroll-target="#sorting-images-by-proposed-id">3. Sorting images by proposed ID</a></li>
+  <li><a href="#introduction" id="toc-introduction" class="nav-link active" data-scroll-target="#introduction"><span class="header-section-number">1</span> Introduction</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation"><span class="header-section-number">2</span> Installation</a></li>
+  <li><a href="#spinner-dolphin-example" id="toc-spinner-dolphin-example" class="nav-link" data-scroll-target="#spinner-dolphin-example"><span class="header-section-number">3</span> Spinner dolphin example</a>
+  <ul class="collapse">
+  <li><a href="#folder-management" id="toc-folder-management" class="nav-link" data-scroll-target="#folder-management"><span class="header-section-number">3.1</span> Folder management</a></li>
+  <li><a href="#extracting-features" id="toc-extracting-features" class="nav-link" data-scroll-target="#extracting-features"><span class="header-section-number">3.2</span> Extracting features</a></li>
+  <li><a href="#grading-individuals-by-distinctiveness" id="toc-grading-individuals-by-distinctiveness" class="nav-link" data-scroll-target="#grading-individuals-by-distinctiveness"><span class="header-section-number">3.3</span> Grading individuals by distinctiveness</a></li>
+  <li><a href="#clustering-images-into-proposed-ids" id="toc-clustering-images-into-proposed-ids" class="nav-link" data-scroll-target="#clustering-images-into-proposed-ids"><span class="header-section-number">3.4</span> Clustering images into proposed IDs</a></li>
+  <li><a href="#sorting-images-by-proposed-id-then-encounter" id="toc-sorting-images-by-proposed-id-then-encounter" class="nav-link" data-scroll-target="#sorting-images-by-proposed-id-then-encounter"><span class="header-section-number">3.5</span> Sorting images by proposed ID then encounter</a></li>
+  </ul></li>
+  <li><a href="#conclusion" id="toc-conclusion" class="nav-link" data-scroll-target="#conclusion"><span class="header-section-number">4</span> Conclusion</a></li>
+  <li><a href="#supplements" id="toc-supplements" class="nav-link" data-scroll-target="#supplements"><span class="header-section-number">5</span> Supplements</a>
+  <ul class="collapse">
+  <li><a href="#hierarchical-agglomerative-clustering" id="toc-hierarchical-agglomerative-clustering" class="nav-link" data-scroll-target="#hierarchical-agglomerative-clustering"><span class="header-section-number">5.1</span> Hierarchical Agglomerative Clustering</a></li>
+  <li><a href="#resizing-images-with-pillow" id="toc-resizing-images-with-pillow" class="nav-link" data-scroll-target="#resizing-images-with-pillow"><span class="header-section-number">5.2</span> Resizing images with Pillow</a></li>
+  </ul></li>
+  <li><a href="#reference" id="toc-reference" class="nav-link" data-scroll-target="#reference">Reference</a></li>
   </ul>
-<div class="toc-actions"><ul><li><a href="https://github.dev/philpatton/pyseter/blob/main/tutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+<div class="toc-actions"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/tutorial.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -339,334 +406,351 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Introduction to pyseter</h1>
+<h1 class="title">Pyseter: a Python package for processing images before photo-identification</h1>
 </div>
 
 
+<div class="quarto-title-meta-author">
+  <div class="quarto-title-meta-heading">Authors</div>
+  <div class="quarto-title-meta-heading">Affiliations</div>
+  
+    <div class="quarto-title-meta-contents">
+    <p class="author">Philip T. Patton <a href="mailto:PattonP@si.edu" class="quarto-title-author-email"><i class="bi bi-envelope"></i></a> <a href="https://orcid.org/0000-0003-2059-4355" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Migratory Bird Center, Smithsonian’s National Zoo and Conservation Biology Institute
+          </p>
+        <p class="affiliation">
+            Marine Mammal Research Program, University of Hawaiʻi at Mānoa
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Claire Lacey <a href="https://orcid.org/0000-0003-0541-8193" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Marine Mammal Research Program, University of Hawaiʻi at Mānoa
+          </p>
+      </div>
+    <div class="quarto-title-meta-contents">
+    <p class="author">Lars Bejder <a href="https://orcid.org/0000-0001-8138-8606" class="quarto-title-author-orcid"> <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA2ZpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMC1jMDYwIDYxLjEzNDc3NywgMjAxMC8wMi8xMi0xNzozMjowMCAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo1N0NEMjA4MDI1MjA2ODExOTk0QzkzNTEzRjZEQTg1NyIgeG1wTU06RG9jdW1lbnRJRD0ieG1wLmRpZDozM0NDOEJGNEZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDozM0NDOEJGM0ZGNTcxMUUxODdBOEVCODg2RjdCQ0QwOSIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ1M1IE1hY2ludG9zaCI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOkZDN0YxMTc0MDcyMDY4MTE5NUZFRDc5MUM2MUUwNEREIiBzdFJlZjpkb2N1bWVudElEPSJ4bXAuZGlkOjU3Q0QyMDgwMjUyMDY4MTE5OTRDOTM1MTNGNkRBODU3Ii8+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+84NovQAAAR1JREFUeNpiZEADy85ZJgCpeCB2QJM6AMQLo4yOL0AWZETSqACk1gOxAQN+cAGIA4EGPQBxmJA0nwdpjjQ8xqArmczw5tMHXAaALDgP1QMxAGqzAAPxQACqh4ER6uf5MBlkm0X4EGayMfMw/Pr7Bd2gRBZogMFBrv01hisv5jLsv9nLAPIOMnjy8RDDyYctyAbFM2EJbRQw+aAWw/LzVgx7b+cwCHKqMhjJFCBLOzAR6+lXX84xnHjYyqAo5IUizkRCwIENQQckGSDGY4TVgAPEaraQr2a4/24bSuoExcJCfAEJihXkWDj3ZAKy9EJGaEo8T0QSxkjSwORsCAuDQCD+QILmD1A9kECEZgxDaEZhICIzGcIyEyOl2RkgwAAhkmC+eAm0TAAAAABJRU5ErkJggg=="></a></p>
+  </div>
+  <div class="quarto-title-meta-contents">
+        <p class="affiliation">
+            Marine Mammal Research Program, University of Hawaiʻi at Mānoa
+          </p>
+        <p class="affiliation">
+            Zoophysiology, Department of Bioscience, Aarhus University
+          </p>
+      </div>
+  </div>
 
 <div class="quarto-title-meta">
 
-    
+      
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 2, 2025</p>
+    </div>
+  </div>
   
     
   </div>
   
+<div>
+  <div class="abstract">
+    <div class="block-title">Abstract</div>
+    Photographic identification (photo-ID) is an effective and non-invasive method for studying many aspects of animal ecology. Photo-ID, however, is a labor-intensive process that involves many steps including, but not limited to, grading individuals for distinctiveness (useful for partially marked populations), and curating the best image of each individual from each encounter. This latter step is helpful for reducing false negative errors, reducing the labor effort involved in manual or semi-automated identification, , and Photo-ID is a multi-step process that culminates in identifying individuals in a set of query images by comparing them against a reference set. Before this final identification step, there are several steps that should be taken to improve identification performance or downstream analyses. We introduce Pyseter, a Python package for automating several of these steps, including grading animals for distinctiveness, which is helpful for partially marked populations, and grouping query images into folders by a proposed ID then encounter, which is helpful for selecting the highest quality image of every individual by encounter. This curation can reduce false negative errors, and greatly reduces the effort involved in manual photo-ID. Pyseter includes AnyDorsal, an individual identification algorithm that was trained on 24 species of cetacean. As such, users can estimate similarity scores between individuals in cetacean dorsal images with Pyseter. We demonstrate a typical Pyseter workflow with a spinner dolphin example from Hawaiʻi.
+  </div>
+</div>
 
+<div>
+  <div class="keywords">
+    <div class="block-title">Keywords</div>
+    <p>computer vision, deep learning, clustering, whale, dolphin</p>
+  </div>
+</div>
 
 </header>
 
 
-<p>Pyseter is an Python package for sorting images by an automatically generated ID. The main functions of Pyseter are:</p>
-<ol type="1">
-<li>Extracting features from images</li>
-<li>Clustering images by proposed ID</li>
-<li>Sorting images by cluster</li>
-<li>Grading images by distinctiveness</li>
-</ol>
-<p>This notebook will walk you through each major function. First, let’s make sure that Pyseter is properly installed, and that it can access Pytorch.</p>
-<div id="7b682038-990e-4ee6-b4ce-a4e8ec3d77b4" class="cell" data-execution_count="1">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyseter</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>pyseter.verify_pytorch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>✓ PyTorch 2.7.1+cu126 detected
-✓ CUDA GPU available: NVIDIA RTX A4000</code></pre>
+<section id="introduction" class="level2" data-number="1">
+<h2 data-number="1" class="anchored" data-anchor-id="introduction"><span class="header-section-number">1</span> Introduction</h2>
+<p>Photographic identification (photo-ID) is an effective and non-invasive method for studying many aspects of ecology, including movement <span class="citation" data-cites="gardiner-2014-dragon">(<a href="#ref-gardiner-2014-dragon" role="doc-biblioref">Gardiner et al. 2014</a>)</span>, social behavior <span class="citation" data-cites="bejder-1998-social">(<a href="#ref-bejder-1998-social" role="doc-biblioref">Bejder et al. 1998</a>)</span>, abundance <span class="citation" data-cites="mcpherson-2024-dolphin">(<a href="#ref-mcpherson-2024-dolphin" role="doc-biblioref">McPherson et al. 2024</a>)</span>, survival <span class="citation" data-cites="morrison-2011-survival">(<a href="#ref-morrison-2011-survival" role="doc-biblioref">Morrison et al. 2011</a>)</span>, distribution <span class="citation" data-cites="mcguire-2020-belu0">(<a href="#ref-mcguire-2020-belu0" role="doc-biblioref">McGuire et al. 2020</a>)</span>, recruitment <span class="citation" data-cites="setyawan-2022-population">(<a href="#ref-setyawan-2022-population" role="doc-biblioref">Setyawan et al. 2022</a>)</span>, migration <span class="citation" data-cites="hill-2020-humpback">(<a href="#ref-hill-2020-humpback" role="doc-biblioref">Hill et al. 2020</a>)</span>, and resource-selection <span class="citation" data-cites="patton-2025-dissertation">(<a href="#ref-patton-2025-dissertation" role="doc-biblioref">Patton 2025</a>)</span>. Photo-ID is a multi-step process that culminates in comparing a query set—images of animals whose identity we wish to know—against a reference set—images of known individuals. This last step can be accomplished by hand <span class="citation" data-cites="karanth-1995-camera">(<a href="#ref-karanth-1995-camera" role="doc-biblioref">Karanth 1995</a>)</span>, with a database <span class="citation" data-cites="adams-2006-finbase">(<a href="#ref-adams-2006-finbase" role="doc-biblioref">Adams et al. 2006</a>)</span>, or with individual identification software that comes with database management, such as Happywhale <span class="citation" data-cites="cheeseman-2021-happywhale">(<a href="#ref-cheeseman-2021-happywhale" role="doc-biblioref">Cheeseman et al. 2021</a>)</span>.</p>
+<p>Curating a query set from a batch of field images involves several steps that are often manual and labor-intensive. These include selecting images with animals <span class="citation" data-cites="beery-2019-efficient">(<a href="#ref-beery-2019-efficient" role="doc-biblioref">Beery et al. 2019</a>)</span>, selecting images of sufficient quality <span class="citation" data-cites="urian-2015-cmr">(<a href="#ref-urian-2015-cmr" role="doc-biblioref">Urian et al. 2015</a>)</span>, and selecting images of animals with distinctive markings <span class="citation" data-cites="rosel-2011-grading">(<a href="#ref-rosel-2011-grading" role="doc-biblioref">Rosel et al. 2011</a>)</span>, which is necessary in partially marked populations. Additionally, users may want to limit the query set to only the highest quality images of each individual from a single encounter (e.g., a burst of images from a camera trap). This especially helpful for manual photo-ID because it can dramatically reduce the number of comparisons between the query and the reference set. Further, limiting the query set to only the best images from each encounter may reduce the chance of a missed match, i.e., a false negative error <span class="citation" data-cites="urian-2015-cmr">(<a href="#ref-urian-2015-cmr" role="doc-biblioref">Urian et al. 2015</a>)</span>. One way to curate the query set this way is to “sort” the images by apparent individual and encounter (Figure 1).Sorting, however, is a labor-intensive process in itself, in that it requires <span class="math inline">\(\binom{m}{2}=m(m-1)/2\)</span> comparisons, where <span class="math inline">\(m\)</span> is the number of images in the query set. As such, a query set of 500 images requires 124,750 comparisons to complete the sort.</p>
+<div id="fig-sort" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-sort-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="images/sort-figure.png" class="img-fluid figure-img">
 </div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-sort-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;1: Example of sorted images. Before sorting, the entire query set is in one directory. After sorting, the query set is divided into many directories. In this example, the second level of directories are the temporary IDs and the third level of directories are the encounters
+</figcaption>
+</figure>
 </div>
-<p>If you’re on a Mac, you should see something like</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">✓</span> PyTorch 2.7.0 detected</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">✓</span> Apple Silicon <span class="er">(</span><span class="ex">MPS</span><span class="kw">)</span> <span class="ex">GPU</span> available</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Please note, however, that AnyDorsal consumes quite a bit of memory. As such, only Apple Silicon devices with 16 GB or more of memory will work. Ideally, future versions of Pyseter will use a smaller model.</p>
-<p>If neither Apple Silicon or an NVIDIA GPU are available, you will see a message like this.</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">✓</span> PyTorch 2.7.1+cu126 detected</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ot">! </span><span class="ex">No</span> GPU acceleration available. Expect slow feature extraction.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Packages in Python tend to be subdivided into modules based on their functions. In Pyseter, the <code>sort</code> module contains functions for sorting files, including other forms of file management.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-R user tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In R, the above code block would look something like</p>
-<pre><code>library(pyseter)
-verify_pytorch()</code></pre>
-<p>or,</p>
-<pre><code>pyseter::verify_pytorch()</code></pre>
-<p>Imports work a little differently in Python. First, we need tell Python that this package is available for imports, <code>import pyseter</code>, then we need to explicitly call the function from the library <code>pyseter.verify_pytorch()</code>. To an R user, this can feel overly wordy. Nevertheless, this wordiness helps keep the global environment clean. Whereas R sessions frequently have to deal with <a href="https://adv-r.hadley.nz/functions.html?q=masking#lexical-scoping">masking names</a>, this rarely happens in Python.</p>
-</div>
-</div>
-<section id="optional-folder-management" class="level2">
-<h2 class="anchored" data-anchor-id="optional-folder-management">Optional: Folder management</h2>
-<p>The main purpose of Pyseter is organizing images into folders. To do keep things clean and tidy, we recommend establishing a <code>working directory</code> with a subfolder, e.g., called, <code>all images</code>, that contains every image you want to be sorted (see below for a different case). Optionally, you might want to have a .csv with encounter information in the working directory. This .csv would contain two columns: one for the image name, i.e., every image in <code>all images</code>, and another for the encounter. As such, the working directory would look like this.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">working</span> directory</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> encounter_info.csv</span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="ex">├──</span> all images</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──00cef32dc62b0f.jpg</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──3ecc025ea6f9bf.jpg</span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──9f18762a48696b.jpg</span>
-<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──36f78517a512dd.jpg</span>
-<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──470d524b4d5303.jpg</span>
-<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>       <span class="ex">...</span></span>
-<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a><span class="ex">│&nbsp;&nbsp;</span> └──4511c9e5cb7acb.jpg</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Sometimes, you might have your images organized into subfolders by encounter.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">working_dir</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">└──</span> original_images</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="ex">├──</span> SL_HI_006_20220616 <span class="er">(</span><span class="ex">CROPPED</span><span class="kw">)</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_006.JPG</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_007.JPG</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_008.JPG</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_021.JPG</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_042.JPG</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ex">...</span></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    <span class="ex">├──</span> SL_HI_007_20220616 <span class="er">(</span><span class="ex">CROPPED</span><span class="kw">)</span></span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_346.JPG</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_347.JPG</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_371.JPG</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="ex">│&nbsp;&nbsp;</span> ├── 2022-06-16_CLD500_CL_372.JPG</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>In this case, you might want to accomplish two tasks: move all these images to one folder, e.g., <code>all_images</code>, and create a .csv that indicates which image belongs to which encounter (i.e., a map from image to encounter). The <code>prep_images()</code> function does just that.</p>
-<div id="9f46f939-2856-46be-add5-2d42796ce817" class="cell" data-execution_count="2">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> prep_images</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># various directories we'll be working with</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>working_dir <span class="op">=</span> <span class="st">'/home/pattonp/koa_scratch/id_data/working_dir'</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>original_image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/original_images'</span></span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># new directory containing every image</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/all_images'</span></span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="co"># copy images to a single folder, then </span></span>
-<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>prep_images(original_image_dir, all_image_dir<span class="op">=</span>image_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Copied 1230 images to: /home/pattonp/koa_scratch/id_data/working_dir/all_images
-Saved encounter information to: /home/pattonp/koa_scratch/id_data/working_dir/encounter_info.csv</code></pre>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-R user tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>In python, you can concatenate strings with the <code>+</code> operator. This is equivalent to <code>paste0(working_dir, '/original_images')</code> in R.</p>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-R user tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Packages in Python tend to be subdivided into modules based on their functions. In Pyseter, the <code>sort</code> module contains functions for sorting files, including other forms of file management.</p>
-</div>
-</div>
+<p>We developed a Python package, Pyseter, to help automate several of these steps. For example, Pyseter’s <code>extract</code> module extracts feature vectors from images, which are useful for estimating similarity scores and identifying individuals <span class="citation" data-cites="miele-2021-metric">(<a href="#ref-miele-2021-metric" role="doc-biblioref">Miele et al. 2021</a>)</span>. The <code>grade</code> module includes functions for evaluating the distinctiveness of an animal’s markings. Finally, the <code>sort</code> module contains two clustering algorithms for classifying individuals into proposed identities. Additionally, <code>sort</code> includes functions for sorting images into proposed identities and encounters <a href="#fig-sort" class="quarto-xref">Figure&nbsp;1</a>. Pyseter currently lacks functions for detecting animals in images <span class="citation" data-cites="beery-2019-efficient">(<a href="#ref-beery-2019-efficient" role="doc-biblioref">Beery et al. 2019</a>)</span> or grading the quality of images <span class="citation" data-cites="rosel-2011-grading">(<a href="#ref-rosel-2011-grading" role="doc-biblioref">Rosel et al. 2011</a>)</span>. We plan on adding these functions as the technology advances.</p>
 </section>
-<section id="extracting-features" class="level2">
-<h2 class="anchored" data-anchor-id="extracting-features">1. Extracting features</h2>
-<p>Pyseter identifies individuals by extracting <em>feature vectors</em> from images. Feature vectors summarize three-dimensional images into one-dimensional vectors that are useful for the task at hand, in this case, individual identification.</p>
-<p>Pyseter extracts feature vectors with <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167">AnyDorsal</a>, an algorithm for identifying whales and dolphins of many species. AnyDorsal is the same dorsal identification algorithm that’s included with <a href="https://happywhale.com/home">Happywhale</a> (although not to be confused with their humpback whale fluke ID algorithm).</p>
-<p>Before we extract the feature vectors, let’s first create a subfolder within our working directory to save them in. This isn’t necessary, yet keeps things tidy.</p>
-<div id="82e70d3d-832d-4a24-aa75-0b8a831a973e" class="cell" data-execution_count="3">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># in case you want to save the features after extracting them </span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/features'</span></span>
-<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>os.makedirs(feature_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="installation" class="level2" data-number="2">
+<h2 data-number="2" class="anchored" data-anchor-id="installation"><span class="header-section-number">2</span> Installation</h2>
+<p>Here, we assume some familiarity with Python, conda, and pip. Users coming from R, who may be less familiar with these concepts, should reference the “General Overview” Notebook that’s included in this manuscript’s attendant Zenodo repository. [Reviewers will find it in the Anonymous GitHub repository.]</p>
+<p>If using conda, we recommend creating a fresh conda environment. Additionally, before installing Pyseter, users must install Pytorch. Follow the directions on the Pytorch website, which will vary based on your operating system and how you plan to use GPU acceleration. Users who plan on extracting features should have an NVIDIA GPU that is CUDA compatible, or a Mac with at least 16 GB of RAM. Below, we demonstrate the bash commands necessary to install Pytorch. These can be executed in a Jupyter Notebook (as below) or a command line interface (e.g., the miniforge prompt in Windows or the Terminal application in a Unix-like OS). After installing Pytorch, users can install Pyseter from PyPI.</p>
+<div id="cbbe8ca5" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>conda create <span class="op">-</span>n pyseter_env  </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>conda activate pyseter_env</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>conda install pip3</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>pip3 install torch torchvision <span class="op">--</span>index<span class="op">-</span>url https:<span class="op">//</span>download.pytorch.org<span class="op">/</span>whl<span class="op">/</span>cu128</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>pip3 install pyseter</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-R user tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The module, <code>os</code>, is part of Python’s <em>standard library</em>. People often refer to R and its standard libraries as “base R.” Base R includes the stats library, which provides the function <code>rnorm</code>. The <code>os</code> module has many functions for tinkering with your operating system.</p>
-</div>
-</div>
-<p>We will extract features with the <code>FeatureExtractor</code> class. To do so, we first need to initialize the class. This sets up important parameters, such as the <code>batch_size</code>, which is the number of images that will be processed in parallel. Larger batches should run faster, although your mileage may vary. If you specify too large of a batch, you may encounter an <code>OutOfMemoryError</code> (see below for an example). If you encounter this error, try specifying a larger batch size. If you encounter this error with a very small batch size (say, 2), you may need to resize your images. You can do this manually by reducing the file size in an image editing software, or <a href="https://imagekit.io/blog/image-resizing-in-python/">with Python</a></p>
-<pre style="white-space: pre-wrap; word-wrap: break-word;">OutOfMemoryError: CUDA out of memory. Tried to allocate 12.00 MiB. GPU 0 has a total capacity of 5.81 GiB of which 9.06 MiB is free. Including non-PyTorch memory, this process has 5.76 GiB memory in use. Of the allocated memory 5.64 GiB is allocated by PyTorch, and 50.21 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://pytorch.org/docs/stable/notes/cuda.html#environment-variables)
-</pre>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-R user tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Python error messages are comically long, putting CVS receipts to shame. This is because they show the entire traceback, i.e., this error caused this error caused this error, etc. To quickly diagnose the problem, scroll to the bottom of the message. Then, you can further dissect it by scrolling up.</p>
-</div>
-</div>
-<div id="b6c85063-614a-433d-8bdb-867c8c965122" class="cell" data-execution_count="4">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.extract <span class="im">import</span> FeatureExtractor</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># specify the configuration for the extractor </span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>fe <span class="op">=</span> FeatureExtractor(batch_size<span class="op">=</span><span class="dv">4</span>,)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Users can verify the installation by running the following Python commands in, say, a Jupyter Notebook,</p>
+<div id="98c6abaf" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyseter</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>pyseter.verify_pytorch()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Using device: cuda (NVIDIA RTX A4000)</code></pre>
+<pre><code>✓ PyTorch 2.7.0 detected
+✓ Apple Silicon (MPS) GPU available</code></pre>
 </div>
 </div>
-<p>Once we’ve initialize the class, we can use its associated methods (functions). In this case, the only one we are interested in is <code>extract()</code>, which extracts a feature vector for every image in a specified directory. This can take several minutes, so we typically save the results afterwards.</p>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-R user tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Classes and methods also exist in R, but operate more behind the scenes. For example, <code>x &lt;- data.frame()</code> initializes an object of class data.frame, and <code>summary(x)</code> calls the summary method for data.frames. Python makes this relationship more explicit. For example, the equivalent (although nonsensical) Python code would be <code>x = data.frame()</code> and <code>x.summary()</code>.</p>
-</div>
-</div>
-<div id="dff8c63c-3268-44b6-8703-66fcb03b6907" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the features for the input directory then save them</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> fe.extract(image_dir<span class="op">=</span>image_dir)</span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a><span class="co"># this saves them as an numpy array</span></span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>np.save(out_path, features)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Loading model...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>/home/pattonp/.conda/envs/pyseter/lib/python3.13/site-packages/timm/models/_factory.py:138: UserWarning: Mapping deprecated model name tf_efficientnet_l2_ns to current tf_efficientnet_l2.ns_jft_in1k.
-  model = create_fn(</code></pre>
-</div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Warning: Missing keys when loading pretrained weights: ['head.weight']
-Warning: Unexpected keys when loading pretrained weights: ['head.fc.weight']
-Extracting features...</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>100%|██████████| 308/308 [01:48&lt;00:00,  2.84it/s]</code></pre>
-</div>
-</div>
-<p>The object <code>features</code> is a dictionary, whose keys are the filenames and whose values are the feature vectors associated with each filename. This helps ensure that each image is associated with the correct feature vector. Nevertheless, it can be easier to work with actual numpy arrays. To do so, convert the keys to a list, then to a numpy array.</p>
-<div id="db9bb733-aad3-4cee-909a-f6e6ddcf5a99" class="cell" data-execution_count="6">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>filenames <span class="op">=</span> np.array(<span class="bu">list</span>(features.keys()))</span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>feature_array <span class="op">=</span> np.array(<span class="bu">list</span>(features.values()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-R user tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The R objects that Python’s dictionary most resemble is the <a href="https://adv-r.hadley.nz/vectors-chap.html?q=named%20vector#attr-names">named vector</a> or the <a href="https://adv-r.hadley.nz/vectors-chap.html?q=named%20vector#lists">list</a>. Like a list, dictionaries can hold different data types. Unlike a list, dictionaries have no order, and therefore cannot be integer indexed.</p>
-</div>
-</div>
-<p>If you’ve already extracted and saved features, you can load them with the code below.</p>
-<div id="4e6893da-ec27-44c6-acbd-54baaa773bb9" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># import numpy as np</span></span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a><span class="co"># out_path = feature_dir + '/features.npy'</span></span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a><span class="co"># features = np.load(out_path, allow_pickle=True).item()</span></span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a><span class="co"># filenames = np.array(list(features.keys()))</span></span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a><span class="co"># feature_array = np.array(list(features.values()))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
+<p>which will tell the user which form of GPU acceleration is available, if any.</p>
 </section>
-<section id="clustering-images-by-proposed-id" class="level2">
-<h2 class="anchored" data-anchor-id="clustering-images-by-proposed-id">2. Clustering images by proposed ID</h2>
-<p>Pyseter comes with two algorithm’s for clustering images by proposed ID. Network clustering works better for small datasets. To use network clustering, we first need to compute the similarity scores between each pair of images.</p>
-<div id="7734d4d3-d029-4dc2-bc8d-cf3ed3a05490" class="cell" data-execution_count="8">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>similarity_scores <span class="op">=</span> cosine_similarity(feature_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>This indicates how similar the individuals in each image are.</p>
-<p>Next, we can perform the clustering. Each cluster represents a proposed ID. To access the “cluster labels” (these are just integers representing the cluster), we can access the cluster_idx attribute, i.e, <code>results.cluster_idx</code>.</p>
-<div id="f7fd95c1-c9ae-402f-818a-ccc1936b1ea3" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> NetworkCluster, report_cluster_results</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>nc <span class="op">=</span> NetworkCluster(match_threshold<span class="op">=</span><span class="fl">0.55</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> nc.cluster_images(similarity_scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Following clusters may contain false positives:
-['ID_0013', 'ID_0040', 'ID_0061', 'ID_0079', 'ID_0086', 'ID_0110']</code></pre>
-</div>
-</div>
-<p>Network clustering has one major hyperparameter, namely, the <code>match_threshold</code>, which indicates whether two images should be grouped within a cluster. That is, if the similarity score between two images is above a certain threshold, we cluster them into a proposed ID. High thresholds mean that few images will be clustered together, creating many clusters. Very low thresholds mean that many images will be clustered together, creating few clusters. <code>report_cluster_results</code> produces a quick and dirty summary of the number of clusters created, and the size of the largest cluster (i.e., the number of images associated to the most photographed individual). This is a quick sanity check.</p>
-<div id="1fcc6989" class="cell" data-execution_count="10">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>network_idx <span class="op">=</span> results.cluster_idx</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>report_cluster_results(network_idx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Found 245 clusters.
-Largest cluster has 30 images.</code></pre>
-</div>
-</div>
-<p>You’ll also note that <code>nc.cluster_images()</code> warns that some clusters may contain “false positives.” False positive matches occur when two separate individuals fall under the same proposed ID. We can diagnose possible false positives by evaluating the network. In this case, the network consists of nodes (images) and edges, which represent connections between images. Two images are connected when they have a similarity score above the threshold. A blob of connected nodes (i.e., connected components) represents a proposed ID.</p>
-<p>Sometimes, the connected components look less like a blob and more like a barbell, where two sets of images have many connections amongst each other, yet these two blobs are only connected by one link. We suspect that such clusters contain false positives, i.e., two sets of images for two individuals connected by one spurious link. We can plot the networks of the suspicious clusters with <code>results.plot_suspicious()</code>.</p>
-<div id="79e2998b" class="cell" data-execution_count="11">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>results.plot_suspicious()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="spinner-dolphin-example" class="level2" data-number="3">
+<h2 data-number="3" class="anchored" data-anchor-id="spinner-dolphin-example"><span class="header-section-number">3</span> Spinner dolphin example</h2>
+<p>We demonstrate the core modules and functions of Pyseter with a example using spinner dolphins (<em>Stenella longirostris</em>). Theoretically, Pyseter is taxon agnostic. Functions in the grade and sort modules work with similarity scores, which can be generated from any individual identification algorithm <span class="citation" data-cites="miele-2021-metric">(<a href="#ref-miele-2021-metric" role="doc-biblioref">Miele et al. 2021</a>)</span>. The extract module, however, only includes one individual identification algorithm, namely, AnyDorsal, which is only suitable for cetacean dorsal images (see below) <span class="citation" data-cites="patton-2023-deep">(<a href="#ref-patton-2023-deep" role="doc-biblioref">Patton et al. 2023</a>)</span>. As such, we chose a cetacean example to demonstrate the package’s full capabilities. The images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi <span class="citation" data-cites="lacey-2025-spinner">(<a href="#ref-lacey-2025-spinner" role="doc-biblioref">Lacey et al. 2025</a>)</span>. Every image collected during the study was graded for quality and distinctiveness <span class="citation" data-cites="urian-2015-cmr">Lacey et al. (<a href="#ref-lacey-2025-spinner" role="doc-biblioref">2025</a>)</span>. This example dataset only includes images of sufficient quality that have been cropped to the identifying mark—the dorsal fin <span class="citation" data-cites="rosel-2011-grading">(<a href="#ref-rosel-2011-grading" role="doc-biblioref">Rosel et al. 2011</a>)</span> (<a href="#fig-demo" class="quarto-xref">Figure&nbsp;2</a>). This example includes 208 images of animals without distinctive markings, and 1043 images of animals with distinctive markings.</p>
+<div id="cell-fig-demo" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co"># grab the first nine images in the dataset</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>nrow <span class="op">=</span> ncol <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>demo_dir <span class="op">=</span> <span class="st">'/Users/philtpatton/datasets/pyseter-data/working_dir/all_images'</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>demo_images <span class="op">=</span> os.listdir(demo_dir)[:(nrow <span class="op">*</span> ncol)]</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plot a grid of images </span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(nrow, ncol, figsize<span class="op">=</span>(<span class="dv">6</span>, <span class="dv">6</span>), tight_layout<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, filename <span class="kw">in</span> <span class="bu">enumerate</span>(demo_images):</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> os.path.join(demo_dir, filename)</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> Image.<span class="bu">open</span>(path)</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    axes.flat[i].imshow(image)</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    axes.flat[i].axis(<span class="st">'off'</span>)</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>fig.savefig(<span class="st">'images/fig-demo.png'</span>, transparent<span class="op">=</span><span class="va">False</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>, dpi<span class="op">=</span><span class="dv">600</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="tutorial_files/figure-html/cell-12-output-1.png" class="img-fluid figure-img"></p>
+<div id="fig-demo" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-demo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tutorial_files/figure-html/fig-demo-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-demo-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;2: Nine images from the spinner dolphin example <span class="citation" data-cites="lacey-2025-spinner">(<a href="#ref-lacey-2025-spinner" role="doc-biblioref">Lacey et al. 2025</a>)</span>
+</figcaption>
 </figure>
 </div>
 </div>
 </div>
-<p><code>ID_0033</code> clearly has a barbell shape, suggesting that this cluster consists of images for two individuals linked together by one spurious connection.<code>ID_0013</code> also seems dubious, and <code>ID_0060</code> might consist of four separate individuals.</p>
-<p>Users can deal with suspicious clusters in several ways. First, raising the match threshold should reduce the number of false positive matches. That said, this will increase the <em>false negative rate</em>, whereby images of one individual are spread across multiple proposed IDs. Alternatively, users can manually inspect the images within the clusters and, if need be, divide up the images.</p>
-<p>As the number of images being clustered grows, the overall false positive rate also grows (this is analogous the <a href="https://en.wikipedia.org/wiki/Multiple_comparisons_problem">multiple comparison problem</a> in statistics). At some point,the network matching becomes untenable; all but the highest match thresholds would produce too many false positives to be useful.</p>
-<p>For these cases, there is <code>HierarchicalCluster</code>, which relies on the <a href="https://scikit-learn.org/stable/modules/clustering.html#hierarchical-clustering">Hierarchical Agglomerative Clustering</a> algorithm provided by the popular machine learning package, scikit-learn. Note that <code>HierarchicalCluster</code> will run noticeably slower than the <code>NetworkCluster</code>.</p>
-<div id="d9495f97-18bc-443c-9765-339f20387ea1" class="cell" data-execution_count="12">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> HierarchicalCluster, format_ids</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize the object then cluster away! </span></span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>hc <span class="op">=</span> HierarchicalCluster(match_threshold<span class="op">=</span><span class="fl">0.5</span>)</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>hac_idx <span class="op">=</span> hc.cluster_images(feature_array)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<p>The <code>HierarchicalCluster</code> results object is much simpler, in that it just returns the cluster indices for each image. We can make these labels a little prettier with the <code>format_ids</code> function.</p>
-<div id="d3e56cfc" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>hac_labels <span class="op">=</span> format_ids(hac_idx)</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(hac_labels[:<span class="dv">5</span>])</span>
-<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a><span class="co"># quick summary of the clustering results</span></span>
-<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a>report_cluster_results(hac_labels)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<section id="folder-management" class="level3" data-number="3.1">
+<h3 data-number="3.1" class="anchored" data-anchor-id="folder-management"><span class="header-section-number">3.1</span> Folder management</h3>
+<p>To do keep things clean and tidy, we recommend establishing a <code>working_directory</code> with a subfolder, e.g., called, <code>all_images</code>, that contains every image that needs to be sorted (see below for a different case). The working directory should also contain a .csv with encounter information. This .csv would contain two columns: one for the image name, i.e., every image in <code>all_images</code>, and another for the encounter. As such, the working directory would look like this.</p>
+<pre><code>working_dir
+├── all_images
+│&nbsp;&nbsp; ├── 0a49385ef8f1e74a.jpg
+│&nbsp;&nbsp; ├── 0aca671c4afbd9b9.jpg
+        ...
+│&nbsp;&nbsp; └── ffa8759a92174857.jpg
+└── encounter_info.csv</code></pre>
+<p>Alternatively, you might have your images organized into subfolders by encounter.</p>
+<pre><code>working_dir
+└── original_images
+ &nbsp;&nbsp; ├── enc0
+ &nbsp;&nbsp; │&nbsp;&nbsp; ├── 0a49385ef8f1e74a.jpg
+ &nbsp;&nbsp;  &nbsp;&nbsp; ├── 1e105f9659c12a66.jpg
+            ...
+ &nbsp;&nbsp; │&nbsp;&nbsp; └── f5093b3089b44e67.jpg
+ &nbsp;&nbsp; └── enc12
+ &nbsp;&nbsp;  &nbsp;&nbsp; ├── 0b5c44f167d89d6c.jpg
+        ├── 1e0c186da31a53c4.jpg
+            ...
+ &nbsp;&nbsp;  &nbsp;&nbsp; └── f9bb41e7ce0d672d.jpg</code></pre>
+<p>In this case, you might want to accomplish two tasks: move all these images to one folder, e.g., <code>all_images</code>, and create a .csv that indicates which image belongs to which encounter (i.e., a map from image to encounter). The <code>prep_images()</code> function does just that.</p>
+<div id="62d90f17" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> prep_images</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>working_dir <span class="op">=</span> <span class="st">'/Users/philtpatton/datasets/pyseter-data/working_dir'</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>original_image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/original_images'</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co"># new, flattened directory containing every image</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/all_images'</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>prep_images(original_image_dir, all_image_dir<span class="op">=</span>image_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>['ID-0092', 'ID-0159', 'ID-0075', 'ID-0000', 'ID-0034']
-Found 306 clusters.
-Largest cluster has 19 images.</code></pre>
+<pre><code>Copied 1251 images to: /Users/philtpatton/datasets/pyseter-data/working_dir/all_images
+Saved encounter information to: /Users/philtpatton/datasets/pyseter-data/working_dir/encounter_info.csv</code></pre>
 </div>
 </div>
-<p><code>HierarchicalCluster</code> is useful for large datasets, yet will be more prone to false negative errors. In this example, it found 60 more clusters (proposed IDs) than the network matching, which may be dubious. Users will have to decide for themselves how to balance false positive versus false negative matches. For example, we recommend that users preprocess their images with Pyseter, then identify animals in the pre-processed images manually or with Happywhale. This second round of identification should help clean up false negative matches. As such, users following this approach might be more averse to false positive errors in the first stage.</p>
 </section>
-<section id="sorting-images-by-proposed-id" class="level2">
-<h2 class="anchored" data-anchor-id="sorting-images-by-proposed-id">3. Sorting images by proposed ID</h2>
-<p>Once we’ve identified individuals, we can sort them into folder by proposed ID and encounter. To do so, we need to create a pandas <code>DataFrame</code> that indicates the proposed ID and encounter for each filename. Recall that we created the <code>encounter_info.csv</code> with the <code>prep_images()</code> function above. For this sort, we’ll use the NetworkCluster results</p>
-<div id="638860fc-994f-4b1c-990f-a5ae49586aa6" class="cell" data-execution_count="14">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># create a dataframe proposed id and encounter for each image</span></span>
-<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>network_df <span class="op">=</span> pd.DataFrame({<span class="st">'image'</span>: filenames, <span class="st">'proposed_id'</span>: network_idx})</span>
-<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>encounter_info <span class="op">=</span> pd.read_csv(working_dir <span class="op">+</span> <span class="st">'/encounter_info.csv'</span>)</span>
-<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>network_df <span class="op">=</span> network_df.merge(encounter_info)</span>
-<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>network_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<section id="extracting-features" class="level3" data-number="3.2">
+<h3 data-number="3.2" class="anchored" data-anchor-id="extracting-features"><span class="header-section-number">3.2</span> Extracting features</h3>
+<p>Pyseter’s <code>extract</code> module includes the AnyDorsal algorithm, which was trained to identify cetaceans of 24 species <span class="citation" data-cites="patton-2023-deep">(<a href="#ref-patton-2023-deep" role="doc-biblioref">Patton et al. 2023</a>)</span>. AnyDorsal’s identifying performance varies by species. Species primarily identified by nicks and notches along the dorsal fin will perform best <span class="citation" data-cites="patton-2023-deep">(<a href="#ref-patton-2023-deep" role="doc-biblioref">Patton et al. 2023</a>)</span>.</p>
+<p>Pyseter extracts features with the <code>FeatureExtractor</code> class, which needs to be initialized by setting the <code>batch_size</code>. The <code>batch_size</code> dictates how many images will be processed by the GPU at once. Larger batch sizes might run faster yet might also produce an <code>OutOfMemoryError</code>. For lower memory GPUs, we recommend smaller batch sizes. If you encounter an <code>OutOfMemoryError</code> with <code>batch_size=1</code>, then you will have to reduce the size of your images. See the Supplement for how to do so with the Pillow library.</p>
+<div id="705ceb8c" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.extract <span class="im">import</span> FeatureExtractor</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># feature extraction can take time so it's useful to save the result </span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/features'</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>os.makedirs(feature_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>fe <span class="op">=</span> FeatureExtractor(batch_size<span class="op">=</span><span class="dv">4</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Using device: mps (Apple Silicon GPU)</code></pre>
+</div>
+</div>
+<p>The <code>extract()</code> method of the <code>FeatureExtractor</code> class only takes one argument, <code>image_dir</code>, the flattened directory containing every image to be processed. Feature extraction can take several minutes, depending on the number of files and the GPU, so we recommend saving the results afterwards. The <code>extract()</code> function returns a Python dictionary where the filenames are the keys, and the features are the values. It can be useful to convert these to NumPy arrays</p>
+<div id="1553a9aa" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> fe.extract(image_dir<span class="op">=</span>image_dir)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># this saves the dictionary as an numpy file</span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>np.save(out_path, features)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a><span class="co"># convert keys and values to numpy arrays</span></span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>filenames <span class="op">=</span> np.array(<span class="bu">list</span>(features.keys()))</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>feature_array <span class="op">=</span> np.array(<span class="bu">list</span>(features.values()))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Alternatively, we can load previously saved results with the <code>load_features()</code> function. In either case, <code>feature_array</code> will be a two-dimensional matrix of shape <code>(n, 5504)</code>, where <code>n</code> is the number of images and <code>5504</code> is the number of features returned by AnyDorsal.</p>
+<div id="eda432d7" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># alternatively, load in the feature dictionary from file </span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np </span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> load_features</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>filenames, feature_array <span class="op">=</span> load_features(out_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="grading-individuals-by-distinctiveness" class="level3" data-number="3.3">
+<h3 data-number="3.3" class="anchored" data-anchor-id="grading-individuals-by-distinctiveness"><span class="header-section-number">3.3</span> Grading individuals by distinctiveness</h3>
+<p>Here, we introduce one of Pyseter’s clustering algorithms, <code>NetworkCluster</code>, because doing so helps understand the distinctiveness grading algorithm (see Section 3.4 for a more thorough description of <code>NetworkCluster</code>). Network clustering works with similarity scores, which represent the similarity between two individuals in a pair of images. We can define a threshold score, the <code>match_threshold</code>, above which we consider two individuals to be the same. That is, if the similarity score between two images is above a certain threshold, we cluster them into a proposed ID. As such, network clustering works by treating the query set as a network, where the nodes are images and the edges are similarity scores above a threshold. Each set of connected components, i.e., images whose similarity scores are above the match threshold, represents a proposed ID.</p>
+<p>We might expect the indistinct individuals to cluster together. In the context of facial recognition, <span class="citation" data-cites="deng-2023-ui">Deng et al. (<a href="#ref-deng-2023-ui" role="doc-biblioref">2023</a>)</span> observed that “unrecognizable identities”, e.g., extremely blurry or masked faces, tend to cluster together. As such, for partially marked populations, the largest cluster in the query set may represent every indistinct individual. Following <span class="citation" data-cites="deng-2023-ui">Deng et al. (<a href="#ref-deng-2023-ui" role="doc-biblioref">2023</a>)</span>, we can compute the average feature vector for this cluster. The distance between this average feature vector and the feature vector for each image is the distinctiveness score for that image. As such, the score applies to the image, not the animal. To get a score for an animal, users could average the distinctiveness scores across images for that animal.</p>
+<div id="1510c0aa" class="cell" data-execution_count="8">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.grade <span class="im">import</span> rate_distinctiveness</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>distinctiveness <span class="op">=</span> rate_distinctiveness(feature_array, match_threshold<span class="op">=</span><span class="fl">0.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/philtpatton/miniforge3/envs/pymc_env/lib/python3.13/site-packages/pyseter/grade.py:35: UserWarning: Distinctiveness grades are experimental and should be verified.
+  warn(UserWarning('Distinctiveness grades are experimental and should be verified.'))</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Unrecognizable identity cluster consists of 196 images.</code></pre>
+</div>
+</div>
+<p>We can evaluate the effectiveness of these scores with AUC (i.e., the area under the receiver operating curve). AUC is a metric for evaluating a classifier’s ability to balance true positive and false positive rates. In this example, a classifier built from the distinctiveness grades achieves an AUC of 0.925 <a href="#fig-roc" class="quarto-xref">Figure&nbsp;3</a>.</p>
+<div id="cell-fig-roc" class="cell" data-execution_count="9">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve, RocCurveDisplay, roc_auc_score</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co"># merge the ers scores with the true values to compare for each image</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>mapping <span class="op">=</span> pd.read_csv(<span class="st">'/Users/philtpatton/datasets/pyseter-data/file_mapping.csv'</span>).iloc[:, <span class="dv">1</span>:]</span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>ers_df <span class="op">=</span> pd.DataFrame({<span class="st">'image_new'</span>: filenames, <span class="st">'ers'</span>: <span class="dv">1</span> <span class="op">-</span> distinctiveness})</span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>ers_df <span class="op">=</span> ers_df.merge(mapping)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the curve first, which will get displayed</span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a>y_score <span class="op">=</span> ers_df[<span class="st">'ers'</span>]</span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a>y_test, _ <span class="op">=</span> ers_df.distinctiveness.factorize()</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a>fpr, tpr, _ <span class="op">=</span> roc_curve(y_test, y_score)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">4</span>, <span class="dv">3</span>))</span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a>roc_display <span class="op">=</span> RocCurveDisplay(fpr<span class="op">=</span>fpr, tpr<span class="op">=</span>tpr).plot(ax<span class="op">=</span>ax)</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'right'</span>].set_visible(<span class="va">False</span>)</span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'top'</span>].set_visible(<span class="va">False</span>)</span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a>roc_auc <span class="op">=</span> roc_auc_score(y_test, y_score)</span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.95</span>, <span class="fl">0.6</span>, <span class="ss">f'AUC=</span><span class="sc">{</span>roc_auc<span class="sc">:0.3f}</span><span class="ss">'</span>, ha<span class="op">=</span><span class="st">'right'</span>, va<span class="op">=</span><span class="st">'top'</span>)</span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'ROC Curve for </span><span class="ch">\n</span><span class="st">Distinctiveness Classifier'</span>)</span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a>fig.savefig(<span class="st">'images/fig-auc.png'</span>, transparent<span class="op">=</span><span class="va">False</span>, bbox_inches<span class="op">=</span><span class="st">'tight'</span>, dpi<span class="op">=</span><span class="dv">300</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/philtpatton/miniforge3/envs/pymc_env/lib/python3.13/site-packages/sklearn/metrics/_plot/roc_curve.py:189: UserWarning: No artists with labels found to put in legend.  Note that artists whose label start with an underscore are ignored when legend() is called with no argument.
+  self.ax_.legend(loc="lower right")</code></pre>
+</div>
+<div class="cell-output cell-output-display">
+<div id="fig-roc" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tutorial_files/figure-html/fig-roc-output-2.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-roc-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;3: Receiving operator characteristic (ROC) curve for a classifier based on the ERS. The area under the curve (AUC), a measure of overall performance, is listed in the middle.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>These distinctiveness scores are experimental in that have not been robustly tested across a variety of scenarios. Nevertheless, users might use them as a guide, potentially making distinctiveness grading somewhat easier.</p>
+</section>
+<section id="clustering-images-into-proposed-ids" class="level3" data-number="3.4">
+<h3 data-number="3.4" class="anchored" data-anchor-id="clustering-images-into-proposed-ids"><span class="header-section-number">3.4</span> Clustering images into proposed IDs</h3>
+<p>To use <code>NetworkCluster</code>, users must first compute the similarity scores between each pair of images. After computing the scores, we cluster the images, where each cluster represents a proposed identity.</p>
+<div id="957e4ab8" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics.pairwise <span class="im">import</span> cosine_similarity</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> NetworkCluster, report_cluster_results</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>similarity_scores <span class="op">=</span> cosine_similarity(feature_array)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>nc <span class="op">=</span> NetworkCluster(match_threshold<span class="op">=</span><span class="fl">0.55</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> nc.cluster_images(similarity_scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Following clusters may contain false positives:
+['ID_0002', 'ID_0011', 'ID_0045', 'ID_0048', 'ID_0150']</code></pre>
+</div>
+</div>
+<p>As mentioned above, network clustering has one major hyperparameter, <code>match_threshold</code>, which indicates whether two images should be grouped within a cluster. High thresholds mean that few images will be clustered together, creating many clusters. Very low thresholds mean that many images will be clustered together, creating few clusters. The <code>report_cluster_results()</code> function produces a quick and dirty summary of the number of clusters created, and the size of the largest cluster (i.e., the number of images associated to the most photographed individual). This is a quick sanity check. The <code>results</code> object has several useful attributes and methods (see below). For example, <code>results.cluster_idx</code> contains the proposed ID for each image.</p>
+<div id="129fb2e6" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>network_idx <span class="op">=</span> results.cluster_idx</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>report_cluster_results(network_idx)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Found 208 clusters.
+Largest cluster has 128 images.</code></pre>
+</div>
+</div>
+<p>In this example, the <code>nc.cluster_images()</code> function warned that some clusters may contain “false positives.” False positive matches occur when two separate individuals fall under the same proposed ID. We can diagnose possible false positives by evaluating the network. Recall that, in the network, a blob of connected nodes (i.e., connected components) represents a proposed ID. These connected components, however, can sometimes look less like a blob and more like a barbell, where two sets of images have many connections amongst each other, yet the two blobs are only connected by a single link. We suspect that such clusters represent false positives, i.e., two sets of images for two individuals connected by one spurious link. We can plot the networks of the suspicious clusters with the <code>results.plot_suspicious()</code> function.</p>
+<div id="cell-fig-false" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>results.plot_suspicious()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div id="fig-false" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-false-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<img src="tutorial_files/figure-html/fig-false-output-1.png" class="img-fluid figure-img">
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-false-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;4: Proposed IDs that may contain false positive errors. Each image (colored) circle is linked to another image (gray line) if similarity between them exceeds a threshold. The colors of each circle represent potential IDs within the proposed ID.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>Both <code>ID_0011</code> and <code>ID_0150</code> appear to have spurious links combining two separate IDs. To deal with this, we could increase manually separate these clusters, or increase the match threshold. Cluster <code>ID_0002</code> represents the “unrecognizable individual” cluster (see Section 3.3).</p>
+<p>As the number of images being clustered grows, the overall false positive rate also grows (this is analogous the multiple comparison problem in statistics). At some point, network matching becomes untenable; all but the highest match thresholds would produce too many false positives to be useful. For these cases, there is <code>HierarchicalCluster</code>, which relies on the Hierarchical Agglomerative Clustering algorithm provided by the popular machine learning package, scikit-learn <span class="citation" data-cites="scikit-learn">(<a href="#ref-scikit-learn" role="doc-biblioref">Pedregosa et al. 2011</a>)</span>. Note that <code>HierarchicalCluster</code> will run noticeably slower than <code>NetworkCluster</code>. See the supplement for an example with <code>HierarchicalCluster</code>.</p>
+</section>
+<section id="sorting-images-by-proposed-id-then-encounter" class="level3" data-number="3.5">
+<h3 data-number="3.5" class="anchored" data-anchor-id="sorting-images-by-proposed-id-then-encounter"><span class="header-section-number">3.5</span> Sorting images by proposed ID then encounter</h3>
+<p>With these cluster results, we can sort images by proposed ID then encounter. To do so, we need to create a Pandas <code>DataFrame</code> that indicates the proposed ID and encounter for each filename <span class="citation" data-cites="pandas">(<a href="#ref-pandas" role="doc-biblioref">McKinney 2010</a>)</span>. Recall that we created the <code>encounter_info.csv</code> with the <code>prep_images()</code> function above.</p>
+<div id="847e64e1" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>id_df <span class="op">=</span> pd.DataFrame({<span class="st">'image'</span>: filenames, <span class="st">'proposed_id'</span>: network_idx})</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># join with the encounter information using "encounter" as a key </span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>encounter_info <span class="op">=</span> pd.read_csv(working_dir <span class="op">+</span> <span class="st">'/encounter_info.csv'</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a>id_df <span class="op">=</span> id_df.merge(encounter_info)</span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>id_df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="11">
 <div>
 
 
@@ -682,33 +766,33 @@ Largest cluster has 19 images.</code></pre>
 <tbody>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">0</td>
-<td>2022-06-25_CLD500_CL_735.jpg</td>
+<td>ae16cb2c0815b31c.jpg</td>
 <td>ID-0000</td>
-<td>SL_HI_016_20220625 (CROPPED)</td>
+<td>enc3</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">1</td>
-<td>2021-11-17_Hilo_AP_2_UNK_0330.jpg</td>
+<td>f86cdadd6ecb59aa.jpg</td>
 <td>ID-0001</td>
-<td>SL_Hilo_13_20211117 (CROPPED)</td>
+<td>enc0</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">2</td>
-<td>2022-06-20_CLD500_CL_1166.jpg</td>
+<td>ee348a1b39cc38b3.jpg</td>
 <td>ID-0002</td>
-<td>SL_HI_010_20220620 (CROPPED)</td>
+<td>enc12</td>
 </tr>
 <tr class="even">
 <td data-quarto-table-cell-role="th">3</td>
-<td>2022-06-16_D750_ANNM_062.JPG</td>
+<td>dc11f24c81a8e339.jpg</td>
 <td>ID-0003</td>
-<td>SL_HI_006_20220616 (CROPPED)</td>
+<td>enc10</td>
 </tr>
 <tr class="odd">
 <td data-quarto-table-cell-role="th">4</td>
-<td>2022-06-20_CLD500_CL_453.jpg</td>
+<td>ae466530552590e3.jpg</td>
 <td>ID-0004</td>
-<td>SL_HI_010_20220620 (CROPPED)</td>
+<td>enc4</td>
 </tr>
 </tbody>
 </table>
@@ -716,78 +800,177 @@ Largest cluster has 19 images.</code></pre>
 </div>
 </div>
 </div>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Formatting the ID DataFrame
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>The ID DataFrame must have columns named image, proposed_id, and encounter. Otherwise sort_images will not work. Luckily, changing column names in pandas is straightforward.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>network_df.columns <span class="op">=</span> [<span class="st">'image'</span>, <span class="st">'proposed_id'</span>, <span class="st">'encounter'</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</div>
-<div class="callout callout-style-default callout-tip callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-R user tip
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Pandas is a package for managing dataframes, and is a straight knock-off of R’s data.frame. In my experience, most R users lose patience not with Python, but with pandas. Pandas is <em>just</em> similar enough to R that one should be able to directly port R ideas over. However, key differences between pandas and R prevent this, causing immense frustration (especially for yours truly!)</p>
-</div>
-</div>
-<p>To sort the images, we need to specify an output directory, then run the <code>sort_images</code> function.</p>
-<div id="babf447f-c801-4a5f-9412-7e148db68b11" class="cell" data-execution_count="16">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> sort_images</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="co"># make an output directory </span></span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>sorted_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/sorted_images'</span></span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>os.makedirs(sorted_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="co"># sort the images into folders based on proposed id</span></span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>sort_images(network_df, all_image_dir<span class="op">=</span>image_dir, output_dir<span class="op">=</span>sorted_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Finally, to sort the images, we need to specify an output directory, then run the <code>sort_images()</code> function. Note that the ID <code>DataFrame</code> must have columns named <code>image</code>, <code>proposed_id</code>, and <code>encounter</code>. Otherwise <code>sort_images()</code> will not work.</p>
+<div id="4ef5383d" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> sort_images</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="co"># make an output directory </span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>sorted_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/sorted_images'</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>os.makedirs(sorted_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>sort_images(id_df, all_image_dir<span class="op">=</span>image_dir, output_dir<span class="op">=</span>sorted_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Sorted 1230 images into 335 folders.</code></pre>
+<pre><code>Sorted 1251 images into 311 folders.</code></pre>
 </div>
 </div>
-<p>We can check to see that this worked by plotting a grid of images with matplotlib.</p>
-<div id="8f6aa0da-7583-4cd9-80e4-2ae57f768a9f" class="cell" data-execution_count="17">
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
-<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
-<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get the files associated with the first ID</span></span>
-<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a>first_id_dir <span class="op">=</span> sorted_dir <span class="op">+</span> <span class="st">'/ID-0000'</span></span>
-<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a>this_encounter <span class="op">=</span> os.listdir(first_id_dir)[<span class="dv">0</span>]</span>
-<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a>encounter_dir <span class="op">=</span> first_id_dir <span class="op">+</span> <span class="st">'/'</span> <span class="op">+</span> this_encounter</span>
-<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a>encounter_files <span class="op">=</span> os.listdir(encounter_dir)</span>
-<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a><span class="co"># plot a grid of images </span></span>
-<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">3</span>, tight_layout<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, filename <span class="kw">in</span> <span class="bu">enumerate</span>(encounter_files[:<span class="dv">9</span>]):</span>
-<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a>    path <span class="op">=</span> encounter_dir <span class="op">+</span> <span class="st">'/'</span> <span class="op">+</span> filename</span>
-<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>    image <span class="op">=</span> Image.<span class="bu">open</span>(path)</span>
-<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a>    axes.flat[i].imshow(image)</span>
-<span id="cb34-16"><a href="#cb34-16" aria-hidden="true" tabindex="-1"></a>    axes.flat[i].axis(<span class="st">'off'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="tutorial_files/figure-html/cell-18-output-1.png" class="img-fluid figure-img"></p>
-</figure>
+<p>Now the flat directory, <code>all_images</code> has been copied to a new folder, <code>sorted_images</code>, that is organized by proposed ID, then encounter.</p>
+<pre><code>sorted_images
+├── ID-0000
+│&nbsp;&nbsp; ├── enc0
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── 0a49385ef8f1e74a.jpg
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── 4d69031e07ef3393.jpg
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── b4f1ca6229180f18.jpg
+│&nbsp;&nbsp; │&nbsp;&nbsp; └── e0016bed0be5bf9f.jpg
+│&nbsp;&nbsp; ├── enc10
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── 0cdbe7c151420b0c.jpg
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── 19dd8e9db3a26066.jpg
+            ...
+│&nbsp;&nbsp; └── enc3
+│&nbsp;&nbsp;     ├── 1ced4b1e3bd63781.jpg
+            ...
+│&nbsp;&nbsp;     └── bc17d3aa572320cc.jpg
+├── ID-0001
+│&nbsp;&nbsp; ├── enc0
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── e7dbbe01ac71d6e8.jpg
+│&nbsp;&nbsp; │&nbsp;&nbsp; └── f86cdadd6ecb59aa.jpg
+│&nbsp;&nbsp; ├── enc2
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── 2b66eacdced6c165.jpg
+│&nbsp;&nbsp; │&nbsp;&nbsp; ├── 7ce2b670757443de.jpg
+            ... 
+├── ID-0206
+│&nbsp;&nbsp; └── enc4
+│&nbsp;&nbsp;     └── 767bdedefe51aabb.jpg
+└── ID-0207
+    └── enc4
+        └── e345d4ddaae7db02.jpg</code></pre>
+</section>
+</section>
+<section id="conclusion" class="level2" data-number="4">
+<h2 data-number="4" class="anchored" data-anchor-id="conclusion"><span class="header-section-number">4</span> Conclusion</h2>
+<p>We have demonstrated one possible workflow for using Pyseter. A potential user would manually grade images for quality and crop images of sufficient quality to the identifying mark. Then, they would use Pyseter to grade these images for distinctiveness and to sort the images above a distinctiveness threshold into folders, selecting the highest quality image of each proposed individual. Finally, the user would compare these images against the reference set, either manually or with an interface such as Happywhale.</p>
+<p>Nevertheless, Pyseter offers users with cetacean datasets flexibility to conduct several kinds of analyses because it allows them to extract feature vectors from images with AnyDorsal. For example, users could compute the false negative rate for their dataset, which is useful for population assessments <span class="citation" data-cites="patton-2025-optimizing">(<a href="#ref-patton-2025-optimizing" role="doc-biblioref">Patton et al. 2025</a>)</span>. Similarly, one could use Pyseter to evaluate the predictive performance of AnyDorsal on a species that was outside the training dataset. Further, after the initial sort, users could clean up the results by doing a second round of clustering and sorting. As Pyseter matures, we plan to add documentation on how to conduct such analyses with Pyseter. Finally, as photo-ID technology improves, e.g., automated quality grading, we plan on adding these algorithms to Pyseter.</p>
+</section>
+<section id="supplements" class="level2" data-number="5">
+<h2 data-number="5" class="anchored" data-anchor-id="supplements"><span class="header-section-number">5</span> Supplements</h2>
+<section id="hierarchical-agglomerative-clustering" class="level3" data-number="5.1">
+<h3 data-number="5.1" class="anchored" data-anchor-id="hierarchical-agglomerative-clustering"><span class="header-section-number">5.1</span> Hierarchical Agglomerative Clustering</h3>
+<p>Below is a demonstration of how to use the HAC algorithm to cluster images, then sort them into folders.</p>
+<div id="09ee5ee2" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> HierarchicalCluster, format_ids</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>hc <span class="op">=</span> HierarchicalCluster(match_threshold<span class="op">=</span><span class="fl">0.5</span>)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>hac_idx <span class="op">=</span> hc.cluster_images(feature_array)</span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a><span class="co"># format_ids converts the integer labels to something like 'ID-0001'</span></span>
+<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>hac_labels <span class="op">=</span> format_ids(hac_idx)</span>
+<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>report_cluster_results(hac_labels)</span>
+<span id="cb27-9"><a href="#cb27-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-10"><a href="#cb27-10" aria-hidden="true" tabindex="-1"></a>hac_df <span class="op">=</span> pd.DataFrame({<span class="st">'image'</span>: filenames, <span class="st">'proposed_id'</span>: hac_labels})</span>
+<span id="cb27-11"><a href="#cb27-11" aria-hidden="true" tabindex="-1"></a>encounter_info <span class="op">=</span> pd.read_csv(working_dir <span class="op">+</span> <span class="st">'/encounter_info.csv'</span>)</span>
+<span id="cb27-12"><a href="#cb27-12" aria-hidden="true" tabindex="-1"></a>hac_df <span class="op">=</span> hac_df.merge(encounter_info)</span>
+<span id="cb27-13"><a href="#cb27-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-14"><a href="#cb27-14" aria-hidden="true" tabindex="-1"></a><span class="co"># separate directory for the hac images</span></span>
+<span id="cb27-15"><a href="#cb27-15" aria-hidden="true" tabindex="-1"></a>hac_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/sorted_images_hac'</span></span>
+<span id="cb27-16"><a href="#cb27-16" aria-hidden="true" tabindex="-1"></a>os.makedirs(hac_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb27-17"><a href="#cb27-17" aria-hidden="true" tabindex="-1"></a>sort_images(hac_df, all_image_dir<span class="op">=</span>image_dir, output_dir<span class="op">=</span>hac_dir)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+<p><code>HierarchicalCluster</code> is useful for large datasets, yet will be more prone to false negative errors. In this example, it found 60 more clusters (proposed IDs) than the network matching, which may be dubious. Users will have to decide how to balance false positive versus false negative matches. For example, we recommend that users preprocess their images with Pyseter, then identify animals in the pre-processed images manually or a program such as Happywhale. This second round of identification should help clean up false negative matches. As such, users following this approach might be more averse to false positive errors in the first stage.</p>
+</section>
+<section id="resizing-images-with-pillow" class="level3" data-number="5.2">
+<h3 data-number="5.2" class="anchored" data-anchor-id="resizing-images-with-pillow"><span class="header-section-number">5.2</span> Resizing images with Pillow</h3>
+<p>Here is how is one example on how to do so with the Pillow library.</p>
+<div id="0ab8cc60" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>new_size <span class="op">=</span> <span class="dv">512</span>, <span class="dv">512</span></span>
+<span id="cb28-4"><a href="#cb28-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-5"><a href="#cb28-5" aria-hidden="true" tabindex="-1"></a><span class="co"># files for resizing and where they'll be sent</span></span>
+<span id="cb28-6"><a href="#cb28-6" aria-hidden="true" tabindex="-1"></a>all_images <span class="op">=</span> [i <span class="cf">for</span> i <span class="kw">in</span> os.listdir(image_dir) <span class="cf">if</span> i.endswith(<span class="st">'jpg'</span>)]</span>
+<span id="cb28-7"><a href="#cb28-7" aria-hidden="true" tabindex="-1"></a>new_dir <span class="op">=</span> os.path.join(working_dir, <span class="st">'thumbnails'</span>)</span>
+<span id="cb28-8"><a href="#cb28-8" aria-hidden="true" tabindex="-1"></a>os.makedirs(new_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb28-9"><a href="#cb28-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb28-10"><a href="#cb28-10" aria-hidden="true" tabindex="-1"></a><span class="co"># resize and save the files </span></span>
+<span id="cb28-11"><a href="#cb28-11" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> <span class="bu">file</span> <span class="kw">in</span> all_images:</span>
+<span id="cb28-12"><a href="#cb28-12" aria-hidden="true" tabindex="-1"></a>    old_path <span class="op">=</span> os.path.join(image_dir, <span class="bu">file</span>)</span>
+<span id="cb28-13"><a href="#cb28-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">with</span> Image.<span class="bu">open</span>(old_path) <span class="im">as</span> im:</span>
+<span id="cb28-14"><a href="#cb28-14" aria-hidden="true" tabindex="-1"></a>        im.thumbnail(new_size)</span>
+<span id="cb28-15"><a href="#cb28-15" aria-hidden="true" tabindex="-1"></a>        new_path <span class="op">=</span> os.path.join(new_dir, <span class="bu">file</span>)</span>
+<span id="cb28-16"><a href="#cb28-16" aria-hidden="true" tabindex="-1"></a>        im.save(new_path)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</div>
+</section>
+</section>
+<section id="reference" class="level2 unnumbered">
+
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">Reference</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" data-line-spacing="2" role="list">
+<div id="ref-adams-2006-finbase" class="csl-entry" role="listitem">
+Adams, J., T. R. Speakman, E. S. Zolman, and L. H. Schwacke. 2006. Automating image matching, cataloging, and analysis for photo-identification research. Aquatic Mammals 32:374–384.
+</div>
+<div id="ref-beery-2019-efficient" class="csl-entry" role="listitem">
+Beery, S., D. Morris, and S. Yang. 2019. Efficient pipeline for camera trap image review. arXiv preprint arXiv:1907.06772.
+</div>
+<div id="ref-bejder-1998-social" class="csl-entry" role="listitem">
+Bejder, L., D. Fletcher, and S. Bräger. 1998. A method for testing association patterns of social animals. Animal behaviour 56:719–725.
+</div>
+<div id="ref-cheeseman-2021-happywhale" class="csl-entry" role="listitem">
+Cheeseman, T., K. Southerland, J. Park, M. Olio, K. Flynn, J. Calambokidis, L. Jones, C. Garrigue, A. Frisch Jordán, A. Howard, W. Reade, J. Neilson, C. Gabriele, and P. Clapham. 2021. <a href="https://doi.org/10.1007/s42991-021-00180-9">Advanced image recognition: A fully automated, high-accuracy photo-identification matching system for humpback whales</a>. Mammalian Biology:1618–1476.
+</div>
+<div id="ref-deng-2023-ui" class="csl-entry" role="listitem">
+Deng, S., Y. Xiong, M. Wang, W. Xia, and S. Soatto. 2023. Harnessing unrecognizable faces for improving face recognition. Pages 3424–3433 Proceedings of the IEEE/CVF winter conference on applications of computer vision.
+</div>
+<div id="ref-gardiner-2014-dragon" class="csl-entry" role="listitem">
+Gardiner, R. Z., E. Doran, K. Strickland, L. Carpenter-Bundhoo, and C. Frère. 2014. A face in the crowd: A non-invasive and cost effective photo-identification methodology to understand the fine scale movement of eastern water dragons. PloS one 9:e96992.
+</div>
+<div id="ref-hill-2020-humpback" class="csl-entry" role="listitem">
+Hill, M. C., A. L. Bradford, D. Steel, C. S. Baker, A. D. Ligon, J. M. V. Acebes, O. A. Filatova, S. Hakala, N. Kobayashi, Y. Morimoto, H. Okabe, R. Okamoto, J. Rivers, T. Sato, O. V. Titova, R. K. Uyeyama, and O. E. M. 2020. Found: A missing breeding ground for endangered western <span class="nocase">North Pacific humpback whales in the Mariana Archipelago</span>. Endangered Species Research 41:91–103.
+</div>
+<div id="ref-karanth-1995-camera" class="csl-entry" role="listitem">
+Karanth, K. U. 1995. Estimating tiger <em><span>P</span>anthera tigris</em> populations from camera–trap data using capture–recapture models. Biological conservation 71:333–338.
+</div>
+<div id="ref-lacey-2025-spinner" class="csl-entry" role="listitem">
+Lacey, C., M. C. Hill, A. L. Bradford, E. M. Oleson, F. Vivier, A. F. Pacini, P. S. Hammond, and L. Bejder. 2025. Circum-island line-transect abundance estimates of spinner dolphins around Oʻahu, Hawaiʻi. Marine Mammal Science:e70055.
+</div>
+<div id="ref-mcguire-2020-belu0" class="csl-entry" role="listitem">
+McGuire, T. L., G. K. Himes Boor, J. R. McClung, A. D. Stephens, C. Garner, K. E. Shelden, and B. Wright. 2020. Distribution and habitat use by endangered <span>Cook Inlet</span> beluga whales: Patterns observed during a photo-identification study, 2005–2017. Aquatic Conservation: Marine and Freshwater Ecosystems 30:2402–2427.
+</div>
+<div id="ref-pandas" class="csl-entry" role="listitem">
+McKinney, Wes. 2010. <a href="https://doi.org/ 10.25080/Majora-92bf1922-00a "><span>D</span>ata <span>S</span>tructures for <span>S</span>tatistical <span>C</span>omputing in <span>P</span>ython</a>. Pages 56–61 <em>in</em> Stéfan van der Walt and Jarrod Millman, editors. <span>P</span>roceedings of the 9th <span>P</span>ython in <span>S</span>cience <span>C</span>onference.
+</div>
+<div id="ref-mcpherson-2024-dolphin" class="csl-entry" role="listitem">
+McPherson, L., J. Badger, K. Fertitta, M. Gordanier, C. Nemeth, and L. Bejder. 2024. Quantifying the abundance and survival rates of island-associated spinner dolphins using a multi-state open robust design model. Scientific Reports 14:14764.
+</div>
+<div id="ref-miele-2021-metric" class="csl-entry" role="listitem">
+Miele, V., G. Dussert, B. Spataro, S. Chamaillé-Jammes, D. Allainé, and C. Bonenfant. 2021. Revisiting animal photo-identification using deep metric learning and network analysis. Methods in Ecology and Evolution 21:863–873.
+</div>
+<div id="ref-morrison-2011-survival" class="csl-entry" role="listitem">
+Morrison, T. A., J. Yoshizaki, J. D. Nichols, and D. T. Bolger. 2011. Estimating survival in photographic capture–recapture studies: Overcoming misidentification error. Methods in Ecology and Evolution 2:454–463.
+</div>
+<div id="ref-patton-2025-dissertation" class="csl-entry" role="listitem">
+Patton, P. T. 2025. Monitoring cetaceans with computer vision and hierarchical models. PhD thesis, University of Hawai‘i at Mānoa.
+</div>
+<div id="ref-patton-2023-deep" class="csl-entry" role="listitem">
+Patton, P. T., T. Cheeseman, K. Abe, T. Yamaguchi, W. Reade, K. Southerland, A. Howard, E. M. Oleson, J. B. Allen, E. Ashe, A. Athayde, R. W. Baird, C. Basran, E. Cabrera, J. Calambokidis, J. Cardoso, E. L. Carroll, A. Cesario, B. J. Cheney, E. Corsi, J. Currie, J. W. Durban, E. A. Falcone, H. Fearnbach, K. Flynn, T. Franklin, W. Franklin, B. G. Vernazzani, T. Genov, M. Hill, D. R. Johnston, E. L. Keene, S. D. Mahaffy, T. L. McGuire, L. McPherson, C. Meyer, R. Michaud, A. Miliou, D. N. Orbach, H. C. Pearson, M. H. Rasmussen, W. J. Rayment, C. Rinaldi, R. Rinaldi, S. Siciliano, S. Stack, B. Tintore, L. G. Torres, J. R. Towers, C. Trotter, R. T. Moore, C. R. Weir, R. Wellard, R. Wells, K. M. Yano, J. R. Zaeschmar, and L. Bejder. 2023. A deep learning approach to photo–identification demonstrates high performance on two dozen cetacean species. Methods in Ecology and Evolution 14:2611–2625.
+</div>
+<div id="ref-patton-2025-optimizing" class="csl-entry" role="listitem">
+Patton, P. T., K. Pacifici, R. W. Baird, E. M. Oleson, J. B. Allen, E. Ashe, A. Athayde, C. J. Basran, E. Cabrera, J. Calambokidis, J. Cardoso, E. L. Carroll, A. Cesario, B. J. Cheney, T. Cheeseman, E. Corsi, J. J. Currie, J. W. Durban, E. A. Falcone, H. Fearnbach, K. Flynn, T. Franklin, W. Franklin, B. G. Vernazzani, T. Genov, M. Hill, D. R. Johnston, E. L. Keene, C. Lacey, S. D. Mahaffy, T. L. McGuire, L. McPherson, C. Meyer, R. Michaud, A. Miliou, G. L. Olson, D. N. Orbach, H. C. Pearson, M. H. Rasmussen, W. J. Rayment, C. Rinaldi, R. Rinaldi, S. Siciliano, S. H. Stack, B. Tintore, L. G. Torres, J. R. Towers, R. B. T. Moore, C. R. Weir, R. Wellard, R. S. Wells, K. M. Yano, J. R. Zaeschmar, and L. Bejder. 2025. Optimizing automated photo identification for population assessments. Conservation Biology:e14436.
+</div>
+<div id="ref-scikit-learn" class="csl-entry" role="listitem">
+Pedregosa, F., G. Varoquaux, A. Gramfort, V. Michel, B. Thirion, O. Grisel, M. Blondel, P. Prettenhofer, R. Weiss, V. Dubourg, J. Vanderplas, A. Passos, D. Cournapeau, M. Brucher, M. Perrot, and E. Duchesnay. 2011. Scikit-learn: Machine learning in <span>P</span>ython. Journal of Machine Learning Research 12:2825–2830.
+</div>
+<div id="ref-rosel-2011-grading" class="csl-entry" role="listitem">
+Rosel, P., K. Mullin, L. Garrison, L. Schwacke, J. Adams, B. Balmer, P. Conn, M. Conroy, T. Eguchi, A. Gorgone, A. Hohn, M. Mazzoil, C. Schwartz, C. Sinclair, T. Speakman, K. Urian, N. Vollmer, P. Wade, R. Wells, and E. Zolman. 2011. <a href="http://dx.doi.org/10.25607/OBP-1687">Photo-identification capture-mark-recapture techniques for estimating abundance of bay, sound and estuary populations of bottlenose dolphins along the <span>U.S. East Coast</span> and <span class="nocase">Gulf of Mexico</span>: A workshop report</a>. NOAA Southeast Fisheries Science Center.
+</div>
+<div id="ref-setyawan-2022-population" class="csl-entry" role="listitem">
+Setyawan, E., B. C. Stevenson, M. V. Erdmann, A. W. Hasan, A. B. Sianipar, I. Mofu, M. I. Putra, M. Izuan, O. Ambafen, R. M. Fewster, R. Aldridge-Sutton, R. Mambrasar, and R. Constantine. 2022. Population estimates of photo-identified individuals using a modified <span class="nocase">POPAN model reveal that Raja Ampat’s reef manta rays are thriving</span>. Frontiers in Marine Science 9:1014791.
+</div>
+<div id="ref-urian-2015-cmr" class="csl-entry" role="listitem">
+Urian, K., A. Gorgone, A. Read, B. Balmer, R. S. Wells, P. Berggren, J. Durban, T. Eguchi, W. Rayment, and P. S. Hammond. 2015. <a href="https://doi.org/10.1111/mms.12141">Recommendations for photo-identification methods used in capture-recapture models with cetaceans</a>. Marine Mammal Science 31:298–321.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -1205,4 +1388,4 @@ R user tip
 
 
 
-<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.dev/philpatton/pyseter/blob/main/tutorial.ipynb" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/philpatton/pyseter/edit/main/tutorial.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/philpatton/pyseter/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

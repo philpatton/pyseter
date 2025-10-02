@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://philpatton.github.io/pyseter/tutorial.html</loc>
-    <lastmod>2025-10-02T17:42:23.856Z</lastmod>
+    <lastmod>2025-10-02T19:09:37.295Z</lastmod>
   </url>
   <url>
     <loc>https://philpatton.github.io/pyseter/api/sort.HierarchicalCluster.html</loc>
@@ -18,7 +18,7 @@
   </url>
   <url>
     <loc>https://philpatton.github.io/pyseter/api/index.html</loc>
-    <lastmod>2025-10-02T17:42:23.849Z</lastmod>
+    <lastmod>2025-10-02T19:10:00.672Z</lastmod>
   </url>
   <url>
     <loc>https://philpatton.github.io/pyseter/api/verify_pytorch.html</loc>
@@ -67,5 +67,9 @@
   <url>
     <loc>https://philpatton.github.io/pyseter/install-r.html</loc>
     <lastmod>2025-10-02T17:42:23.854Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/sort.ClusterResults.html</loc>
+    <lastmod>2025-10-02T19:10:00.689Z</lastmod>
   </url>
 </urlset>
