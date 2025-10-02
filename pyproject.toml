@@ -38,9 +38,9 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://pypi.org/project/pyseter/"
+Homepage = "https://github.com/philpatton/pyseter"
 Changelog = "https://github.com/username/your-package/blob/main/CHANGELOG.md"
-# Documentation = "https://pyseter.readthedocs.io"
+Documentation = "https://philpatton.github.io/pyseter"
 Repository = "https://github.com/philpatton/pyseter"
 "Bug Tracker" = "https://github.com/philpatton/pyseter/issues"
 
