@@ -1,5 +1,5 @@
 ---
-title: "Pyseter: a Python package for processing images before photo-identification"
+title: "Pyseter: A Python package for processing images before photo-identification"
 author:
   - name: Philip T. Patton
     orcid: 0000-0003-2059-4355
@@ -67,6 +67,7 @@ pyseter.verify_pytorch()
 ```
 
 which will tell the user which form of GPU acceleration is available, if any.
+ 
  
 ## Spinner dolphin example 
 
