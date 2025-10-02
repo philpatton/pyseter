@@ -22,8 +22,10 @@ jobs:
         with:
           python-version: '3.10'
       
-      - name: Install quartodoc
-        run: pip install quartodoc
+      - name: Install package and quartodoc
+        run: |
+          pip install quartodoc
+          pip install -e .  
       
       - name: Build API docs
         run: |
