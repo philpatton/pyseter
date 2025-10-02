@@ -1,0 +1,63 @@
+{
+  "installation-r.qmd": {
+    "installation-r.html": "6a4736ee"
+  },
+  "installation-python.qmd": {
+    "installation-python.html": "d513c08b"
+  },
+  "index.qmd": {
+    "index.html": "581c1aca"
+  },
+  "about.qmd": {
+    "about.html": "b4985ab0"
+  },
+  "installation.qmd": {
+    "installation.html": "4794887f"
+  },
+  "tutorial.ipynb": {
+    "tutorial.html": "9a8462ad",
+    "tutorial.tex": "d9448493"
+  },
+  "install.qmd": {
+    "install.html": "550702c9"
+  },
+  "install-r.qmd": {
+    "install-r.html": "ab2567d0"
+  },
+  "api/sort.sort_images.qmd": {
+    "sort.sort_images.html": "ab360ca7"
+  },
+  "api/grade.rate_distinctiveness.qmd": {
+    "grade.rate_distinctiveness.html": "3b331efe"
+  },
+  "api/verify_pytorch.qmd": {
+    "verify_pytorch.html": "1736a6b5"
+  },
+  "api/get_best_device.qmd": {
+    "get_best_device.html": "f7a4965e"
+  },
+  "api/index.qmd": {
+    "index.html": "13213437"
+  },
+  "api/extract.FeatureExtractor.qmd": {
+    "extract.FeatureExtractor.html": "b0a22d3f"
+  },
+  "api/sort.process_images.qmd": {
+    "sort.process_images.html": "b8f0704b"
+  },
+  "api/sort.NetworkCluster.qmd": {
+    "sort.NetworkCluster.html": "3ca0547d"
+  },
+  "api/sort.prep_images.qmd": {
+    "sort.prep_images.html": "8add7064"
+  },
+  "api/sort.HierarchicalCluster.qmd": {
+    "sort.HierarchicalCluster.html": "feebc0cd"
+  },
+  "api/extract.FeatureExtractor.extract.qmd": {
+    "extract.FeatureExtractor.extract.html": "3e712a29"
+  },
+  "api/sort.load_features.qmd": {
+    "sort.load_features.html": "613761b1"
+  }
+}
