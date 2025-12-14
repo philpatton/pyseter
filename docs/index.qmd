@@ -13,7 +13,7 @@ Pyseter is a Python package for processing images before photo-identification. P
 
 ## Introduction 
 
-Please see the [Tutorial](tutorial.ipynb) for a longer form demonstration on working with Pyseter, including tips for R users. 
+Please see the [Manuscript](manuscript.ipynb) for a longer form demonstration on working with Pyseter, including tips for R users. 
 
 ## Installation
 

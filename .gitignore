@@ -22,3 +22,6 @@ env/
 venv/
 .env
 .venv/
+
+# docs
+docs/working_dir/

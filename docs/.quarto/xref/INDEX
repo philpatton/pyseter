@@ -65,5 +65,11 @@
   },
   "api/sort.ClusterResults.qmd": {
     "sort.ClusterResults.html": "d22cb309"
+  },
+  "getting-started.qmd": {
+    "getting-started.html": "2ca17ac3"
+  },
+  "manuscript.qmd": {
+    "manuscript.html": "0d07c774"
   }
 }
