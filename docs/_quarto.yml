@@ -18,8 +18,8 @@ website:
         file: install.qmd
       - text: "Getting started"
         file: getting-started.qmd
-      - text: "Manuscript"
-        file: manuscript.qmd
+      # - text: "Manuscript"
+      #   file: manuscript.qmd
       - text: "API Reference"
         file: api/index.qmd  # Quartodoc generates this
 

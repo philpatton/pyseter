@@ -107,6 +107,35 @@ image_dir = working_dir + '/all_images'
 prep_images(original_image_dir, all_image_dir=image_dir)
 ```
 
+We can look at a few random images with `matplotlib`.
+
+```{python}
+from PIL import Image
+import os
+import matplotlib.pyplot as plt
+import numpy as np
+
+# select a random id to plot
+rng = np.random.default_rng(seed=17)
+images = os.listdir(image_dir)
+
+# create a figure where each subplot is an image 
+column_count = 3
+row_count = 7
+fig, axes = plt.subplots(row_count, column_count, tight_layout=True, 
+                         figsize=(9, row_count * 3))
+
+# plot each image
+for i in range(column_count * row_count):
+    ax = axes.flat[i]
+    file_name = images[i]
+    path = f'working_dir/all_images/{file_name}'
+    image = Image.open(path)
+    ax.imshow(image)
+    ax.axis('off')
+```
+
+
 ### Feature extraction
 
 Identifying animals in images requires extracting feature vectors. The distance between two feature vectors tells us similarity between two images. Similar images likely contain the same individual, if the model is working. 
@@ -235,6 +264,9 @@ for i, row in id_info.iterrows():
     ax.imshow(image)
     ax.set_title(row.encounter)
     ax.axis('off')
+
+fig.text(0.5, 1.0, f'Proposed ID: {random_id}', ha='center', va='bottom',
+         fontsize=16)
 
 # delete any unnecessary subplots
 for i in range(image_count, row_count * column_count):

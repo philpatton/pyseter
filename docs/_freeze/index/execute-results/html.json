@@ -1,0 +1,12 @@
+{
+  "hash": "400209f547cdb57d24ea4aa8593b91bb",
+  "result": {
+    "engine": "jupyter",
+    "markdown": "---\ntitle: \"Pyseter\"\n# about:\n#   template: marquee\n#   # image: images/sort-figure.png\n---\n\nPyseter is a Python package for processing images before photo-identification. Pyseter includes functions for:\n\n- Extracting feature vectors from images with the [AnyDorsal](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14167) algorithm \n- Clustering images by a proposed ID\n- Sorting images into directories by proposed ID then encounter (as shown above)\n- Grading images by distinctiveness (experimental)\n\n## Introduction \n\nPlease see the [Getting Started](getting-started.qmd) page for a demonstration of the basic functionality of Pyseter using an example of spinner dolphins.\n\n## Installation\n\n```{bash}\npip install pyster\n```\n\nR users will also find a [seperate page for installation instructions](install-r.qmd).\n\n",
+    "supporting": [
+      "index_files"
+    ],
+    "filters": [],
+    "includes": {}
+  }
+}
