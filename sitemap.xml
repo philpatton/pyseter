@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://philpatton.github.io/pyseter/manuscript.html</loc>
-    <lastmod>2026-02-10T01:27:37.039Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/install-r.html</loc>
-    <lastmod>2026-02-10T01:27:37.039Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/install.html</loc>
-    <lastmod>2026-02-10T01:27:37.039Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/sort.load_features.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
+    <loc>https://philpatton.github.io/pyseter/tutorial.html</loc>
+    <lastmod>2025-12-11T18:59:22.083Z</lastmod>
   </url>
   <url>
     <loc>https://philpatton.github.io/pyseter/api/sort.HierarchicalCluster.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/extract.FeatureExtractor.extract.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/verify_pytorch.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/index.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/sort.process_images.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/sort.ClusterResults.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/get_best_device.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/extract.FeatureExtractor.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/api/sort.sort_images.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
   </url>
   <url>
     <loc>https://philpatton.github.io/pyseter/api/sort.NetworkCluster.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
   </url>
   <url>
-    <loc>https://philpatton.github.io/pyseter/api/sort.prep_images.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
+    <loc>https://philpatton.github.io/pyseter/api/sort.process_images.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/index.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/verify_pytorch.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
   </url>
   <url>
     <loc>https://philpatton.github.io/pyseter/api/grade.rate_distinctiveness.html</loc>
-    <lastmod>2026-02-10T01:27:36.977Z</lastmod>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
   </url>
   <url>
-    <loc>https://philpatton.github.io/pyseter/index.html</loc>
-    <lastmod>2026-02-10T01:27:37.039Z</lastmod>
-  </url>
-  <url>
-    <loc>https://philpatton.github.io/pyseter/tutorial.html</loc>
-    <lastmod>2026-02-10T01:27:37.043Z</lastmod>
+    <loc>https://philpatton.github.io/pyseter/api/sort.load_features.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
   </url>
   <url>
     <loc>https://philpatton.github.io/pyseter/getting-started.html</loc>
-    <lastmod>2026-02-10T01:27:37.000Z</lastmod>
+    <lastmod>2026-02-10T00:47:44.982Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/index.html</loc>
+    <lastmod>2026-02-10T00:55:48.389Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/install.html</loc>
+    <lastmod>2025-12-11T18:59:22.082Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/manuscript.html</loc>
+    <lastmod>2025-12-12T21:47:53.986Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/sort.sort_images.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/sort.ClusterResults.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/get_best_device.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/extract.FeatureExtractor.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/extract.FeatureExtractor.extract.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/api/sort.prep_images.html</loc>
+    <lastmod>2025-12-11T18:59:22.066Z</lastmod>
+  </url>
+  <url>
+    <loc>https://philpatton.github.io/pyseter/install-r.html</loc>
+    <lastmod>2025-12-11T18:59:22.082Z</lastmod>
   </url>
 </urlset>
