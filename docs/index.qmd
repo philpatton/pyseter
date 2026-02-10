@@ -9,7 +9,7 @@ Pyseter is a Python package for processing images before photo-identification. P
 
 - Extracting feature vectors from images with the [AnyDorsal](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14167) algorithm 
 - Clustering images by a proposed ID
-- Sorting images into directories by proposed ID then encounter (as shown above)
+- Sorting images into directories by proposed ID then encounter
 - Grading images by distinctiveness (experimental)
 
 ## Introduction 
