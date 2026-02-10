@@ -8,7 +8,7 @@ Typical usage example:
     image_directory = 'working_dir/all_images'
     feature_dict = fe.extract_images(image_directory)
 """
-from typing import Optional, Dict, LiteralString
+from typing import Optional, Dict
 import os
 
 from huggingface_hub import hf_hub_download
@@ -52,7 +52,7 @@ def verify_pytorch() -> None:
 
         return None
 
-def get_best_device() -> LiteralString:
+def get_best_device():
     """Select torch device based on expected performance.
     """
     if torch.cuda.is_available():
