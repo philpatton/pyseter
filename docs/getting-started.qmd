@@ -41,7 +41,6 @@ The images in this example were collected during a multi-year photo-ID survey of
 
 Open a Jupyter notebook and download the data with `gdown`, which pulls data from Google Drive.
 
-
 ```{python}
 #| eval: false
 import gdown
