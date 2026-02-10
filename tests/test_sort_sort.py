@@ -81,7 +81,8 @@ def test_process_images_ignores_file_types(tmp_path):
     all_image_dir = tmp_path / "all_images"
     
     images, encounters = process_images(str(tmp_path), str(all_image_dir))
-    
-    assert len(images) == 2
-    assert images[0] == 'image1.jpg'
-    assert images[1] == 'image2.png'
+    images_sorted = sorted(images)
+
+    assert len(images_sorted) == 2
+    assert images_sorted[0] == 'image1.jpg'
+    assert images_sorted[1] == 'image2.png'
