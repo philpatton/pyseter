@@ -36,13 +36,13 @@ def verify_pytorch() -> None:
 
         # Check all device options
         if torch.cuda.is_available():
-            print(f"✓ CUDA GPU available: {torch.cuda.get_device_name(0)}")
+            print(f":) CUDA GPU available: {torch.cuda.get_device_name(0)}")
 
         if torch.backends.mps.is_available():
-            print("✓ Apple Silicon (MPS) GPU available")
+            print(":) Apple Silicon (MPS) GPU available")
 
         if not torch.cuda.is_available() and not torch.backends.mps.is_available():
-            print("! No GPU acceleration available. Expect slow feature extraction.")
+            print(":( No GPU acceleration available. Expect slow feature extraction.")
 
         return None
 
@@ -244,6 +244,7 @@ class FeatureExtractor:
 
         with torch.no_grad():
             for file, image in tqdm(dataloader):
+                if len(file) == 0: continue
                 image = image.to(self.device)
                 with autocast(self.device): # Big speed up
                     feature_vector = model(image, return_loss=False)
@@ -384,7 +385,11 @@ class DorsalImageDataset(Dataset):
     def __getitem__(self, idx):
         filename = self.images[idx]
         full_path = os.path.join(self.image_dir, filename)
-        image = decode_image(full_path)
+        try:
+            image = decode_image(full_path)
+        except RuntimeError:
+            print(f"Warning: Could not load {filename}, skipping.")
+            return None
         if self.bboxes and filename in self.bboxes:
             bbox = self.bboxes[filename]
             # Crop image to bounding box
@@ -414,9 +419,17 @@ def get_test_data(directory, batch_size, bbox_csv=None):
                                   bbox_csv=bbox_csv)
 
     dataloader = DataLoader(test_data, batch_size=batch_size, shuffle=False,
-                           num_workers=2, pin_memory=True)
+                           num_workers=2, pin_memory=True, collate_fn=collate_fn)
 
     return dataloader
+
+def collate_fn(batch):
+    """Filter out Nones that appear if there's a corrupted file."""
+    batch = [b for b in batch if b is not None]
+    if len(batch) == 0:
+        return [], torch.empty(0)
+    filenames, images = zip(*batch)
+    return list(filenames), torch.stack(images)
 
 def list_images(image_dir):
     """List all images in a directory."""
