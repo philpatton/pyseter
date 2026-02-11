@@ -3,7 +3,7 @@ Pyseter
 Processing images before photo-identification
 """
 
-__version__ = "0.2.2"
+__version__ = "0.2.3"
 
 # Import main functions/classes for easy access
 from pyseter.extract import verify_pytorch, get_best_device

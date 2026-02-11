@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.2.3] - 2025-02-11
+
+### Changed
+- Bug fix: Continue extracting features even if file is corrupted
+
 ## [0.2.2] - 2025-12-14
 
 ### Changed
