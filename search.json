@@ -4,7 +4,7 @@
     "href": "sort.html",
     "title": "Pyseter",
     "section": "",
-    "text": "from PIL import Image\nfrom sklearn.metrics.pairwise import cosine_similarity\nfrom pyseter.sort import load_features, NetworkCluster\nfrom pyseter.experimental import launch_quality_review\nimport numpy as np \nimport pandas as pd\nimport os\n\nfeature_dir = 'working_dir/features'\nout_path = feature_dir + '/features.npy'\nfilenames, feature_array = load_features(out_path)\n\nsimilarity_scores = cosine_similarity(feature_array)\nnc = NetworkCluster(match_threshold=0.55)\nresults = nc.cluster_images(similarity_scores)\n\nid_df = pd.DataFrame({'image': filenames, 'proposed_id': results.cluster_idx})\n\n# join with the encounter information using \"encounter\" as a key \nencounter_info = pd.read_csv('working_dir/encounter_info.csv')\nid_df = id_df.merge(encounter_info)\nid_df.head()\n\nFollowing clusters may contain false positives:\n['ID_0001', 'ID_0006', 'ID_0008', 'ID_0021', 'ID_0110']\n\n\n\n\n\n\n\n\n\nimage\nproposed_id\nencounter\n\n\n\n\n0\n2c8750b066372ab5.jpg\nID-0000\nenc8\n\n\n1\n568fc1d376b616a6.jpg\nID-0001\nenc8\n\n\n2\nddeb347716d7861c.jpg\nID-0002\nenc6\n\n\n3\nb65f9334b05f48f4.jpg\nID-0003\nenc0\n\n\n4\nd84aefa4d99d6f9a.jpg\nID-0004\nenc4\n\n\n\n\n\n\n\n\nlaunch_quality_review(\n    id_df, \n    'working_dir/all_images'\n)\n\n* Running on local URL:  http://127.0.0.1:7862\n* To create a public link, set `share=True` in `launch()`."
+    "text": "from sklearn.metrics.pairwise import cosine_similarity\nfrom pyseter.sort import load_features, NetworkCluster\nfrom pyseter.experimental import launch_quality_review\nimport pandas as pd\n\nfeature_dir = 'working_dir/features'\nout_path = feature_dir + '/features.npy'\nfilenames, feature_array = load_features(out_path)\n\nsimilarity_scores = cosine_similarity(feature_array)\nnc = NetworkCluster(match_threshold=0.55)\nresults = nc.cluster_images(similarity_scores)\n\nid_df = pd.DataFrame({'image': filenames, 'proposed_id': results.cluster_idx})\n\n# join with the encounter information using \"encounter\" as a key \nencounter_info = pd.read_csv('working_dir/encounter_info.csv')\nid_df = id_df.merge(encounter_info)\nid_df.head()\n\nFollowing clusters may contain false positives:\n['ID_0001', 'ID_0006', 'ID_0008', 'ID_0021', 'ID_0110']\n\n\n\n\n\n\n\n\n\nimage\nproposed_id\nencounter\n\n\n\n\n0\n2c8750b066372ab5.jpg\nID-0000\nenc8\n\n\n1\n568fc1d376b616a6.jpg\nID-0001\nenc8\n\n\n2\nddeb347716d7861c.jpg\nID-0002\nenc6\n\n\n3\nb65f9334b05f48f4.jpg\nID-0003\nenc0\n\n\n4\nd84aefa4d99d6f9a.jpg\nID-0004\nenc4\n\n\n\n\n\n\n\n\nlaunch_quality_review(\n    id_df, \n    'working_dir/all_images'\n)\n\n* Running on local URL:  http://127.0.0.1:7862\n* To create a public link, set `share=True` in `launch()`."
   },
   {
     "objectID": "tutorial.html",
@@ -123,7 +123,7 @@
     "href": "api/sort.prep_images.html",
     "title": "sort.prep_images",
     "section": "",
-    "text": "sort.prep_images(image_dir, all_image_dir)\nCopy all images to a flat directory and save a csv with encounter info.\nSome users may have their image directory structured such that each image is in a subfolder by encounter, e.g., original_images/enc1/img1.jpg. The FeatureExtractor in pyseter.extract prefers flat directories. prep_images flattens the original_images directory by copying every image to all_image_dir, then saves a csv with encounter information to the working directory.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nimage_dir\nstr\nPath to directory containing images.\nrequired\n\n\nall_image_dir\nstr\nPath to new directory where user wants to copy all their images.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nNone\nSaves images to the all_image_dir and the encounter information to the csv in the working_dir.\n\n\n\n\n\n\nFor a complete working example with real images, see:\n\nTutorial\n\nBasic usage pattern::\nfrom pyseter.sort import prep_images\nprep_images('working_dir/original_images/')"
+    "text": "sort.prep_images(image_dir, all_image_dir)\nCopy all images to a flat directory and save a csv with encounter info.\nSome users may have their image directory structured such that each image is in a subfolder by encounter, e.g., original_images/enc1/img1.jpg. The FeatureExtractor in pyseter.extract prefers flat directories. prep_images flattens the original_images directory by copying every image to all_image_dir, then saves a csv with encounter information to the working directory.\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\nDefault\n\n\n\n\nimage_dir\nstr\nPath to directory containing images.\nrequired\n\n\nall_image_dir\nstr\nPath to new directory where user wants to copy all their images.\nrequired\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nName\nType\nDescription\n\n\n\n\n\nNone\nSaves images to the all_image_dir and the encounter information to the csv in the working_dir.\n\n\n\n\n\n\nFor a complete working example with real images, see:\n\nTutorial\n\nBasic usage pattern::\nfrom pyseter.sort import prep_images\n\n# old directory, structured by encounter\nworking_dir = 'working_dir'\noriginal_image_dir = working_dir + '/original_images'\n\n# new, flattened directory containing every image\nimage_dir = working_dir + '/all_images'\nprep_images(original_image_dir, all_image_dir=image_dir)"
   },
   {
     "objectID": "api/sort.prep_images.html#parameters",
@@ -144,7 +144,7 @@
     "href": "api/sort.prep_images.html#examples",
     "title": "sort.prep_images",
     "section": "",
-    "text": "For a complete working example with real images, see:\n\nTutorial\n\nBasic usage pattern::\nfrom pyseter.sort import prep_images\nprep_images('working_dir/original_images/')"
+    "text": "For a complete working example with real images, see:\n\nTutorial\n\nBasic usage pattern::\nfrom pyseter.sort import prep_images\n\n# old directory, structured by encounter\nworking_dir = 'working_dir'\noriginal_image_dir = working_dir + '/original_images'\n\n# new, flattened directory containing every image\nimage_dir = working_dir + '/all_images'\nprep_images(original_image_dir, all_image_dir=image_dir)"
   },
   {
     "objectID": "api/extract.FeatureExtractor.html",
@@ -451,7 +451,7 @@
     "href": "api/index.html",
     "title": "API Reference",
     "section": "",
-    "text": "Extracting feature vectors from images\n\n\n\nextract.FeatureExtractor\nExtract features from images.\n\n\n\n\n\n\nClustering images by proposed IDs\n\n\n\nsort.HierarchicalCluster\nHierarchical clustering of images\n\n\nsort.NetworkCluster\nNetwork clustering of images\n\n\nsort.ClusterResults\n\n\n\nsort.prep_images\nCopy all images to a flat directory and save a csv with encounter info.\n\n\nsort.sort_images\nSort images into subfolders by proposed ID then encounter.\n\n\nsort.load_features\nLoad previously extracted features.\n\n\n\n\n\n\nGrade images by distinctiveness\n\n\n\ngrade.rate_distinctiveness\nGrade images by their distinctiveness.\n\n\n\n\n\n\nFunctions to make sure PyTorch is working\n\n\n\nget_best_device\nSelect torch device based on expected performance.\n\n\nverify_pytorch\nVerify PyTorch installation and show device options."
+    "text": "Extracting feature vectors from images\n\n\n\nextract.FeatureExtractor\nExtract features from images.\n\n\n\n\n\n\nClustering images by proposed IDs\n\n\n\nsort.HierarchicalCluster\nHierarchical clustering of images\n\n\nsort.NetworkCluster\nNetwork clustering of images\n\n\nsort.ClusterResults\nStoring NetworkCluster results.\n\n\nsort.prep_images\nCopy all images to a flat directory and save a csv with encounter info.\n\n\nsort.sort_images\nSort images into subfolders by proposed ID then encounter.\n\n\nsort.load_features\nLoad previously extracted features.\n\n\n\n\n\n\nGrade images by distinctiveness\n\n\n\ngrade.rate_distinctiveness\nGrade images by their distinctiveness.\n\n\n\n\n\n\nFunctions to make sure PyTorch is working\n\n\n\nget_best_device\nSelect torch device based on expected performance.\n\n\nverify_pytorch\nVerify PyTorch installation and show device options."
   },
   {
     "objectID": "api/index.html#feature-extraction",
@@ -465,7 +465,7 @@
     "href": "api/index.html#sorting-and-clustering",
     "title": "API Reference",
     "section": "",
-    "text": "Clustering images by proposed IDs\n\n\n\nsort.HierarchicalCluster\nHierarchical clustering of images\n\n\nsort.NetworkCluster\nNetwork clustering of images\n\n\nsort.ClusterResults\n\n\n\nsort.prep_images\nCopy all images to a flat directory and save a csv with encounter info.\n\n\nsort.sort_images\nSort images into subfolders by proposed ID then encounter.\n\n\nsort.load_features\nLoad previously extracted features."
+    "text": "Clustering images by proposed IDs\n\n\n\nsort.HierarchicalCluster\nHierarchical clustering of images\n\n\nsort.NetworkCluster\nNetwork clustering of images\n\n\nsort.ClusterResults\nStoring NetworkCluster results.\n\n\nsort.prep_images\nCopy all images to a flat directory and save a csv with encounter info.\n\n\nsort.sort_images\nSort images into subfolders by proposed ID then encounter.\n\n\nsort.load_features\nLoad previously extracted features."
   },
   {
     "objectID": "api/index.html#grading",
@@ -563,7 +563,7 @@
     "href": "api/sort.ClusterResults.html",
     "title": "sort.ClusterResults",
     "section": "",
-    "text": "sort.ClusterResults\nsort.ClusterResults(cluster_labels)"
+    "text": "sort.ClusterResults\nsort.ClusterResults(cluster_labels)\nStoring NetworkCluster results."
   },
   {
     "objectID": "api/get_best_device.html",
