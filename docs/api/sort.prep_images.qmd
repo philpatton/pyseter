@@ -35,4 +35,11 @@ For a complete working example with real images, see:
 Basic usage pattern::
 
     from pyseter.sort import prep_images
-    prep_images('working_dir/original_images/')
+
+    # old directory, structured by encounter
+    working_dir = 'working_dir'
+    original_image_dir = working_dir + '/original_images'
+
+    # new, flattened directory containing every image
+    image_dir = working_dir + '/all_images'
+    prep_images(original_image_dir, all_image_dir=image_dir)

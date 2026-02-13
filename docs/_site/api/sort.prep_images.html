@@ -412,7 +412,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </ul>
 <p>Basic usage pattern::</p>
 <pre><code>from pyseter.sort import prep_images
-prep_images('working_dir/original_images/')</code></pre>
+
+# old directory, structured by encounter
+working_dir = 'working_dir'
+original_image_dir = working_dir + '/original_images'
+
+# new, flattened directory containing every image
+image_dir = working_dir + '/all_images'
+prep_images(original_image_dir, all_image_dir=image_dir)</code></pre>
 
 
 </section>
