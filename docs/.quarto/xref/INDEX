@@ -71,5 +71,11 @@
   },
   "manuscript.qmd": {
     "manuscript.html": "0d07c774"
+  },
+  "sort.ipynb": {
+    "sort.html": "5e6bd62d"
+  },
+  "identify.ipynb": {
+    "identify.html": "d61935fb"
   }
 }
