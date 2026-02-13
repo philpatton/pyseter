@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.0] - 2025-02-11
+
+### Added
+- Added `identify.predict_ids` to predict ids of animals in query images given a 
+  reference set
+- Added `experimental` module to visualize Pyseter output
+
 ## [0.2.3] - 2025-02-11
 
 ### Changed
