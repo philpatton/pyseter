@@ -3,7 +3,7 @@ from sklearn.neighbors import NearestNeighbors
 import numpy as np
 import pandas as pd
 
-def find_neighbors(ref_feat, query_feat):
+def _find_neighbors(ref_feat, query_feat):
     """Find the most similar images to the reference set to the query set."""
     neighborhood = NearestNeighbors(n_neighbors=500, metric="cosine")
     neighborhood.fit(ref_feat)
@@ -11,7 +11,7 @@ def find_neighbors(ref_feat, query_feat):
     distances, indices = neighborhood.kneighbors(query_feat)
     return distances, indices
 
-def insert_new_id(distances, predictions, threshold=0.5):
+def _insert_new_id(distances, predictions, threshold=0.5):
     """Insert new_individual into the predictions at the threshold."""
 
     # find position where we should slot new individual
@@ -27,7 +27,7 @@ def insert_new_id(distances, predictions, threshold=0.5):
 
     return new_dist, new_preds
 
-def pool_predictions(predictions, distances):
+def _pool_predictions(predictions, distances):
     """Remove redundant predictions, i.e., those of the same individual."""
 
     # find position of unique entry to eliminate redundant predictions 
@@ -40,8 +40,44 @@ def pool_predictions(predictions, distances):
     return pooled_dist, pooled_pred
 
 
-def predict_ids(reference_dict, query_dict, id_df, proposed_id_count=10, return_scores=True):
-    """Identify individuals in the query set."""
+def predict_ids(reference_dict, query_dict, id_df, proposed_id_count=10):
+    """Predict the identities of individuals in the query set
+
+    Return a DataFrame of the most `proposed_id_count` most similar individuals
+    in the reference set for each query image, along with their cosine 
+    similarity. 
+
+    Parameters
+    ----------
+    reference_dict : dict
+        Dictionary where the key is the reference image's name. The value 
+        associate with each key is a NumPy array of shape (M, ) where M is the 
+        number of features in the feature vector.
+    query_dict : dict
+        Dictionary where the key is the query image's name. The value 
+        associate with each key is a NumPy array of shape (M, ) where M is the 
+        number of features in the feature vector.
+    id_df : pd.DataFrame
+        DataFrame containing the identities, `individual_id`, and image file 
+        name, `image`, for every image in the reference set.
+    proposed_id_count : integer
+        The number of proposed IDs to return for each query image.
+        
+    Examples
+    --------
+    >>> import numpy as np
+    >>> import pandas as pd
+    >>> from pyseter.identify import predict_ids
+    >>> 
+    >>> ref_dict = {'image1': np.array([0.1, 0.11])}
+    >>> query_dict = {'image2': np.array([0.1, 0.12])}
+    >>> id_df = pd.DataFrame({'image': 'image1', 'individual_id': 'a'})
+    >>> 
+    >>> results = predict_ids(ref_dict, query_dict, id_df, proposed_id_count=1)
+    >>> len(results)
+    2
+
+    """
 
     # unpack the dictionaries 
     reference_files = np.array(list(reference_dict.keys()))
@@ -54,16 +90,16 @@ def predict_ids(reference_dict, query_dict, id_df, proposed_id_count=10, return_
     ids = id_df.set_index('image').loc[reference_files, 'individual_id'].values
 
     # takes about 19 seconds
-    distance_matrix, index_matrix = find_neighbors(reference_feats, query_feats)
+    distance_matrix, index_matrix = _find_neighbors(reference_feats, query_feats)
 
     # get the corresponding labels for each reference image
     predicted_ids = ids[index_matrix]
 
     # insert the prediction "new_individual" at the threshold
-    distances, ids = insert_new_id(distance_matrix, predicted_ids, threshold=0.5)
+    distances, ids = _insert_new_id(distance_matrix, predicted_ids, threshold=0.5)
 
     # remove redundant predictions and take the maximum 
-    pooled_distances, pooled_ids = pool_predictions(ids, distances)
+    pooled_distances, pooled_ids = _pool_predictions(ids, distances)
 
     final_predictions = [t[:proposed_id_count].tolist() for t in pooled_ids]
     final_distances = [t[:proposed_id_count].tolist() for t in pooled_distances]
