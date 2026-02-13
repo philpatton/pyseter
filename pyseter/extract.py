@@ -32,7 +32,7 @@ def verify_pytorch() -> None:
     """
     try:
         import torch
-        print(f"✓ PyTorch {torch.__version__} detected")
+        print(f":) PyTorch {torch.__version__} detected")
 
         # Check all device options
         if torch.cuda.is_available():
@@ -47,7 +47,7 @@ def verify_pytorch() -> None:
         return None
 
     except ImportError:
-        print("✗ PyTorch not found!")
+        print(":( PyTorch not found!")
         print("See homepage for PyTorch installation instructions")
 
         return None
@@ -392,8 +392,9 @@ class DorsalImageDataset(Dataset):
             return None
         if self.bboxes and filename in self.bboxes:
             bbox = self.bboxes[filename]
+            xmin, ymin, xmax, ymax = [int(v) for v in bbox]
             # Crop image to bounding box
-            image = image[:, bbox[1]:bbox[3], bbox[0]:bbox[2]]
+            image = image[:, ymin:ymax, xmin:xmax]
         if self.transform:
             image = self.transform(image)
         return filename, image
