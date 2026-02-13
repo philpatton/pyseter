@@ -40,7 +40,7 @@ def pool_predictions(predictions, distances):
     return pooled_dist, pooled_pred
 
 
-def identify(reference_dict, query_dict, id_df, proposed_id_count=10, return_scores=True):
+def predict_ids(reference_dict, query_dict, id_df, proposed_id_count=10, return_scores=True):
     """Identify individuals in the query set."""
 
     # unpack the dictionaries 
