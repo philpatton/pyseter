@@ -1,3 +1,4 @@
+"""Compare unidentified individuals in a query set with a reference set of known IDs."""
 
 from sklearn.neighbors import NearestNeighbors
 import numpy as np
@@ -75,7 +76,7 @@ def predict_ids(reference_dict, query_dict, id_df, proposed_id_count=10):
     >>> 
     >>> results = predict_ids(ref_dict, query_dict, id_df, proposed_id_count=1)
     >>> len(results)
-    2
+    1
 
     """
 
