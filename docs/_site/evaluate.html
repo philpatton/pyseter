@@ -440,7 +440,7 @@ window.Quarto = {
 
 <p>In this notebook, we’ll demonstrate how do evaluate <em>AnyDorsal</em>’s’ performance on a test dataset. We’ll use the <a href="https://www.kaggle.com/competitions/happy-whale-and-dolphin/data">Happy Whale and Dolphin Kaggle competition dataset</a> as an example. You can download the data by following that linked page (click the big “Download all” button). FYI, you’ll have to create an account first.</p>
 <p>In the <a href="./identify.html">Predicting IDs</a> notebook, we demonstrated how to extract features for the Happywhale dataset using a set of bounding boxes. Here, we’ll load the features in.</p>
-<div id="c6a82edf" class="cell" data-execution_count="1">
+<div id="3eae08c4" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>config InlineBackend.figure_format <span class="op">=</span> <span class="st">'retina'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> load_features</span>
@@ -459,7 +459,7 @@ window.Quarto = {
 <span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>query_files, query_features <span class="op">=</span> load_features(query_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>In order to evaluate the performance of <em>AnyDorsal</em> on the test set, we’ll need to know the IDs of animals in the train set and the test set.</p>
-<div id="69723363" class="cell" data-execution_count="2">
+<div id="c97d8555" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>data_url <span class="op">=</span> (</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">'https://raw.githubusercontent.com/philpatton/pyseter/main/'</span> </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'data/happywhale-ids.csv'</span></span>
@@ -553,7 +553,7 @@ window.Quarto = {
 </div>
 </div>
 <p>Now we’ll predict the IDs in the query set.</p>
-<div id="591f0084" class="cell" data-execution_count="3">
+<div id="6650c464" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>query_dict <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(query_files, query_features))</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>reference_dict <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(reference_files, reference_features))</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -579,7 +579,7 @@ window.Quarto = {
 <td>a704da09e32dc3.jpg</td>
 <td>1</td>
 <td>5f2296c18e26</td>
-<td>0.500232</td>
+<td>0.500233</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
@@ -593,7 +593,7 @@ window.Quarto = {
 <td>a704da09e32dc3.jpg</td>
 <td>3</td>
 <td>61f9e4cd30eb</td>
-<td>0.432060</td>
+<td>0.432061</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
@@ -614,7 +614,7 @@ window.Quarto = {
 <td>de1569496d42f4.jpg</td>
 <td>1</td>
 <td>ed237f7c2165</td>
-<td>0.826260</td>
+<td>0.826259</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">6</th>
@@ -642,7 +642,7 @@ window.Quarto = {
 <td>de1569496d42f4.jpg</td>
 <td>5</td>
 <td>fcc7ade0c50a</td>
-<td>0.376510</td>
+<td>0.376511</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">10</th>
@@ -656,7 +656,7 @@ window.Quarto = {
 <td>4ab51dd663dd29.jpg</td>
 <td>2</td>
 <td>31f748b822f4</td>
-<td>0.503391</td>
+<td>0.503390</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">12</th>
@@ -684,7 +684,7 @@ window.Quarto = {
 <td>da27c3f9f96504.jpg</td>
 <td>1</td>
 <td>c02b7ad6faa0</td>
-<td>0.937103</td>
+<td>0.937102</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">16</th>
@@ -712,7 +712,7 @@ window.Quarto = {
 <td>da27c3f9f96504.jpg</td>
 <td>5</td>
 <td>749e56a8ec71</td>
-<td>0.354003</td>
+<td>0.354002</td>
 </tr>
 </tbody>
 </table>
@@ -724,7 +724,7 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="mean-average-precision">Mean average precision</h2>
 <p>We are going to evaluate <em>AnyDorsal</em> with Mean Average Precision (MAP). MAP evaluates a set of predictions, in this case, a set of 5 predictions. For a set of five ordered predictions, the precision score will be <span class="math inline">\(1/1 = 1\)</span> if the first prediction is correct, <span class="math inline">\(1/2\)</span> if the second is correct, and so on until <span class="math inline">\(1/5\)</span> if the fifth prediction is correct, or <span class="math inline">\(0\)</span> if none of the five predictions are correct. MAP is the mean precision score for a set.</p>
 <p>So we need to get the <code>rank</code> of the correct ID for every image in the test set. One way to do so is to merge the ID DataFrame with the prediction DataFrame. We only want one row per test image, so we need to merge on both the image and ID columns. We can check to see that it worked by checking the number of rows in the result (there are <code>27956</code> images in the testing dataset).</p>
-<div id="008301bd" class="cell" data-execution_count="4">
+<div id="9c1f60fb" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># add the predictions and the scores to the id dataframe</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>performance_df <span class="op">=</span> id_df.merge(</span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    prediction_df,</span>
@@ -741,7 +741,7 @@ window.Quarto = {
 <pre><code>(27956, 6)</code></pre>
 </div>
 </div>
-<div id="d30e6b19" class="cell" data-execution_count="5">
+<div id="135a66af" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>performance_df.head(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
 <div>
@@ -767,7 +767,7 @@ window.Quarto = {
 <td>fbe2b15b5481</td>
 <td>1.0</td>
 <td>fbe2b15b5481</td>
-<td>0.871142</td>
+<td>0.871143</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
@@ -794,7 +794,7 @@ window.Quarto = {
 <td>c4274d90be60</td>
 <td>1.0</td>
 <td>c4274d90be60</td>
-<td>0.816241</td>
+<td>0.816240</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">10</th>
@@ -857,7 +857,7 @@ window.Quarto = {
 <td>2280b5fcc6c2</td>
 <td>1.0</td>
 <td>2280b5fcc6c2</td>
-<td>0.837773</td>
+<td>0.837772</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">25</th>
@@ -884,7 +884,7 @@ window.Quarto = {
 <td>81bec36eb86e</td>
 <td>1.0</td>
 <td>81bec36eb86e</td>
-<td>0.840178</td>
+<td>0.840179</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">32</th>
@@ -893,7 +893,7 @@ window.Quarto = {
 <td>2efee119d786</td>
 <td>1.0</td>
 <td>2efee119d786</td>
-<td>0.748653</td>
+<td>0.748652</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">34</th>
@@ -920,7 +920,7 @@ window.Quarto = {
 <td>67b7b6934db9</td>
 <td>1.0</td>
 <td>67b7b6934db9</td>
-<td>0.509901</td>
+<td>0.509903</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">48</th>
@@ -929,7 +929,7 @@ window.Quarto = {
 <td>ed15fd01efbe</td>
 <td>1.0</td>
 <td>ed15fd01efbe</td>
-<td>0.815826</td>
+<td>0.815825</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">49</th>
@@ -948,7 +948,7 @@ window.Quarto = {
 </div>
 <p>Any image with an <code>NA</code> rank means that the true ID was not one of the <code>proposed_ids</code>.</p>
 <p>We can compute the precision by taking the reciprocal of the rank. After we do that, we’ll fill the NA values with zero, since none of the five predictions were correct.</p>
-<div id="ece58c9a" class="cell" data-execution_count="6">
+<div id="b31f32eb" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>performance_df[<span class="st">'precision'</span>] <span class="op">=</span> <span class="dv">1</span> <span class="op">/</span> performance_df[<span class="st">'rank'</span>] </span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>performance_df[<span class="st">'precision'</span>] <span class="op">=</span> performance_df[<span class="st">'precision'</span>].fillna(<span class="dv">0</span>)</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>map5 <span class="op">=</span> performance_df.precision.mean()</span>
@@ -958,7 +958,7 @@ window.Quarto = {
 </div>
 </div>
 <p>For fun, we can look at the results by species</p>
-<div id="47688450" class="cell" data-execution_count="7">
+<div id="1bcadff0" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>plt.style.use(<span class="st">'fivethirtyeight'</span>)</span>
@@ -986,7 +986,7 @@ window.Quarto = {
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
-<p><img src="evaluate_files/figure-html/cell-8-output-1.png" width="622" height="719" class="figure-img"></p>
+<p><img src="evaluate_files/figure-html/cell-8-output-1.png" width="622" height="720" class="figure-img"></p>
 </figure>
 </div>
 </div>
