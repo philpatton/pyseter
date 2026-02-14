@@ -8,7 +8,9 @@ Typical usage example:
     image_directory = 'working_dir/all_images'
     feature_dict = fe.extract_images(image_directory)
 """
+from pathlib import Path
 from typing import Optional, Dict
+import argparse
 import os
 
 from huggingface_hub import hf_hub_download
@@ -461,3 +463,33 @@ def load_all_features(feature_paths, image_list):
         feature = load_and_process_features(path, image_list)
         feature_list.append(feature)
     return np.stack(feature_list, axis=1)
+
+def main():
+    # Set up argument parser
+    parser = argparse.ArgumentParser(description='Extract features from images')
+    parser.add_argument('--dir', required=True, help='Path to image directory')
+    parser.add_argument('--bbox_csv', default=None, help='Path to bounding box CSV (optional)')
+    
+    # Parse arguments
+    args = parser.parse_args()
+    
+    image_dir = args.dir
+    bbox_csv = args.bbox_csv
+    parent = str(Path(image_dir).parents[0])
+
+    # we'll save the results in the feature_dir
+    feature_dir = parent + '/features'
+    os.makedirs(feature_dir, exist_ok=True)
+
+    # initialize the extractor 
+    fe = FeatureExtractor(batch_size=4)
+    features = fe.extract(image_dir=image_dir, bbox_csv=bbox_csv)
+
+    # this saves the dictionary as an numpy file
+    out_path = feature_dir + '/features.npy'
+    np.save(out_path, features)
+
+    return None
+
+if __name__ == '__main__':
+    main()
