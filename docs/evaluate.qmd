@@ -1,5 +1,10 @@
 ---
 title: Evaluating *AnyDorsal*
+jupyter:
+  kernelspec:
+    display_name: Python (Pyseter)
+    language: python
+    name: pyseter_env
 execute:
   cache: true
 ---
