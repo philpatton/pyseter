@@ -117,5 +117,6 @@ def predict_ids(reference_dict, query_dict, id_df, proposed_id_count=10):
     pred_df.columns = ['image', 'rank', 'predicted_id']
 
     pred_df = pred_df.merge(score_df)
+    pred_df.rank = pred_df.rank + 1
 
     return pred_df
