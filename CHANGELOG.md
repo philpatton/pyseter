@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.1] - 2025-02-11
+
+### Changed
+- Bug fixes: Clean up a couple of fixes with `identify.predict_ids`
+- Updated documentation to reflect new versioning
+
 ## [0.3.0] - 2025-02-11
 
 ### Added
