@@ -10,6 +10,13 @@ jupyter:
 
 Here we present a quick overview of the main functions of Pyseter with a demo dataset.  
 
+:::{.callout-tip}
+## R user tip
+
+Throughout we'll provide tips for R users who are new to Python. If this is you, check out [Installation - New to Python](install-r.qmd) instructions.
+:::
+
+
 ## Installation
 
 If you haven't already, install some form of conda. [Anaconda](https://www.anaconda.com) is probably the easiest to install, but we are personally partial to [miniforge](https://github.com/conda-forge/miniforge?tab=readme-ov-file). Of course, you are also welcome to use any other package management tool, such as [uv](https://docs.astral.sh/uv/), [pixi](https://pixi.sh/latest/), or good old fashioned [venv](https://docs.python.org/3/library/venv.html).
@@ -44,28 +51,39 @@ Open a Jupyter notebook and download the data with `gdown`, which pulls data fro
 ```{python}
 #| eval: false
 import gdown
+import zipfile
 
-# download the demo data
+# make the file url with an f string
 file_id = '1puM7YBTVFbIAT3xNBQV1g09K0bMGLk1y' 
 file_url = f'https://drive.google.com/uc?id={file_id}'
 
+# download the demo data
 gdown.download(file_url, quiet=False, use_cookies=False)
-```
-
-Then, unzip the folder into our `working_directory`. 
-
-```{python}
-#| eval: false
-import zipfile
-import shutil
 
 # extract the files to the working directory
 with zipfile.ZipFile('original_images.zip', 'r') as zip_ref:
     zip_ref.extractall('working_dir')
 
-# this is an artifact of zipping on mac 
-shutil.rmtree('working_dir/__MACOSX')
 ```
+
+:::{.callout-tip}
+## R user tip
+
+In R, the above code block would look something like
+
+```
+library(gdown)
+download()
+```
+
+Imports work a little differently in Python. First, we need tell Python that this package is available for imports, `import pyseter`, then we need to explicitly call the function from the library `pyseter.verify_pytorch()`. To an R user, this can feel overly wordy. Nevertheless, this wordiness helps keep the global environment clean. Whereas R sessions frequently have to deal with [masking names](https://adv-r.hadley.nz/functions.html?q=masking#lexical-scoping), this rarely happens in Python. 
+:::
+
+::: {.callout-tip}
+## R user tip
+
+This block uses two fancy Python concepts, `with` (or the context manager), and the `f''` string. The `f''` string allows us to substitute the `file_id` into the `file_url`. The `with` statement is a way to safely open and close a connection to a file.
+:::
 
 ## Working with Pyseter
 
@@ -171,6 +189,11 @@ np.save(out_path, features)
 filenames = np.array(list(features.keys()))
 feature_array = np.array(list(features.values()))
 ```
+
+:::{.callout-tip}
+## R user tip
+In this case, `FeatureExtractor` is a class and `extract()` is a method of that class. Classes and methods also exist in R, but operate more behind the scenes. For example, `x <- data.frame()` initializes an object of class data.frame, and `summary(x)` calls the summary method for data.frames. Python makes this relationship more explicit. For example, the equivalent Python code would be `x = pandas.DataFrame()` and `x.summary()`. The `pandas` library provides data frames in Python.
+:::
 
 You can also load in features from a previously saved session. 
 
