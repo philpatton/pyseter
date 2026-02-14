@@ -1,0 +1,140 @@
+---
+title: Identifying animals with a reference set
+jupyter:
+  kernelspec:
+    display_name: Python (Pyseter)
+    language: python
+    name: pyseter_env
+execute:
+  cache: true
+---
+
+In this notebook, we'll demonstrate how do identify animals in a query set using a catalog of known individuals (i.e., a reference set). We'll use the [Happy Whale and Dolphin Kaggle competition dataset](https://www.kaggle.com/competitions/happy-whale-and-dolphin/data) as an example. You can download the data by following that linked page (click the big "Download all" button). FYI, you'll have to create an account first.
+
+There are three components of the Happywhale dataset that we'll focus on:
+
+  - **train.csv** .csv containing the IDs for every image in the reference set 
+  - **train_images** Directory containing every image in the reference set 
+  - **test_images** Directory containing every image in the query set
+
+In this case, we're treating the training dataset as the reference set, since we know the true identities. 
+
+## Set up
+
+Feel free to place the data anywhere you like, e.g., within a `pyseter_jobs` folder or something. I frequently come back to the Happywhale dataset, so I have it saved locally. 
+
+```{python}
+%config InlineBackend.figure_format = 'retina'
+import os
+
+from pyseter.extract import FeatureExtractor
+from pyseter.sort import load_features
+from pyseter.identify import predict_ids
+import numpy as np
+import pandas as pd
+
+data_dir = '/Users/PattonP/datasets/happywhale/'
+```
+
+## Extracting features
+
+Now that we've downloaded the data, we'll get ready to extract the feature vectors by initializing the `FeatureExtractor`. Some of the images in the Happywhale dataset are pretty big, so we'll set the `batch_size` to a low value, `4`.
+
+```{python}
+
+# we'll save the results in the feature_dir
+feature_dir = data_dir + '/features'
+os.makedirs(feature_dir, exist_ok=True)
+
+# initialize the extractor 
+fe = FeatureExtractor(batch_size=4)
+```
+
+There are about 75,000 images in the Happywhale dataset. In my testing, on an NVIDIA GPU, it takes about 45 minutes to extract the features for the 50,000 reference images, and 25 minutes to extract the features for the 25,000 query images. On my Apple M4 MacBook, it takes about 3 hours and 30 minutes for the reference images and about 2 hours for the query images.
+
+Additionally, we'll need to supply *bounding boxes* to the feature extractor. Many of the Happywhale images are taken from far away, so we need to crop the image to just the animal. To do so, we'll supply the path to the bounding box .csv as to the argument, `bbox_csv`. The .csv needs to have columns named: `['image', 'xmin', 'xmax', 'ymin', ymax']` that contain the image name and the coordinates for the corners of the box.  
+
+```{python}
+#| echo: false
+
+import matplotlib.pyplot as plt
+import matplotlib.patches as patches
+from torchvision.io import decode_image
+import os
+
+def visualize_bboxes(image_dir, bbox_csv, n=5):
+    df = pd.read_csv(bbox_csv)
+    fig, axes = plt.subplots(1, n, figsize=(4 * n, 4))
+    if n == 1: axes = [axes]
+    
+    for ax, (_, row) in zip(axes, df.head(n).iterrows()):
+        img = decode_image(os.path.join(image_dir, row['filename']))
+        ax.imshow(img.permute(1, 2, 0))  # CHW -> HWC
+        xmin, ymin, xmax, ymax = row['xmin'], row['ymin'], row['xmax'], row['ymax']
+        rect = patches.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin,
+                                  linewidth=2, edgecolor='r', facecolor='none')
+        ax.add_patch(rect)
+        ax.set_title(row['filename'], fontsize=8)
+        ax.axis('off')
+    
+    plt.tight_layout()
+    plt.show()
+  
+visualize_bboxes(
+    data_dir + '/train_images',
+    'https://raw.githubusercontent.com/philpatton/pyseter/main/data/happywhale-charm-boxes.csv'
+)
+```
+
+```{python}
+#| eval: false
+
+bbox_url = 'https://raw.githubusercontent.com/philpatton/pyseter/main/data/happywhale-charm-boxes.csv'
+
+train_dir = data_dir + '/train_images'
+train_features = fe.extract(image_dir=train_dir, bbox_csv=bbox_url)
+
+# this saves the dictionary as an numpy file
+out_path = feature_dir + '/train_features.npy'
+np.save(out_path, train_features)
+
+# now do the test images
+test_dir = data_dir + '/test_images'
+test_features = fe.extract(image_dir=test_dir, bbox_csv=bbox_url)
+
+out_path = feature_dir + '/test_features.npy'
+np.save(out_path, test_features)
+```
+
+If you've already extracted the features, you can load them back into your session.
+
+```{python}
+reference_path = feature_dir + '/train_features.npy'
+reference_files, reference_features = load_features(reference_path)
+
+query_path = feature_dir + '/test_features.npy'
+query_files, query_features = load_features(query_path)
+```
+
+## Identifying animals
+
+First, we'll create two dictionaries. Dictionaries are similar to a named list in R, where we can access the value in the dictionary by providing it's key. In this case, the key will be the image name and the value will be the feature vector for that image.
+
+We'll also need a `DataFrame` that tells us the identity of every individual in the reference set. This comes with the Kaggle dataset, in the `train.csv` file.
+
+```{python}
+query_dict = dict(zip(query_files, query_features))
+reference_dict = dict(zip(reference_files, reference_features))
+
+id_df = pd.read_csv(data_dir + '/train.csv')
+id_df.head()
+```
+
+And now we're ready to make predictions! By default, `predict_ids` returns 10 proposed IDs. Here we'll show just 2 so for the sake of variety. 
+
+```{python}
+prediction_df = predict_ids(reference_dict, query_dict, id_df, proposed_id_count=2)
+prediction_df.head(20)
+```
+
+By default, `predict_ids` inserts a dummy prediction "new_individual" at 0.5. This makes it easy to evaluate the algorithm with metrics like MAP@5, or calculate the false negative rate. 

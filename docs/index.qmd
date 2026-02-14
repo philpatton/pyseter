@@ -21,7 +21,7 @@ Please see the [Getting Started](getting-started.qmd) page for a demonstration o
 Users can install Pyseter with pip, uv, or pixi. For example, 
 
 ```bash
-pip install pyster
+pip install pyester
 ```
 
 We imagine that most Pyseter users will be more familiar with R than Python. If this is you, please see the [R users who are new to Python](install-r.qmd) page for detailed instructions on the steps needed to work with Pyseter. 

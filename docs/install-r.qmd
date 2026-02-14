@@ -77,10 +77,6 @@ PyTorch is pretty big (over a gigabyte), so this may take a few minutes.
 Mac users will need to have an Apple Silicon processor, e.g., an M1 chip. Additionally, they will need at least 16 GB of memory (RAM) to use AnyDorsal.
 :::
 
-### Linux users
-
-You run Linux, but you've never used Python?
-
 ## Install Pyseter
 
 Now, install Pyseter. If you haven't already, activate your environment before installing.

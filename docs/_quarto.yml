@@ -6,34 +6,27 @@ execute:
   freeze: auto
 
 website:
-  title: "Pyseter"
-  site-url: "https://philpatton.github.io/pyseter"
-  repo-url: "https://github.com/philpatton/pyseter"
-  repo-actions: [edit, issue]
-  
-  navbar:
-    background: primary
-    left:
-      - text: "Install" 
-        file: install.qmd
-      - text: "Getting started"
-        file: getting-started.qmd
-      # - text: "Manuscript"
-      #   file: manuscript.qmd
-      - text: "API Reference"
-        file: api/index.qmd  # Quartodoc generates this
-
-    right:
-      - icon: github
-        href: "https://github.com/philpatton/pyseter"
-
   sidebar:
-    - title: "Installation"
-      style: "docked"
-      # background: light
-      contents:
-        - install.qmd
-        - install-r.qmd
+    style: "docked"
+    search: true
+    contents:
+      - text: "Pyseter"
+        href: index.qmd
+      - text: Getting Started
+        file: getting-started.qmd
+      - section: "Installation"
+        contents:
+          - text: Users new to Python
+            file: install-r.qmd
+          - text: Python users
+            file: install.qmd
+      - section: "Examples"
+        contents:
+          - text: Predicting IDs
+            file: identify.qmd
+          - text: Evaluating *AnyDorsal*
+            file: evaluate.qmd
+      - api/index.qmd
 
 format:
   html:

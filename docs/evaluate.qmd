@@ -1,0 +1,122 @@
+---
+title: Evaluating *AnyDorsal*
+jupyter: pyseter_env
+execute:
+  cache: true
+---
+
+In this notebook, we'll demonstrate how do evaluate *AnyDorsal*'s' performance on a test dataset. We'll use the [Happy Whale and Dolphin Kaggle competition dataset](https://www.kaggle.com/competitions/happy-whale-and-dolphin/data) as an example. You can download the data by following that linked page (click the big "Download all" button). FYI, you'll have to create an account first.
+
+In the [Predicting IDs](identify.qmd) notebook, we demonstrated how to extract features for the Happywhale dataset using a set of bounding boxes. Here, we'll load the features in.
+
+```{python}
+%config InlineBackend.figure_format = 'retina'
+
+from pyseter.sort import load_features
+from pyseter.identify import predict_ids
+import matplotlib.pyplot as plt
+import pandas as pd
+
+data_dir = '/Users/PattonP/datasets/happywhale/'
+
+feature_dir = data_dir + '/features'
+
+reference_path = feature_dir + '/train_features.npy'
+reference_files, reference_features = load_features(reference_path)
+
+query_path = feature_dir + '/test_features.npy'
+query_files, query_features = load_features(query_path)
+```
+
+In order to evaluate the performance of *AnyDorsal* on the test set, we'll need to know the IDs of animals in the train set and the test set. 
+
+```{python}
+data_url = (
+    'https://raw.githubusercontent.com/philpatton/pyseter/main/' 
+    'data/happywhale-ids.csv'
+)
+id_df = pd.read_csv(data_url)
+
+# excel on mac corrupts the IDs (no need to do this on PC or linux)
+id_df['individual_id'] = id_df['individual_id'].apply(
+    lambda x: str(int(float(x))) if 'E+' in str(x) else x
+)
+
+id_df.head(10)
+```
+
+Now we'll predict the IDs in the query set. 
+
+```{python}
+query_dict = dict(zip(query_files, query_features))
+reference_dict = dict(zip(reference_files, reference_features))
+
+prediction_df = predict_ids(reference_dict, query_dict, id_df, proposed_id_count=5)
+prediction_df.head(20)
+```
+
+## Mean average precision
+
+We are going to evaluate *AnyDorsal* with Mean Average Precision (MAP). MAP evaluates a set of predictions, in this case, a set of 5 predictions. For a set of five ordered predictions, the precision score will be $1/1 = 1$ if the first prediction is correct, $1/2$ if the second is correct, and so on until $1/5$ if the fifth prediction is correct, or $0$ if none of the five predictions are correct. MAP is the mean precision score for a set.
+
+So we need to get the `rank` of the correct ID for every image in the test set. One way to do so is to merge the ID DataFrame with the prediction DataFrame. We only want one row per test image, so we need to merge on both the image and ID columns. We can check to see that it worked by checking the number of rows in the result (there are `27956` images in the testing dataset).
+
+```{python}
+# add the predictions and the scores to the id dataframe
+performance_df = id_df.merge(
+    prediction_df,
+    how='left',
+    left_on=['image', 'individual_id'],
+    right_on=['image', 'predicted_id']
+)
+
+# filter out the training images
+train_images = pd.read_csv(data_dir + '/train.csv').image
+performance_df = performance_df.loc[~performance_df.image.isin(train_images)]
+print(performance_df.shape)
+```
+
+```{python}
+performance_df.head(20)
+```
+
+Any image with an `NA` rank means that the true ID was not one of the `proposed_ids`. 
+
+We can compute the precision by taking the reciprocal of the rank. After we do that, we'll fill the NA values with zero, since none of the five predictions were correct.
+
+```{python}
+performance_df['precision'] = 1 / performance_df['rank'] 
+performance_df['precision'] = performance_df['precision'].fillna(0)
+map5 = performance_df.precision.mean()
+print(f'MAP@5: {map5:0.3f}')
+```
+
+For fun, we can look at the results by species
+
+```{python}
+import matplotlib.pyplot as plt
+
+plt.style.use('fivethirtyeight')
+plt.rcParams['axes.facecolor'] = 'white'
+plt.rcParams['figure.facecolor'] = 'white'
+
+map_df = (
+    performance_df.groupby('species')
+        .precision
+        .mean()
+        .rename('MAP')
+        .reset_index()
+        .sort_values('MAP')
+)
+
+fig, ax = plt.subplots(figsize=(4, 8))
+ax.scatter(map_df.MAP, map_df.species)
+for row in map_df.itertuples():
+    ax.text(row.MAP - 0.02, row.species, f'{row.MAP:0.2f}', ha='right', 
+            va='center', fontsize=12)
+ax.set_xlim((0,1.01))
+ax.set_title('AnyDorsal Performance')
+ax.set_xlabel('Mean average precision')
+plt.show()
+```
+
