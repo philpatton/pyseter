@@ -88,7 +88,7 @@ def predict_ids(reference_dict, query_dict, id_df, proposed_id_count=10):
     query_feats = np.array(list(query_dict.values()))  
 
     # this is the true id of every id in the reference dataset
-    ids = id_df.set_index('image').loc[reference_files, 'individual_id'].values
+    ids = id_df.set_index('image').loc[reference_files, 'individual_id'].to_numpy()
 
     # takes about 19 seconds
     distance_matrix, index_matrix = _find_neighbors(reference_feats, query_feats)
