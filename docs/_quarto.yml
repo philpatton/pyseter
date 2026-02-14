@@ -49,6 +49,11 @@ quartodoc:
       contents:
         - extract.FeatureExtractor
 
+    - title: Identify
+      desc: Predicting IDs in a query set with a reference set
+      contents:
+        - identify.predict_ids
+
     - title: Sorting and Clustering
       desc: Clustering images by proposed IDs
       contents:
