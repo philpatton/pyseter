@@ -1,6 +1,5 @@
 ---
 title: Evaluating *AnyDorsal*
-jupyter: pyseter_env
 execute:
   cache: true
 ---
