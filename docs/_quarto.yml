@@ -12,7 +12,7 @@ website:
     contents:
       - text: "Pyseter"
         href: index.qmd
-      - text: Getting Started
+      - text: Getting started
         file: getting-started.qmd
       - section: "Installation"
         contents:
