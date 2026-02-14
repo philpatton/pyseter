@@ -1,1 +1,0 @@
-Sitemap: https://philpatton.github.io/pyseter/sitemap.xml
