@@ -8,6 +8,14 @@ Extracting feature vectors from images
 | --- | --- |
 | [extract.FeatureExtractor](extract.FeatureExtractor.qmd#pyseter.extract.FeatureExtractor) | Extract features from images. |
 
+## Identify
+
+Predicting IDs in a query set with a reference set
+
+| | |
+| --- | --- |
+| [identify.predict_ids](identify.predict_ids.qmd#pyseter.identify.predict_ids) | Predict the identities of individuals in the query set |
+
 ## Sorting and Clustering
 
 Clustering images by proposed IDs

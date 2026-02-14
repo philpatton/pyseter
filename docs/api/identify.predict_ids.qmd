@@ -1,0 +1,36 @@
+# identify.predict_ids { #pyseter.identify.predict_ids }
+
+```python
+identify.predict_ids(reference_dict, query_dict, id_df, proposed_id_count=10)
+```
+
+Predict the identities of individuals in the query set
+
+Return a DataFrame of the most `proposed_id_count` most similar individuals
+in the reference set for each query image, along with their cosine 
+similarity. 
+
+## Parameters {.doc-section .doc-section-parameters}
+
+| Name              | Type         | Description                                                                                                                                                                          | Default    |
+|-------------------|--------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------|
+| reference_dict    | dict         | Dictionary where the key is the reference image's name. The value  associate with each key is a NumPy array of shape (M, ) where M is the  number of features in the feature vector. | _required_ |
+| query_dict        | dict         | Dictionary where the key is the query image's name. The value  associate with each key is a NumPy array of shape (M, ) where M is the  number of features in the feature vector.     | _required_ |
+| id_df             | pd.DataFrame | DataFrame containing the identities, `individual_id`, and image file  name, `image`, for every image in the reference set.                                                           | _required_ |
+| proposed_id_count | integer      | The number of proposed IDs to return for each query image.                                                                                                                           | `10`       |
+
+## Examples {.doc-section .doc-section-examples}
+
+```python
+>>> import numpy as np
+>>> import pandas as pd
+>>> from pyseter.identify import predict_ids
+>>> 
+>>> ref_dict = {'image1': np.array([0.1, 0.11])}
+>>> query_dict = {'image2': np.array([0.1, 0.12])}
+>>> id_df = pd.DataFrame({'image': 'image1', 'individual_id': 'a'})
+>>> 
+>>> results = predict_ids(ref_dict, query_dict, id_df, proposed_id_count=1)
+>>> len(results)
+1
+```
