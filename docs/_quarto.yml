@@ -30,6 +30,8 @@ website:
             file: identify.qmd
           - text: Evaluating *AnyDorsal*
             file: evaluate.qmd
+          - text: False negative rates
+            file: negative.qmd
       - section: "Experimental"
         contents:
           - text: "*AnyDorsal* ID app"

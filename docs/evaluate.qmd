@@ -21,8 +21,8 @@ from pyseter.identify import predict_ids
 import matplotlib.pyplot as plt
 import pandas as pd
 
+# load in the feature vectors
 data_dir = '/Users/PattonP/datasets/happywhale/'
-
 feature_dir = data_dir + '/features'
 
 reference_path = feature_dir + '/train_features.npy'
@@ -50,7 +50,6 @@ id_df.head(10)
 id_df['individual_id'] = id_df['individual_id'].apply(
     lambda x: str(int(float(x))) if 'E+' in str(x) else x
 )
-
 ```
 
 Now we'll predict the IDs in the query set. 
