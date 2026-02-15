@@ -22,6 +22,8 @@ website:
             file: install.qmd
       - section: "Examples"
         contents:
+          - text: Extracting features
+            file: extract.qmd
           - text: Predicting IDs
             file: identify.qmd
           - text: Evaluating *AnyDorsal*

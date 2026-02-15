@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>R users who are new to Python</title>
+<title>Extracting features</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -282,7 +282,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./install-r.html">Installation</a></li><li class="breadcrumb-item"><a href="./install-r.html">Users new to Python</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./extract.html">Examples</a></li><li class="breadcrumb-item"><a href="./extract.html">Extracting features</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -328,7 +328,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./install-r.html" class="sidebar-item-text sidebar-link active">
+  <a href="./install-r.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Users new to Python</span></a>
   </div>
 </li>
@@ -351,7 +351,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./extract.html" class="sidebar-item-text sidebar-link">
+  <a href="./extract.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Extracting features</span></a>
   </div>
 </li>
@@ -402,17 +402,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#install-conda" id="toc-install-conda" class="nav-link active" data-scroll-target="#install-conda">Install conda</a></li>
-  <li><a href="#create-a-new-environment" id="toc-create-a-new-environment" class="nav-link" data-scroll-target="#create-a-new-environment">Create a new environment</a></li>
-  <li><a href="#install-pytorch" id="toc-install-pytorch" class="nav-link" data-scroll-target="#install-pytorch">Install PyTorch</a>
-  <ul class="collapse">
-  <li><a href="#windows-users" id="toc-windows-users" class="nav-link" data-scroll-target="#windows-users">Windows users</a></li>
-  <li><a href="#mac-users" id="toc-mac-users" class="nav-link" data-scroll-target="#mac-users">Mac users</a></li>
-  </ul></li>
-  <li><a href="#install-pyseter" id="toc-install-pyseter" class="nav-link" data-scroll-target="#install-pyseter">Install Pyseter</a></li>
-  <li><a href="#install-vs-code-or-positron" id="toc-install-vs-code-or-positron" class="nav-link" data-scroll-target="#install-vs-code-or-positron">Install VS Code or Positron</a></li>
-  <li><a href="#verify-the-installation" id="toc-verify-the-installation" class="nav-link" data-scroll-target="#verify-the-installation">Verify the installation</a></li>
-  <li><a href="#anydorsal-weights" id="toc-anydorsal-weights" class="nav-link" data-scroll-target="#anydorsal-weights">AnyDorsal weights</a></li>
+  <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset">Dataset</a></li>
+  <li><a href="#extracting-features" id="toc-extracting-features" class="nav-link" data-scroll-target="#extracting-features">Extracting features</a></li>
   </ul>
 </nav>
     </div>
@@ -420,9 +411,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./install-r.html">Installation</a></li><li class="breadcrumb-item"><a href="./install-r.html">Users new to Python</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./extract.html">Examples</a></li><li class="breadcrumb-item"><a href="./extract.html">Extracting features</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">R users who are new to Python</h1>
+<h1 class="title">Extracting features</h1>
 </div>
 
 
@@ -439,104 +430,87 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>We expect that most people using Pyseter will be familiar with R, and completely new to Python. This raises the question: why release Pyseter as a Python package? The answer is that Python is much more suited to deep learning than R, and most of the new developments in automated photo-identification rely on deep learning.</p>
-<p>As such, Pyseter users will have to familiarize themselves with a few Python concepts, such as conda and Jupyter, before getting started.</p>
-<section id="install-conda" class="level2">
-<h2 class="anchored" data-anchor-id="install-conda">Install conda</h2>
-<p>Conda is an important tool for managing packages in Python. While R, for the most part, handles packages for you behind the scenes, Python requires a more hands on approach.</p>
-<p>To get started, we first need to install a package manager called conda. There are many forms of conda, with Anaconda being the most popular. For several reasons, we prefer another form of conda called Miniforge.</p>
-<ul>
-<li>Download and install <a href="https://conda-forge.org/download/">Miniforge</a> (a form of conda)</li>
-</ul>
-<p>After installing, you can verify your installation by opening the <strong>command line interface</strong> (CLI), which will depend on your operating system. Are you on Windows? Open the “miniforge prompt” in your start menu. Are you on Mac? Open the Terminal application. Then, type the following command into the CLI and hit return.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> <span class="at">--version</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>You should see something like <code>conda 25.5.1</code>. Of course, Anaconda, miniconda, mamba, or any other form of conda will work too.</p>
-</section>
-<section id="create-a-new-environment" class="level2">
-<h2 class="anchored" data-anchor-id="create-a-new-environment">Create a new environment</h2>
-<p>Then, you’ll create an environment for the package will live in. Environments are walled off areas where we can install packages. This allows you to have multiple versions of the same package installed on your machine, which can help prevent conflicts.</p>
-<p>Enter the following two commands into the CLI:</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> create <span class="at">-n</span> pyseter_env</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate pyseter_env</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Here, I name (hence the <code>-n</code>) the environment <code>pyseter_env</code>, but you can call it anything you like!</p>
-<p>Now your environment is ready to go! Try installing your first package, pip. Pip is another way of installing Python packages, and will be helpful for installing PyTorch and Pyseter (see below). To do so, enter the following command into the CLI.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> install pip <span class="at">-y</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>In this case, we include the <code>-y</code> argument so we don’t have to immediately answer <code>yes</code> to the next question. Once this is working, you’re ready to proceed to the next section.</p>
-</section>
-<section id="install-pytorch" class="level2">
-<h2 class="anchored" data-anchor-id="install-pytorch">Install PyTorch</h2>
-<p>Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. Extracting features should be fast for users with an NVIDIA GPU, and reasonable for users with a Mac with Apple Silicon.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<p>Here we present a quick overview on how to extract feature vectors with Pyseter. Feature vectors are summaries of images that are useful for identifying individuals. If <em>AnyDorsal</em> is working, then the similarity between two images should indicate that the individuals within the images look similar.</p>
+<div id="2d99a1e1" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.extract <span class="im">import</span> FeatureExtractor</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> load_features, prep_images</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gdown</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyseter</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="callout-title-container flex-fill">
-Warning
+<section id="dataset" class="level2">
+<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
+<p>The images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We can download the data with <code>gdown</code>, which pulls data from Google Drive. We’ll unzip the file to the <code>working_dir</code>.</p>
+<div id="00d524a4" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the demo data</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>file_id <span class="op">=</span> <span class="st">'1puM7YBTVFbIAT3xNBQV1g09K0bMGLk1y'</span> </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>file_url <span class="op">=</span> <span class="ss">f'https://drive.google.com/uc?id=</span><span class="sc">{</span>file_id<span class="sc">}</span><span class="ss">'</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gdown.download(file_url, quiet<span class="op">=</span><span class="va">False</span>, use_cookies<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the files to the working directory</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(<span class="st">'original_images.zip'</span>, <span class="st">'r'</span>) <span class="im">as</span> zip_ref:</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">'working_dir'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</div>
-<div class="callout-body-container callout-body">
-<p>For all other users, extracting features from images will be extremely slow.</p>
-</div>
-</div>
-<p>PyTorch installation can be a little finicky. Essentially, it depends on what operating system you’re using, and what version of <strong>CUDA</strong> you’re using. CUDA is the technology that turns your NVIDIA GPU into a deep learning machine. To install PyTorch, I recommend following <a href="https://pytorch.org/get-started/locally/">these instructions</a>.</p>
-<section id="windows-users" class="level3">
-<h3 class="anchored" data-anchor-id="windows-users">Windows users</h3>
-<p>Below is an example for Windows users. This relies on CUDA 12.8, which should work for most people. If you haven’t already, open the CLI (e.g., the miniforge prompt). Then activate your environment before installing.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate pyseter_env</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip3</span> install torch torchvision <span class="at">--index-url</span> https://download.pytorch.org/whl/cu128</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>PyTorch is pretty big (over a gigabyte), so this may take a few minutes.</p>
-</section>
-<section id="mac-users" class="level3">
-<h3 class="anchored" data-anchor-id="mac-users">Mac users</h3>
-<p>Below is an example for Mac users. The Mac version of PyTorch relies on <a href="https://docs.pytorch.org/docs/stable/notes/mps.html">MPS acceleration</a>, which is good but not at the level of CUDA. If you haven’t already, open you’re command line interface (e.g., the miniforge prompt). Then activate your environment before installing.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate pyseter_env</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip3</span> install torch torchvision </span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>PyTorch is pretty big (over a gigabyte), so this may take a few minutes.</p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Warning
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>Mac users will need to have an Apple Silicon processor, e.g., an M1 chip. Additionally, they will need at least 16 GB of memory (RAM) to use AnyDorsal.</p>
+<p>The demo dataset is organized into subfolders by encounter. Our lives will be a little easier if we move all these images to a flat folder. The <code>prep_images()</code> function does just that.</p>
+<div id="f595660e" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>working_dir <span class="op">=</span> <span class="st">'working_dir'</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>original_image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/original_images'</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># new, flattened directory containing every image</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/all_images'</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>prep_images(original_image_dir, all_image_dir<span class="op">=</span>image_dir)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Copied 1251 images to: working_dir/all_images
+Saved encounter information to: /Users/PattonP/source/repos/pyseter/docs/working_dir/encounter_info.csv</code></pre>
 </div>
 </div>
 </section>
-</section>
-<section id="install-pyseter" class="level2">
-<h2 class="anchored" data-anchor-id="install-pyseter">Install Pyseter</h2>
-<p>Now, install Pyseter. If you haven’t already, activate your environment before installing.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">conda</span> activate pyseter_env</span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">pip3</span> install pyseter</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>Now you’re ready to go!</p>
-</section>
-<section id="install-vs-code-or-positron" class="level2">
-<h2 class="anchored" data-anchor-id="install-vs-code-or-positron">Install VS Code or Positron</h2>
-<p>Most users will interact with Pyseter via a Jupyter Notebook. There are many methods for opening, editing, running, and saving Jupyter Notebooks. We are personally biased towards VS Code. Alternatively, R users might also try out <a href="https://positron.posit.co">Positron</a>. The team at Posit (formerly, R Studio) developed Positron from the open source version of VS Code, but with R users in mind. As such, it might be a nice hybrid option. That said, we have found Positron to throw confusing errors and have found VS Code to be more stable.</p>
-<ul>
-<li>Download and install <a href="https://code.visualstudio.com/download">VS Code</a></li>
-</ul>
-<p>Open VS Code, then click “File -&gt; Open Folder”. Navigate to wherever you’d like to work, then click “New Folder.” You can call this folder something like “learn-pyseter” or “pyseter-jobs”. Open the new folder. Click “File -&gt; New File” then select Jupyter Notebook. Click “Select Kernel” in the top right corner, select “Python environments” and then “pyseter_env”, or whatever you named your environment. For more information, check out <a href="https://code.visualstudio.com/docs/datascience/jupyter-notebooks">this great overview</a> of using Jupyter Notebooks in VS Code.</p>
-<p>Now you’re ready to proceed to the next section.</p>
-</section>
-<section id="verify-the-installation" class="level2">
-<h2 class="anchored" data-anchor-id="verify-the-installation">Verify the installation</h2>
-<p>Verify the Pyseter installation by running the following cell in your notebook.</p>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyseter</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>pyseter.verify_pytorch()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<p>If you’re on a windows computer with an NVIDIA GPU, you should see something like</p>
-<pre><code>✓ PyTorch 2.7.1+cu126 detected
-✓ CUDA GPU available: NVIDIA A30 MIG 2g.12gb</code></pre>
-<p>Once this is working, you’re ready to check out the “General Overview” <a href="https://github.com/philpatton/pyseter/blob/main/examples/general-overview.ipynb">notebook</a> in the examples folder of this repository!</p>
-</section>
-<section id="anydorsal-weights" class="level2">
-<h2 class="anchored" data-anchor-id="anydorsal-weights">AnyDorsal weights</h2>
-<p>Pyseter relies on the <a href="https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/2041-210X.14167">AnyDorsal algorithm</a> to extract features from images. The first time you use the <code>FeatureExtractor</code>, Pyseter will download the AnyDorsal weights from Hugging Face. The weights take up roughly 4.5 GB. As such, to use the <code>FeatureExtractor</code>, users must have enough storage space to accommodate the weights.</p>
+<section id="extracting-features" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-features">Extracting features</h2>
+<p>Extracting features, like all modern AI, depends on GPUs. Users with an NVIDIA GPU can expect fast feature extraction. Extracting features for the ~1200 images in the demo dataset, for example, will take about two minutes on an NVIDIA GPU. Most university or governmental high performance computing clusters (HPCs) will have GPUs available.</p>
+<p>Feature extraction also works reasonably quickly on Apple Silicon (i.e., M1-M4). Extracting features for in the demo dataset, for example, will take about 10 minutes on Apple Silicon, depending on the model.</p>
+<p>We can verify the Pyseter installation and the acceleration with <code>verify_pytorch</code>.</p>
+<div id="6fbf879e" class="cell" data-execution_count="4">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pyseter.verify_pytorch()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>:) PyTorch 2.10.0 detected
+:) Apple Silicon (MPS) GPU available</code></pre>
+</div>
+</div>
+<p>We also need to initialize the <code>FeatureExtractor</code>. The only argument is the <code>batch_size</code>, which we recommend setting to something low, like 4.</p>
+<div id="3892bf89" class="cell" data-execution_count="5">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we'll save the results in the feature_dir</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/features'</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>os.makedirs(feature_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize the extractor </span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>fe <span class="op">=</span> FeatureExtractor(batch_size<span class="op">=</span><span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Using device: mps (Apple Silicon GPU)</code></pre>
+</div>
+</div>
+<p>The first time you extract features with Pyseter, it will download <a href="https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14167">AnyDorsal</a> to your machine. AnyDorsal is huge (4.5GB), so be prepared!</p>
+<p>This will take a minute, so we recommend saving the results afterwards.</p>
+<div id="f1461240" class="cell" data-execution_count="6">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> fe.extract(image_dir<span class="op">=</span>image_dir)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># this saves the dictionary as an numpy file</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>np.save(out_path, features)</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># convert keys and values to numpy arrays</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>filenames <span class="op">=</span> np.array(<span class="bu">list</span>(features.keys()))</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>feature_array <span class="op">=</span> np.array(<span class="bu">list</span>(features.values()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>You can load previously saved features with <code>load_features</code></p>
+<div id="a8b96df7" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>filenames, feature_array <span class="op">=</span> load_features(out_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
 </section>

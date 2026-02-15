@@ -356,6 +356,39 @@
     ]
   },
   {
+    "objectID": "extract.html",
+    "href": "extract.html",
+    "title": "Extracting features",
+    "section": "",
+    "text": "Here we present a quick overview on how to extract feature vectors with Pyseter. Feature vectors are summaries of images that are useful for identifying individuals. If AnyDorsal is working, then the similarity between two images should indicate that the individuals within the images look similar.\nimport os\n\nfrom pyseter.extract import FeatureExtractor\nfrom pyseter.sort import load_features, prep_images\nimport gdown\nimport numpy as np\nimport pyseter\nimport zipfile",
+    "crumbs": [
+      "Examples",
+      "Extracting features"
+    ]
+  },
+  {
+    "objectID": "extract.html#dataset",
+    "href": "extract.html#dataset",
+    "title": "Extracting features",
+    "section": "Dataset",
+    "text": "Dataset\nThe images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We can download the data with gdown, which pulls data from Google Drive. We’ll unzip the file to the working_dir.\n\n# download the demo data\nfile_id = '1puM7YBTVFbIAT3xNBQV1g09K0bMGLk1y' \nfile_url = f'https://drive.google.com/uc?id={file_id}'\n\ngdown.download(file_url, quiet=False, use_cookies=False)\n\n# extract the files to the working directory\nwith zipfile.ZipFile('original_images.zip', 'r') as zip_ref:\n    zip_ref.extractall('working_dir')\n\nThe demo dataset is organized into subfolders by encounter. Our lives will be a little easier if we move all these images to a flat folder. The prep_images() function does just that.\n\nworking_dir = 'working_dir'\noriginal_image_dir = working_dir + '/original_images'\n\n# new, flattened directory containing every image\nimage_dir = working_dir + '/all_images'\nprep_images(original_image_dir, all_image_dir=image_dir)\n\nCopied 1251 images to: working_dir/all_images\nSaved encounter information to: /Users/PattonP/source/repos/pyseter/docs/working_dir/encounter_info.csv",
+    "crumbs": [
+      "Examples",
+      "Extracting features"
+    ]
+  },
+  {
+    "objectID": "extract.html#extracting-features",
+    "href": "extract.html#extracting-features",
+    "title": "Extracting features",
+    "section": "Extracting features",
+    "text": "Extracting features\nExtracting features, like all modern AI, depends on GPUs. Users with an NVIDIA GPU can expect fast feature extraction. Extracting features for the ~1200 images in the demo dataset, for example, will take about two minutes on an NVIDIA GPU. Most university or governmental high performance computing clusters (HPCs) will have GPUs available.\nFeature extraction also works reasonably quickly on Apple Silicon (i.e., M1-M4). Extracting features for in the demo dataset, for example, will take about 10 minutes on Apple Silicon, depending on the model.\nWe can verify the Pyseter installation and the acceleration with verify_pytorch.\n\npyseter.verify_pytorch()\n\n:) PyTorch 2.10.0 detected\n:) Apple Silicon (MPS) GPU available\n\n\nWe also need to initialize the FeatureExtractor. The only argument is the batch_size, which we recommend setting to something low, like 4.\n\n# we'll save the results in the feature_dir\nfeature_dir = working_dir + '/features'\nos.makedirs(feature_dir, exist_ok=True)\n\n# initialize the extractor \nfe = FeatureExtractor(batch_size=4)\n\nUsing device: mps (Apple Silicon GPU)\n\n\nThe first time you extract features with Pyseter, it will download AnyDorsal to your machine. AnyDorsal is huge (4.5GB), so be prepared!\nThis will take a minute, so we recommend saving the results afterwards.\n\nfeatures = fe.extract(image_dir=image_dir)\n\n# this saves the dictionary as an numpy file\nout_path = feature_dir + '/features.npy'\nnp.save(out_path, features)\n\n# convert keys and values to numpy arrays\nfilenames = np.array(list(features.keys()))\nfeature_array = np.array(list(features.values()))\n\nYou can load previously saved features with load_features\n\nout_path = feature_dir + '/features.npy'\nfilenames, feature_array = load_features(out_path)",
+    "crumbs": [
+      "Examples",
+      "Extracting features"
+    ]
+  },
+  {
     "objectID": "evaluate.html",
     "href": "evaluate.html",
     "title": "Evaluating AnyDorsal",
@@ -434,7 +467,7 @@
     "href": "app.html#demo-version",
     "title": "Identify App",
     "section": "Demo version",
-    "text": "Demo version\nHere, we demonstrate what the app looks like when you run it locally. This demo version contains 68 images from the Happywhale dataset, and represents a roughly even sample of every catalog in the dataset.\n\n\nHere are a few pointers on how to use the app\n\nNext and Prev navigate between query images\nYou can navigate between reference images of proposed IDs with the left and right arrow keys\nThe radio buttons under Select correct match allow you to select which proposed ID best matches the query image, if any\nConfirm match locks in your choice\nDownload csv downloads a .csv where one column is the query image and the other column is the confirmed ID\nClicking the X in the top right corner brings up a grid of images. Clicking an image on the grid returns to the single image viewer.",
+    "text": "Demo version\nHere, we demonstrate what the app looks like when you run it locally. This demo version contains 68 images from the Happywhale dataset, and represents a roughly even sample of every catalog in the dataset.\nHere are a few pointers on how to use the app\n\nNext and Prev navigate between query images\nYou can navigate between reference images of proposed IDs with the left and right arrow keys\nThe radio buttons under Select correct match allow you to select which proposed ID best matches the query image, if any\nConfirm match locks in your choice\nDownload csv downloads a .csv where one column is the query image and the other column is the confirmed ID\nClicking the X in the top right corner brings up a grid of images. Clicking an image on the grid returns to the single image viewer.",
     "crumbs": [
       "Experimental",
       "Identify App"
@@ -463,11 +496,11 @@
     ]
   },
   {
-    "objectID": "identify.html#extracting-features",
-    "href": "identify.html#extracting-features",
+    "objectID": "identify.html#extracting-features-using-bounding-boxes",
+    "href": "identify.html#extracting-features-using-bounding-boxes",
     "title": "Identifying animals with a reference set",
-    "section": "Extracting features",
-    "text": "Extracting features\nNow that we’ve downloaded the data, we’ll get ready to extract the feature vectors by initializing the FeatureExtractor. Some of the images in the Happywhale dataset are pretty big, so we’ll set the batch_size to a low value, 4.\n\n# we'll save the results in the feature_dir\nfeature_dir = data_dir + '/features'\nos.makedirs(feature_dir, exist_ok=True)\n\n# initialize the extractor \nfe = FeatureExtractor(batch_size=4)\n\nUsing device: mps (Apple Silicon GPU)\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThere are about 75,000 images in the Happywhale dataset. In my testing, on an NVIDIA GPU, it takes about 45 minutes to extract the features for the 50,000 reference images, and 25 minutes to extract the features for the 25,000 query images. On my Apple M4 MacBook, it takes about 3 hours and 30 minutes for the reference images and about 2 hours for the query images.\n\n\nAdditionally, we’ll need to supply bounding boxes to the feature extractor. Many of the Happywhale images are taken from far away, so we need to crop the image to just the animal. To do so, we’ll supply the path to the bounding box .csv as to the argument, bbox_csv. The .csv needs to have columns named: ['image', 'xmin', 'xmax', 'ymin', ymax'] that contain the image name and the coordinates for the corners of the box.\n\n\n\n\n\n\n\n\n\n\nbbox_url = 'https://raw.githubusercontent.com/philpatton/pyseter/main/data/happywhale-charm-boxes.csv'\n\ntrain_dir = data_dir + '/train_images'\ntrain_features = fe.extract(image_dir=train_dir, bbox_csv=bbox_url)\n\n# this saves the dictionary as an numpy file\nout_path = feature_dir + '/train_features.npy'\nnp.save(out_path, train_features)\n\n# now do the test images\ntest_dir = data_dir + '/test_images'\ntest_features = fe.extract(image_dir=test_dir, bbox_csv=bbox_url)\n\nout_path = feature_dir + '/test_features.npy'\nnp.save(out_path, test_features)\n\nIf you’ve already extracted the features, you can load them back into your session.\n\nreference_path = feature_dir + '/train_features.npy'\nreference_files, reference_features = load_features(reference_path)\n\nquery_path = feature_dir + '/test_features.npy'\nquery_files, query_features = load_features(query_path)",
+    "section": "Extracting features using bounding boxes",
+    "text": "Extracting features using bounding boxes\nNow that we’ve downloaded the data, we’ll get ready to extract the feature vectors by initializing the FeatureExtractor. Some of the images in the Happywhale dataset are pretty big, so we’ll set the batch_size to a low value, 4.\n\n# we'll save the results in the feature_dir\nfeature_dir = data_dir + '/features'\nos.makedirs(feature_dir, exist_ok=True)\n\n# initialize the extractor \nfe = FeatureExtractor(batch_size=4)\n\nUsing device: mps (Apple Silicon GPU)\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThere are about 75,000 images in the Happywhale dataset. In my testing, on an NVIDIA GPU, it takes about 45 minutes to extract the features for the 50,000 reference images, and 25 minutes to extract the features for the 25,000 query images. On my Apple M4 MacBook, it takes about 3 hours and 30 minutes for the reference images and about 2 hours for the query images.\n\n\nAdditionally, we’ll need to supply bounding boxes to the feature extractor. Many of the Happywhale images are taken from far away, so we need to crop the image to just the animal. To do so, we’ll supply the path to the bounding box .csv as to the argument, bbox_csv. The .csv needs to have columns named: ['image', 'xmin', 'xmax', 'ymin', ymax'] that contain the image name and the coordinates for the corners of the box.\n\n\n\n\n\n\n\n\n\n\nbbox_url = 'https://raw.githubusercontent.com/philpatton/pyseter/main/data/happywhale-charm-boxes.csv'\n\ntrain_dir = data_dir + '/train_images'\ntrain_features = fe.extract(image_dir=train_dir, bbox_csv=bbox_url)\n\n# this saves the dictionary as an numpy file\nout_path = feature_dir + '/train_features.npy'\nnp.save(out_path, train_features)\n\n# now do the test images\ntest_dir = data_dir + '/test_images'\ntest_features = fe.extract(image_dir=test_dir, bbox_csv=bbox_url)\n\nout_path = feature_dir + '/test_features.npy'\nnp.save(out_path, test_features)\n\nIf you’ve already extracted the features, you can load them back into your session.\n\nreference_path = feature_dir + '/train_features.npy'\nreference_files, reference_features = load_features(reference_path)\n\nquery_path = feature_dir + '/test_features.npy'\nquery_files, query_features = load_features(query_path)",
     "crumbs": [
       "Examples",
       "Predicting IDs"

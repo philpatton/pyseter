@@ -285,7 +285,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./identify.html">Examples</a></li><li class="breadcrumb-item"><a href="./identify.html">Predicting IDs</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./extract.html">Examples</a></li><li class="breadcrumb-item"><a href="./identify.html">Predicting IDs</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -354,6 +354,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./extract.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Extracting features</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./identify.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Predicting IDs</span></a>
   </div>
@@ -400,7 +406,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
    
   <ul>
   <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set up</a></li>
-  <li><a href="#extracting-features" id="toc-extracting-features" class="nav-link" data-scroll-target="#extracting-features">Extracting features</a></li>
+  <li><a href="#extracting-features-using-bounding-boxes" id="toc-extracting-features-using-bounding-boxes" class="nav-link" data-scroll-target="#extracting-features-using-bounding-boxes">Extracting features using bounding boxes</a></li>
   <li><a href="#identifying-animals" id="toc-identifying-animals" class="nav-link" data-scroll-target="#identifying-animals">Identifying animals</a></li>
   </ul>
 </nav>
@@ -409,7 +415,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./identify.html">Examples</a></li><li class="breadcrumb-item"><a href="./identify.html">Predicting IDs</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./extract.html">Examples</a></li><li class="breadcrumb-item"><a href="./identify.html">Predicting IDs</a></li></ol></nav>
 <div class="quarto-title">
 <h1 class="title">Identifying animals with a reference set</h1>
 </div>
@@ -452,8 +458,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>data_dir <span class="op">=</span> <span class="st">'/Users/PattonP/datasets/happywhale/'</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section>
-<section id="extracting-features" class="level2">
-<h2 class="anchored" data-anchor-id="extracting-features">Extracting features</h2>
+<section id="extracting-features-using-bounding-boxes" class="level2">
+<h2 class="anchored" data-anchor-id="extracting-features-using-bounding-boxes">Extracting features using bounding boxes</h2>
 <p>Now that we’ve downloaded the data, we’ll get ready to extract the feature vectors by initializing the <code>FeatureExtractor</code>. Some of the images in the Happywhale dataset are pretty big, so we’ll set the <code>batch_size</code> to a low value, <code>4</code>.</p>
 <div id="23fbbd91" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we'll save the results in the feature_dir</span></span>

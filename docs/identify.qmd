@@ -36,7 +36,7 @@ import pandas as pd
 data_dir = '/Users/PattonP/datasets/happywhale/'
 ```
 
-## Extracting features
+## Extracting features using bounding boxes
 
 Now that we've downloaded the data, we'll get ready to extract the feature vectors by initializing the `FeatureExtractor`. Some of the images in the Happywhale dataset are pretty big, so we'll set the `batch_size` to a low value, `4`.
 

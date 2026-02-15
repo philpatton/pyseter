@@ -1,0 +1,98 @@
+---
+title: Extracting features
+jupyter:
+  kernelspec:
+    display_name: Python (Pyseter)
+    language: python
+    name: pyseter_env
+---
+
+Here we present a quick overview on how to extract feature vectors with Pyseter. Feature vectors are summaries of images that are useful for identifying individuals. If *AnyDorsal* is working, then the similarity between two images should indicate that the individuals within the images look similar. 
+
+```{python}
+import os
+
+from pyseter.extract import FeatureExtractor
+from pyseter.sort import load_features, prep_images
+import gdown
+import numpy as np
+import pyseter
+import zipfile
+```
+
+## Dataset
+
+The images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We can download the data with `gdown`, which pulls data from Google Drive. We'll unzip the file to the `working_dir`. 
+
+```{python}
+#| eval: false 
+
+# download the demo data
+file_id = '1puM7YBTVFbIAT3xNBQV1g09K0bMGLk1y' 
+file_url = f'https://drive.google.com/uc?id={file_id}'
+
+gdown.download(file_url, quiet=False, use_cookies=False)
+
+# extract the files to the working directory
+with zipfile.ZipFile('original_images.zip', 'r') as zip_ref:
+    zip_ref.extractall('working_dir')
+```
+
+The demo dataset is organized into subfolders by encounter. Our lives will be a little easier if we move all these images to a flat folder. The `prep_images()` function does just that.
+
+```{python}
+working_dir = 'working_dir'
+original_image_dir = working_dir + '/original_images'
+
+# new, flattened directory containing every image
+image_dir = working_dir + '/all_images'
+prep_images(original_image_dir, all_image_dir=image_dir)
+```
+
+## Extracting features
+
+Extracting features, like all modern AI, depends on GPUs. Users with an NVIDIA GPU can expect fast feature extraction. Extracting features for the ~1200 images in the demo dataset, for example, will take about two minutes on an NVIDIA GPU. Most university or governmental high performance computing clusters (HPCs) will have GPUs available. 
+
+Feature extraction also works reasonably quickly on Apple Silicon (i.e., M1-M4). Extracting features for in the demo dataset, for example, will take about 10 minutes on Apple Silicon, depending on the model.
+
+We can verify the Pyseter installation and the acceleration with `verify_pytorch`.
+
+```{python}
+pyseter.verify_pytorch()
+```
+
+We also need to initialize the `FeatureExtractor`. The only argument is the `batch_size`, which we recommend setting to something low, like 4. 
+
+```{python}
+
+# we'll save the results in the feature_dir
+feature_dir = working_dir + '/features'
+os.makedirs(feature_dir, exist_ok=True)
+
+# initialize the extractor 
+fe = FeatureExtractor(batch_size=4)
+```
+
+The first time you extract features with Pyseter, it will download [AnyDorsal](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14167) to your machine. AnyDorsal is huge (4.5GB), so be prepared! 
+
+This will take a minute, so we recommend saving the results afterwards. 
+
+```{python}
+#| eval: false
+features = fe.extract(image_dir=image_dir)
+
+# this saves the dictionary as an numpy file
+out_path = feature_dir + '/features.npy'
+np.save(out_path, features)
+
+# convert keys and values to numpy arrays
+filenames = np.array(list(features.keys()))
+feature_array = np.array(list(features.values()))
+```
+
+You can load previously saved features with `load_features`
+
+```{python}
+out_path = feature_dir + '/features.npy'
+filenames, feature_array = load_features(out_path)
+```
