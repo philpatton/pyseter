@@ -431,6 +431,17 @@
     ]
   },
   {
+    "objectID": "extract.html#command-line-interface",
+    "href": "extract.html#command-line-interface",
+    "title": "Extracting features",
+    "section": "Command line interface",
+    "text": "Command line interface\nUsers can also extract features using the command line interface (e.g., terminal). This can be especially helpful when running on your university’s or your agency’s high performance computing cluster (HPC).\nTo do so, open the terminal and activate your Pyseter environment.\n\n$ cd happywhale\n$ conda activate pyseter_env \n$ python -m pyseter.extract --dir test_images --bbox_csv happywhale-charm-boxes.csv\n\nThere are two arguments:\n\ndir specifies the flat directory containing the images from which to extract features\nbbox_csv optionally indicates where to find the .csv with bounding boxes.\n\nThe features will save to the file, features/features.npy, in the parent directory of the dir you specify. In the example above, the test images live in the happywhale/test_images folder, and the features are saved to the happywhale/features folder.",
+    "crumbs": [
+      "Examples",
+      "Extracting features"
+    ]
+  },
+  {
     "objectID": "evaluate.html",
     "href": "evaluate.html",
     "title": "Evaluating AnyDorsal",

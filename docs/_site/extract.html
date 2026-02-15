@@ -422,6 +422,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset">Dataset</a></li>
   <li><a href="#extracting-features" id="toc-extracting-features" class="nav-link" data-scroll-target="#extracting-features">Extracting features</a></li>
+  <li><a href="#command-line-interface" id="toc-command-line-interface" class="nav-link" data-scroll-target="#command-line-interface">Command line interface</a></li>
   </ul>
 </nav>
     </div>
@@ -449,7 +450,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Here we present a quick overview on how to extract feature vectors with Pyseter. Feature vectors are summaries of images that are useful for identifying individuals. If <em>AnyDorsal</em> is working, then the similarity between two images should indicate that the individuals within the images look similar.</p>
-<div id="2d99a1e1" class="cell" data-execution_count="1">
+<div id="bbd18aa0" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.extract <span class="im">import</span> FeatureExtractor</span>
@@ -462,7 +463,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
 <p>The images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We can download the data with <code>gdown</code>, which pulls data from Google Drive. We’ll unzip the file to the <code>working_dir</code>.</p>
-<div id="00d524a4" class="cell" data-execution_count="2">
+<div id="6be7e03b" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the demo data</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>file_id <span class="op">=</span> <span class="st">'1puM7YBTVFbIAT3xNBQV1g09K0bMGLk1y'</span> </span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>file_url <span class="op">=</span> <span class="ss">f'https://drive.google.com/uc?id=</span><span class="sc">{</span>file_id<span class="sc">}</span><span class="ss">'</span></span>
@@ -474,7 +475,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">'working_dir'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>The demo dataset is organized into subfolders by encounter. Our lives will be a little easier if we move all these images to a flat folder. The <code>prep_images()</code> function does just that.</p>
-<div id="f595660e" class="cell" data-execution_count="3">
+<div id="505dd0bc" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>working_dir <span class="op">=</span> <span class="st">'working_dir'</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>original_image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/original_images'</span></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -492,7 +493,7 @@ Saved encounter information to: /Users/PattonP/source/repos/pyseter/docs/working
 <p>Extracting features, like all modern AI, depends on GPUs. Users with an NVIDIA GPU can expect fast feature extraction. Extracting features for the ~1200 images in the demo dataset, for example, will take about two minutes on an NVIDIA GPU. Most university or governmental high performance computing clusters (HPCs) will have GPUs available.</p>
 <p>Feature extraction also works reasonably quickly on Apple Silicon (i.e., M1-M4). Extracting features for in the demo dataset, for example, will take about 10 minutes on Apple Silicon, depending on the model.</p>
 <p>We can verify the Pyseter installation and the acceleration with <code>verify_pytorch</code>.</p>
-<div id="6fbf879e" class="cell" data-execution_count="4">
+<div id="ae893ef6" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pyseter.verify_pytorch()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>:) PyTorch 2.10.0 detected
@@ -500,7 +501,7 @@ Saved encounter information to: /Users/PattonP/source/repos/pyseter/docs/working
 </div>
 </div>
 <p>We also need to initialize the <code>FeatureExtractor</code>. The only argument is the <code>batch_size</code>, which we recommend setting to something low, like 4.</p>
-<div id="3892bf89" class="cell" data-execution_count="5">
+<div id="632306df" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we'll save the results in the feature_dir</span></span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/features'</span></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>os.makedirs(feature_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
@@ -513,7 +514,7 @@ Saved encounter information to: /Users/PattonP/source/repos/pyseter/docs/working
 </div>
 <p>The first time you extract features with Pyseter, it will download <a href="https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14167">AnyDorsal</a> to your machine. AnyDorsal is huge (4.5GB), so be prepared!</p>
 <p>This will take a minute, so we recommend saving the results afterwards.</p>
-<div id="f1461240" class="cell" data-execution_count="6">
+<div id="c428bd43" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> fe.extract(image_dir<span class="op">=</span>image_dir)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># this saves the dictionary as an numpy file</span></span>
@@ -525,10 +526,26 @@ Saved encounter information to: /Users/PattonP/source/repos/pyseter/docs/working
 <span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>feature_array <span class="op">=</span> np.array(<span class="bu">list</span>(features.values()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>You can load previously saved features with <code>load_features</code></p>
-<div id="a8b96df7" class="cell" data-execution_count="7">
+<div id="0e2e2fb0" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>filenames, feature_array <span class="op">=</span> load_features(out_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
+</section>
+<section id="command-line-interface" class="level2">
+<h2 class="anchored" data-anchor-id="command-line-interface">Command line interface</h2>
+<p>Users can also extract features using the command line interface (e.g., terminal). This can be especially helpful when running on your university’s or your agency’s high performance computing cluster (HPC).</p>
+<p>To do so, open the terminal and activate your Pyseter environment.</p>
+<div id="ebc1eb5b" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>$ cd happywhale</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>$ conda activate pyseter_env </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>$ python <span class="op">-</span>m pyseter.extract <span class="op">--</span><span class="bu">dir</span> test_images <span class="op">--</span>bbox_csv happywhale<span class="op">-</span>charm<span class="op">-</span>boxes.csv</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>There are two arguments:</p>
+<ul>
+<li><code>dir</code> specifies the flat directory containing the images from which to extract features</li>
+<li><code>bbox_csv</code> optionally indicates where to find the .csv with bounding boxes.</li>
+</ul>
+<p>The features will save to the file, <code>features/features.npy</code>, in the <strong>parent</strong> directory of the <code>dir</code> you specify. In the example above, the test images live in the <code>happywhale/test_images</code> folder, and the features are saved to the <code>happywhale/features</code> folder.</p>
 
 
 </section>

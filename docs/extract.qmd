@@ -96,3 +96,23 @@ You can load previously saved features with `load_features`
 out_path = feature_dir + '/features.npy'
 filenames, feature_array = load_features(out_path)
 ```
+
+## Command line interface
+
+Users can also extract features using the command line interface (e.g., terminal). This can be especially helpful when running on your university's or your agency's high performance computing cluster (HPC). 
+
+To do so, open the terminal and activate your Pyseter environment.
+
+```{python}
+#| eval: false
+$ cd happywhale
+$ conda activate pyseter_env 
+$ python -m pyseter.extract --dir test_images --bbox_csv happywhale-charm-boxes.csv
+```
+
+There are two arguments:
+
+  - `dir` specifies the flat directory containing the images from which to extract features
+  - `bbox_csv` optionally indicates where to find the .csv with bounding boxes. 
+
+The features will save to the file, `features/features.npy`, in the **parent** directory of the `dir` you specify. In the example above, the test images live in the `happywhale/test_images` folder, and the features are saved to the `happywhale/features` folder. 
