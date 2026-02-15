@@ -26,6 +26,10 @@ website:
             file: identify.qmd
           - text: Evaluating *AnyDorsal*
             file: evaluate.qmd
+      - section: "Experimental"
+        contents:
+          - text: Identify App
+            file: app.qmd
       - api/index.qmd
 
 format:
