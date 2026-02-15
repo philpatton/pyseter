@@ -1,8 +1,5 @@
 ---
 title: "Pyseter"
-# about:
-#   template: marquee
-#   # image: images/sort-figure.png
 ---
 
 Pyseter is a Python package for processing images before photo-identification. Pyseter includes functions for:

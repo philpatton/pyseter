@@ -50,7 +50,11 @@ os.makedirs(feature_dir, exist_ok=True)
 fe = FeatureExtractor(batch_size=4)
 ```
 
+:::{.callout-warning}
+
 There are about 75,000 images in the Happywhale dataset. In my testing, on an NVIDIA GPU, it takes about 45 minutes to extract the features for the 50,000 reference images, and 25 minutes to extract the features for the 25,000 query images. On my Apple M4 MacBook, it takes about 3 hours and 30 minutes for the reference images and about 2 hours for the query images.
+
+:::
 
 Additionally, we'll need to supply *bounding boxes* to the feature extractor. Many of the Happywhale images are taken from far away, so we need to crop the image to just the animal. To do so, we'll supply the path to the bounding box .csv as to the argument, `bbox_csv`. The .csv needs to have columns named: `['image', 'xmin', 'xmax', 'ymin', ymax']` that contain the image name and the coordinates for the corners of the box.  
 
