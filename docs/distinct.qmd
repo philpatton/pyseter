@@ -1,0 +1,79 @@
+---
+title: Grading distinctiveness
+bibliography: references.bib
+jupyter:
+  kernelspec:
+    display_name: Python (Pyseter)
+    language: python
+    name: pyseter_env
+---
+
+Pyseter comes with an experimental algorithm for grading individual distinctiveness. This can be useful for partially marked populations, e.g., spinner dolphins. 
+
+## Background
+
+To understand the distinctiveness algorithm, it can be helpful to first introduce one of Pyseter’s clustering algorithms, `NetworkCluster`. Network clustering works with similarity scores, which represent the similarity between two individuals in a pair of images. We can define a threshold score, the `match_threshold`, above which we consider two individuals to be the same. That is, if the similarity score between two images is above a certain threshold, we cluster them into a proposed ID. As such, network clustering works by treating the query set as a network, where the nodes are images and the edges are similarity scores above a threshold. Each set of connected components, i.e., images whose similarity scores are above the match threshold, represents a proposed ID.
+
+We might expect the indistinct individuals to cluster together. In the context of facial recognition, @deng-2023-ui observed that “unrecognizable identities”, e.g., extremely blurry or masked faces, tend to cluster together. As such, for partially marked populations, the largest cluster in the query set may represent every indistinct individual. Following @deng-2023-ui, we can compute the average feature vector for this cluster. The distance between this average feature vector and the feature vector for each image is the distinctiveness score for that image. As such, the score applies to the image, not the animal. To get a score for an animal, users could average the distinctiveness scores across images for that animal.
+
+## Spinner dolphin example
+
+The images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We'll load in the saved feature vectors from before. 
+
+```{python}
+%config InlineBackend.figure_format = 'retina'
+
+from pyseter.grade import rate_distinctiveness
+from pyseter.sort import load_features
+from sklearn.metrics import roc_curve, RocCurveDisplay, roc_auc_score
+import matplotlib.pyplot as plt
+import pandas as pd
+
+# load the features
+feature_dir = 'working_dir/features'
+out_path = feature_dir + '/features.npy'
+filenames, feature_array = load_features(out_path)
+```
+
+We need to supply two arguments to `rate_distinctiveness`: the `feature_array`, and the `match_threshold`. The lower the match threshold, the more individuals will end up in the unrecognizable identity cluster, potentially including distinct individuals. Conversely, a high match threshold might split the indistinct individuals into many clusters. 
+
+```{python}
+distinctiveness = rate_distinctiveness(feature_array, match_threshold=0.5)
+```
+
+`rate_distinctiveness` warns you that this is experimental, and lets you know how many individuals ended up in the unrecognizable identity. This should be a quick sanity check. 
+
+We can plot the results of the score with the receiver operator characteristic (ROC) curve. This treats the distinctiveness grade as a classifier probability. The area under the curve tells us how good the classifier is, i.e., in terms of the number of false positives and false negatives. 
+
+```{python}
+# download the true distinctiveness scores
+data_url = (
+    'https://raw.githubusercontent.com/philpatton/pyseter/main/' 
+    'data/spinner-distinct.csv'
+)
+spinner_distinct = pd.read_csv(data_url)
+
+# merge with the predicted distinctiveness scores
+ers_df = pd.DataFrame({'image': filenames, 'ers': 1 - distinctiveness})
+ers_df = ers_df.merge(spinner_distinct)
+
+# compute the curve first, which will get displayed
+y_score = ers_df['ers']
+y_test, _ = ers_df.distinctiveness.factorize()
+fpr, tpr, _ = roc_curve(y_test, y_score)
+
+fig, ax = plt.subplots()
+
+roc_display = RocCurveDisplay(fpr=fpr, tpr=tpr).plot(ax=ax)
+ax.spines['right'].set_visible(False)
+ax.spines['top'].set_visible(False)
+
+roc_auc = roc_auc_score(y_test, y_score)
+ax.text(0.95, 0.6, f'AUC={roc_auc:0.3f}', ha='right', va='top')
+import numpy as np
+ax.plot(np.arange(0, 1.1, 0.1), np.arange(0, 1.1, 0.1), linestyle='--', c='tab:grey')
+ax.set_title('ROC Curve for \nDistinctiveness Classifier')
+plt.show()
+```
+
+We can see that, for this example, the distinctiveness score is better than useless (gray dashed line).

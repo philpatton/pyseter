@@ -356,6 +356,58 @@
     ]
   },
   {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Pyseter",
+    "section": "",
+    "text": "Pyseter is a Python package for processing images before photo-identification. Pyseter includes functions for:",
+    "crumbs": [
+      "Pyseter"
+    ]
+  },
+  {
+    "objectID": "index.html#introduction",
+    "href": "index.html#introduction",
+    "title": "Pyseter",
+    "section": "Introduction",
+    "text": "Introduction\nPlease see the Getting Started page for a demonstration of the basic functionality of Pyseter using an example of spinner dolphins.",
+    "crumbs": [
+      "Pyseter"
+    ]
+  },
+  {
+    "objectID": "index.html#installation",
+    "href": "index.html#installation",
+    "title": "Pyseter",
+    "section": "Installation",
+    "text": "Installation\nUsers can install Pyseter with pip, uv, or pixi. For example,\npip install pyseter\nWe imagine that most Pyseter users will be more familiar with R than Python. If this is you, please see the R users who are new to Python page for detailed instructions on the steps needed to work with Pyseter.",
+    "crumbs": [
+      "Pyseter"
+    ]
+  },
+  {
+    "objectID": "evaluate.html",
+    "href": "evaluate.html",
+    "title": "Evaluating AnyDorsal",
+    "section": "",
+    "text": "In this notebook, we’ll demonstrate how do evaluate AnyDorsal’s’ performance on a test dataset. We’ll use the Happy Whale and Dolphin Kaggle competition dataset as an example. You can download the data by following that linked page (click the big “Download all” button). FYI, you’ll have to create an account first.\nIn the Predicting IDs notebook, we demonstrated how to extract features for the Happywhale dataset using a set of bounding boxes. Here, we’ll load the features in.\n%config InlineBackend.figure_format = 'retina'\n\nfrom pyseter.sort import load_features\nfrom pyseter.identify import predict_ids\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndata_dir = '/Users/PattonP/datasets/happywhale/'\n\nfeature_dir = data_dir + '/features'\n\nreference_path = feature_dir + '/train_features.npy'\nreference_files, reference_features = load_features(reference_path)\n\nquery_path = feature_dir + '/test_features.npy'\nquery_files, query_features = load_features(query_path)\nIn order to evaluate the performance of AnyDorsal on the test set, we’ll need to know the IDs of animals in the train set and the test set.\ndata_url = (\n    'https://raw.githubusercontent.com/philpatton/pyseter/main/' \n    'data/happywhale-ids.csv'\n)\nid_df = pd.read_csv(data_url)\n\nid_df.head(10)\n\n\n\n\n\n\n\n\nimage\nspecies\nindividual_id\n\n\n\n\n0\n000110707af0ba.jpg\ngray_whale\nfbe2b15b5481\n\n\n1\n00021adfb725ed.jpg\nmelon_headed_whale\ncadddb1636b9\n\n\n2\n000562241d384d.jpg\nhumpback_whale\n1a71fbb72250\n\n\n3\n0006287ec424cb.jpg\nfalse_killer_whale\n1424c7fec826\n\n\n4\n0007c33415ce37.jpg\nfalse_killer_whale\n60008f293a2b\n\n\n5\n0007d9bca26a99.jpg\nbottlenose_dolphin\n4b00fe572063\n\n\n6\n000809ecb2ccad.jpg\nbeluga\n1ce3ba6a3c29\n\n\n7\n00087baf5cef7a.jpg\nhumpback_whale\n8e5253662392\n\n\n8\n00098d1376dab2.jpg\nhumpback_whale\nc4274d90be60\n\n\n9\n000a8f2d5c316a.jpg\nbottlenose_dolphin\nb9907151f66e\nCode\n# excel on mac corrupts the IDs (no need to do this on PC or linux)\nid_df['individual_id'] = id_df['individual_id'].apply(\n    lambda x: str(int(float(x))) if 'E+' in str(x) else x\n)\nNow we’ll predict the IDs in the query set.\nquery_dict = dict(zip(query_files, query_features))\nreference_dict = dict(zip(reference_files, reference_features))\n\nprediction_df = predict_ids(reference_dict, query_dict, id_df, proposed_id_count=5)\nprediction_df.head(20)\n\n\n\n\n\n\n\n\nimage\nrank\npredicted_id\nscore\n\n\n\n\n0\na704da09e32dc3.jpg\n1\n5f2296c18e26\n0.500233\n\n\n1\na704da09e32dc3.jpg\n2\nnew_individual\n0.500000\n\n\n2\na704da09e32dc3.jpg\n3\n61f9e4cd30eb\n0.432061\n\n\n3\na704da09e32dc3.jpg\n4\ncb372e9b2c48\n0.411830\n\n\n4\na704da09e32dc3.jpg\n5\n43dad7ffa3c7\n0.405389\n\n\n5\nde1569496d42f4.jpg\n1\ned237f7c2165\n0.826259\n\n\n6\nde1569496d42f4.jpg\n2\nnew_individual\n0.500000\n\n\n7\nde1569496d42f4.jpg\n3\n8c4a71fd3eb1\n0.446297\n\n\n8\nde1569496d42f4.jpg\n4\n7d4deec3b721\n0.424570\n\n\n9\nde1569496d42f4.jpg\n5\nfcc7ade0c50a\n0.376511\n\n\n10\n4ab51dd663dd29.jpg\n1\nb9b24be2d5ae\n0.680653\n\n\n11\n4ab51dd663dd29.jpg\n2\n31f748b822f4\n0.503390\n\n\n12\n4ab51dd663dd29.jpg\n3\nnew_individual\n0.500000\n\n\n13\n4ab51dd663dd29.jpg\n4\n7845337998d6\n0.497671\n\n\n14\n4ab51dd663dd29.jpg\n5\nefda8f368763\n0.455688\n\n\n15\nda27c3f9f96504.jpg\n1\nc02b7ad6faa0\n0.937102\n\n\n16\nda27c3f9f96504.jpg\n2\nnew_individual\n0.500000\n\n\n17\nda27c3f9f96504.jpg\n3\n70858f1edf62\n0.375488\n\n\n18\nda27c3f9f96504.jpg\n4\n72b0033dd4fd\n0.367204\n\n\n19\nda27c3f9f96504.jpg\n5\n749e56a8ec71\n0.354002",
+    "crumbs": [
+      "Examples",
+      "Evaluating *AnyDorsal*"
+    ]
+  },
+  {
+    "objectID": "evaluate.html#mean-average-precision",
+    "href": "evaluate.html#mean-average-precision",
+    "title": "Evaluating AnyDorsal",
+    "section": "Mean average precision",
+    "text": "Mean average precision\nWe are going to evaluate AnyDorsal with Mean Average Precision (MAP). MAP evaluates a set of predictions, in this case, a set of 5 predictions. For a set of five ordered predictions, the precision score will be \\(1/1 = 1\\) if the first prediction is correct, \\(1/2\\) if the second is correct, and so on until \\(1/5\\) if the fifth prediction is correct, or \\(0\\) if none of the five predictions are correct. MAP is the mean precision score for a set.\nSo we need to get the rank of the correct ID for every image in the test set. One way to do so is to merge the ID DataFrame with the prediction DataFrame. We only want one row per test image, so we need to merge on both the image and ID columns. We can check to see that it worked by checking the number of rows in the result (there are 27956 images in the testing dataset).\n\n# add the predictions and the scores to the id dataframe\nperformance_df = id_df.merge(\n    prediction_df,\n    how='left',\n    left_on=['image', 'individual_id'],\n    right_on=['image', 'predicted_id']\n)\n\n# filter out the training images\ntrain_images = pd.read_csv(data_dir + '/train.csv').image\nperformance_df = performance_df.loc[~performance_df.image.isin(train_images)]\nprint(performance_df.shape)\n\n(27956, 6)\n\n\n\nperformance_df.head(20)\n\n\n\n\n\n\n\n\nimage\nspecies\nindividual_id\nrank\npredicted_id\nscore\n\n\n\n\n0\n000110707af0ba.jpg\ngray_whale\nfbe2b15b5481\n1.0\nfbe2b15b5481\n0.871143\n\n\n3\n0006287ec424cb.jpg\nfalse_killer_whale\n1424c7fec826\n1.0\n1424c7fec826\n0.794225\n\n\n6\n000809ecb2ccad.jpg\nbeluga\n1ce3ba6a3c29\n1.0\n1ce3ba6a3c29\n0.797251\n\n\n8\n00098d1376dab2.jpg\nhumpback_whale\nc4274d90be60\n1.0\nc4274d90be60\n0.816240\n\n\n10\n000b8d89c738bd.jpg\ndusky_dolphin\nnew_individual\n1.0\nnew_individual\n0.500000\n\n\n15\n000e246888710c.jpg\nmelon_headed_whale\nnew_individual\n2.0\nnew_individual\n0.500000\n\n\n16\n000eb6e73a31a5.jpg\nbottlenose_dolphin\n77410a623426\n1.0\n77410a623426\n0.709175\n\n\n17\n000fe6ebfc9893.jpg\nspinner_dolphin\n8805324885f2\n1.0\n8805324885f2\n0.942707\n\n\n20\n0011f7a65044e4.jpg\nspinner_dolphin\nd5dcbb35777c\n1.0\nd5dcbb35777c\n0.676094\n\n\n21\n0012ff300032e3.jpg\nbeluga\n19b638e11443\n1.0\n19b638e11443\n0.950292\n\n\n23\n00150406ce5395.jpg\nfalse_killer_whale\n2280b5fcc6c2\n1.0\n2280b5fcc6c2\n0.837772\n\n\n25\n0016cd18d6410e.jpg\ncuviers_beaked_whale\n65620eadc0b4\n1.0\n65620eadc0b4\n0.582929\n\n\n27\n0017a9c11c61a8.jpg\nbeluga\nnew_individual\n2.0\nnew_individual\n0.500000\n\n\n29\n0017f7e0de07b1.jpg\nbottlenose_dolphin\n81bec36eb86e\n1.0\n81bec36eb86e\n0.840179\n\n\n32\n001c4c6d532419.jpg\nbottlenose_dolphin\n2efee119d786\n1.0\n2efee119d786\n0.748652\n\n\n34\n001dc45839b1b5.jpg\nsouthern_right_whale\ncd2e1d83c6a1\n1.0\ncd2e1d83c6a1\n0.791898\n\n\n35\n001ea84d905ced.jpg\nhumpback_whale\n02f5c5ee9c2a\n1.0\n02f5c5ee9c2a\n0.680320\n\n\n43\n00248b9385e2e0.jpg\nblue_whale\n67b7b6934db9\n1.0\n67b7b6934db9\n0.509903\n\n\n48\n002c7034834e2c.jpg\nkiller_whale\ned15fd01efbe\n1.0\ned15fd01efbe\n0.815825\n\n\n49\n002d7a5f6d6765.jpg\nbeluga\n3a055fad1478\nNaN\nNaN\nNaN\n\n\n\n\n\n\n\nAny image with an NA rank means that the true ID was not one of the proposed_ids.\nWe can compute the precision by taking the reciprocal of the rank. After we do that, we’ll fill the NA values with zero, since none of the five predictions were correct.\n\nperformance_df['precision'] = 1 / performance_df['rank'] \nperformance_df['precision'] = performance_df['precision'].fillna(0)\nmap5 = performance_df.precision.mean()\nprint(f'MAP@5: {map5:0.3f}')\n\nMAP@5: 0.863\n\n\nFor fun, we can look at the results by species\n\nimport matplotlib.pyplot as plt\n\nplt.style.use('fivethirtyeight')\nplt.rcParams['axes.facecolor'] = 'white'\nplt.rcParams['figure.facecolor'] = 'white'\n\nmap_df = (\n    performance_df.groupby('species')\n        .precision\n        .mean()\n        .rename('MAP')\n        .reset_index()\n        .sort_values('MAP')\n)\n\nfig, ax = plt.subplots(figsize=(4, 8))\nax.scatter(map_df.MAP, map_df.species)\nfor row in map_df.itertuples():\n    ax.text(row.MAP - 0.02, row.species, f'{row.MAP:0.2f}', ha='right', \n            va='center', fontsize=12)\nax.set_xlim((0,1.01))\nax.set_title('AnyDorsal Performance')\nax.set_xlabel('Mean average precision')\nplt.show()",
+    "crumbs": [
+      "Examples",
+      "Evaluating *AnyDorsal*"
+    ]
+  },
+  {
     "objectID": "extract.html",
     "href": "extract.html",
     "title": "Extracting features",
@@ -389,55 +441,36 @@
     ]
   },
   {
-    "objectID": "evaluate.html",
-    "href": "evaluate.html",
-    "title": "Evaluating AnyDorsal",
+    "objectID": "distinct.html",
+    "href": "distinct.html",
+    "title": "Grading distinctiveness",
     "section": "",
-    "text": "In this notebook, we’ll demonstrate how do evaluate AnyDorsal’s’ performance on a test dataset. We’ll use the Happy Whale and Dolphin Kaggle competition dataset as an example. You can download the data by following that linked page (click the big “Download all” button). FYI, you’ll have to create an account first.\nIn the Predicting IDs notebook, we demonstrated how to extract features for the Happywhale dataset using a set of bounding boxes. Here, we’ll load the features in.\n%config InlineBackend.figure_format = 'retina'\n\nfrom pyseter.sort import load_features\nfrom pyseter.identify import predict_ids\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\ndata_dir = '/Users/PattonP/datasets/happywhale/'\n\nfeature_dir = data_dir + '/features'\n\nreference_path = feature_dir + '/train_features.npy'\nreference_files, reference_features = load_features(reference_path)\n\nquery_path = feature_dir + '/test_features.npy'\nquery_files, query_features = load_features(query_path)\nIn order to evaluate the performance of AnyDorsal on the test set, we’ll need to know the IDs of animals in the train set and the test set.\ndata_url = (\n    'https://raw.githubusercontent.com/philpatton/pyseter/main/' \n    'data/happywhale-ids.csv'\n)\nid_df = pd.read_csv(data_url)\n\n# excel on mac corrupts the IDs (no need to do this on PC or linux)\nid_df['individual_id'] = id_df['individual_id'].apply(\n    lambda x: str(int(float(x))) if 'E+' in str(x) else x\n)\n\nid_df.head(10)\n\n\n\n\n\n\n\n\nimage\nspecies\nindividual_id\n\n\n\n\n0\n000110707af0ba.jpg\ngray_whale\nfbe2b15b5481\n\n\n1\n00021adfb725ed.jpg\nmelon_headed_whale\ncadddb1636b9\n\n\n2\n000562241d384d.jpg\nhumpback_whale\n1a71fbb72250\n\n\n3\n0006287ec424cb.jpg\nfalse_killer_whale\n1424c7fec826\n\n\n4\n0007c33415ce37.jpg\nfalse_killer_whale\n60008f293a2b\n\n\n5\n0007d9bca26a99.jpg\nbottlenose_dolphin\n4b00fe572063\n\n\n6\n000809ecb2ccad.jpg\nbeluga\n1ce3ba6a3c29\n\n\n7\n00087baf5cef7a.jpg\nhumpback_whale\n8e5253662392\n\n\n8\n00098d1376dab2.jpg\nhumpback_whale\nc4274d90be60\n\n\n9\n000a8f2d5c316a.jpg\nbottlenose_dolphin\nb9907151f66e\nNow we’ll predict the IDs in the query set.\nquery_dict = dict(zip(query_files, query_features))\nreference_dict = dict(zip(reference_files, reference_features))\n\nprediction_df = predict_ids(reference_dict, query_dict, id_df, proposed_id_count=5)\nprediction_df.head(20)\n\n\n\n\n\n\n\n\nimage\nrank\npredicted_id\nscore\n\n\n\n\n0\na704da09e32dc3.jpg\n1\n5f2296c18e26\n0.500233\n\n\n1\na704da09e32dc3.jpg\n2\nnew_individual\n0.500000\n\n\n2\na704da09e32dc3.jpg\n3\n61f9e4cd30eb\n0.432061\n\n\n3\na704da09e32dc3.jpg\n4\ncb372e9b2c48\n0.411830\n\n\n4\na704da09e32dc3.jpg\n5\n43dad7ffa3c7\n0.405389\n\n\n5\nde1569496d42f4.jpg\n1\ned237f7c2165\n0.826259\n\n\n6\nde1569496d42f4.jpg\n2\nnew_individual\n0.500000\n\n\n7\nde1569496d42f4.jpg\n3\n8c4a71fd3eb1\n0.446297\n\n\n8\nde1569496d42f4.jpg\n4\n7d4deec3b721\n0.424570\n\n\n9\nde1569496d42f4.jpg\n5\nfcc7ade0c50a\n0.376511\n\n\n10\n4ab51dd663dd29.jpg\n1\nb9b24be2d5ae\n0.680653\n\n\n11\n4ab51dd663dd29.jpg\n2\n31f748b822f4\n0.503390\n\n\n12\n4ab51dd663dd29.jpg\n3\nnew_individual\n0.500000\n\n\n13\n4ab51dd663dd29.jpg\n4\n7845337998d6\n0.497671\n\n\n14\n4ab51dd663dd29.jpg\n5\nefda8f368763\n0.455688\n\n\n15\nda27c3f9f96504.jpg\n1\nc02b7ad6faa0\n0.937102\n\n\n16\nda27c3f9f96504.jpg\n2\nnew_individual\n0.500000\n\n\n17\nda27c3f9f96504.jpg\n3\n70858f1edf62\n0.375488\n\n\n18\nda27c3f9f96504.jpg\n4\n72b0033dd4fd\n0.367204\n\n\n19\nda27c3f9f96504.jpg\n5\n749e56a8ec71\n0.354002",
+    "text": "Pyseter comes with an experimental algorithm for grading individual distinctiveness. This can be useful for partially marked populations, e.g., spinner dolphins.",
     "crumbs": [
-      "Examples",
-      "Evaluating *AnyDorsal*"
+      "Experimental",
+      "Grading distinctiveness"
     ]
   },
   {
-    "objectID": "evaluate.html#mean-average-precision",
-    "href": "evaluate.html#mean-average-precision",
-    "title": "Evaluating AnyDorsal",
-    "section": "Mean average precision",
-    "text": "Mean average precision\nWe are going to evaluate AnyDorsal with Mean Average Precision (MAP). MAP evaluates a set of predictions, in this case, a set of 5 predictions. For a set of five ordered predictions, the precision score will be \\(1/1 = 1\\) if the first prediction is correct, \\(1/2\\) if the second is correct, and so on until \\(1/5\\) if the fifth prediction is correct, or \\(0\\) if none of the five predictions are correct. MAP is the mean precision score for a set.\nSo we need to get the rank of the correct ID for every image in the test set. One way to do so is to merge the ID DataFrame with the prediction DataFrame. We only want one row per test image, so we need to merge on both the image and ID columns. We can check to see that it worked by checking the number of rows in the result (there are 27956 images in the testing dataset).\n\n# add the predictions and the scores to the id dataframe\nperformance_df = id_df.merge(\n    prediction_df,\n    how='left',\n    left_on=['image', 'individual_id'],\n    right_on=['image', 'predicted_id']\n)\n\n# filter out the training images\ntrain_images = pd.read_csv(data_dir + '/train.csv').image\nperformance_df = performance_df.loc[~performance_df.image.isin(train_images)]\nprint(performance_df.shape)\n\n(27956, 6)\n\n\n\nperformance_df.head(20)\n\n\n\n\n\n\n\n\nimage\nspecies\nindividual_id\nrank\npredicted_id\nscore\n\n\n\n\n0\n000110707af0ba.jpg\ngray_whale\nfbe2b15b5481\n1.0\nfbe2b15b5481\n0.871143\n\n\n3\n0006287ec424cb.jpg\nfalse_killer_whale\n1424c7fec826\n1.0\n1424c7fec826\n0.794225\n\n\n6\n000809ecb2ccad.jpg\nbeluga\n1ce3ba6a3c29\n1.0\n1ce3ba6a3c29\n0.797251\n\n\n8\n00098d1376dab2.jpg\nhumpback_whale\nc4274d90be60\n1.0\nc4274d90be60\n0.816240\n\n\n10\n000b8d89c738bd.jpg\ndusky_dolphin\nnew_individual\n1.0\nnew_individual\n0.500000\n\n\n15\n000e246888710c.jpg\nmelon_headed_whale\nnew_individual\n2.0\nnew_individual\n0.500000\n\n\n16\n000eb6e73a31a5.jpg\nbottlenose_dolphin\n77410a623426\n1.0\n77410a623426\n0.709175\n\n\n17\n000fe6ebfc9893.jpg\nspinner_dolphin\n8805324885f2\n1.0\n8805324885f2\n0.942707\n\n\n20\n0011f7a65044e4.jpg\nspinner_dolphin\nd5dcbb35777c\n1.0\nd5dcbb35777c\n0.676094\n\n\n21\n0012ff300032e3.jpg\nbeluga\n19b638e11443\n1.0\n19b638e11443\n0.950292\n\n\n23\n00150406ce5395.jpg\nfalse_killer_whale\n2280b5fcc6c2\n1.0\n2280b5fcc6c2\n0.837772\n\n\n25\n0016cd18d6410e.jpg\ncuviers_beaked_whale\n65620eadc0b4\n1.0\n65620eadc0b4\n0.582929\n\n\n27\n0017a9c11c61a8.jpg\nbeluga\nnew_individual\n2.0\nnew_individual\n0.500000\n\n\n29\n0017f7e0de07b1.jpg\nbottlenose_dolphin\n81bec36eb86e\n1.0\n81bec36eb86e\n0.840179\n\n\n32\n001c4c6d532419.jpg\nbottlenose_dolphin\n2efee119d786\n1.0\n2efee119d786\n0.748652\n\n\n34\n001dc45839b1b5.jpg\nsouthern_right_whale\ncd2e1d83c6a1\n1.0\ncd2e1d83c6a1\n0.791898\n\n\n35\n001ea84d905ced.jpg\nhumpback_whale\n02f5c5ee9c2a\n1.0\n02f5c5ee9c2a\n0.680320\n\n\n43\n00248b9385e2e0.jpg\nblue_whale\n67b7b6934db9\n1.0\n67b7b6934db9\n0.509903\n\n\n48\n002c7034834e2c.jpg\nkiller_whale\ned15fd01efbe\n1.0\ned15fd01efbe\n0.815825\n\n\n49\n002d7a5f6d6765.jpg\nbeluga\n3a055fad1478\nNaN\nNaN\nNaN\n\n\n\n\n\n\n\nAny image with an NA rank means that the true ID was not one of the proposed_ids.\nWe can compute the precision by taking the reciprocal of the rank. After we do that, we’ll fill the NA values with zero, since none of the five predictions were correct.\n\nperformance_df['precision'] = 1 / performance_df['rank'] \nperformance_df['precision'] = performance_df['precision'].fillna(0)\nmap5 = performance_df.precision.mean()\nprint(f'MAP@5: {map5:0.3f}')\n\nMAP@5: 0.863\n\n\nFor fun, we can look at the results by species\n\nimport matplotlib.pyplot as plt\n\nplt.style.use('fivethirtyeight')\nplt.rcParams['axes.facecolor'] = 'white'\nplt.rcParams['figure.facecolor'] = 'white'\n\nmap_df = (\n    performance_df.groupby('species')\n        .precision\n        .mean()\n        .rename('MAP')\n        .reset_index()\n        .sort_values('MAP')\n)\n\nfig, ax = plt.subplots(figsize=(4, 8))\nax.scatter(map_df.MAP, map_df.species)\nfor row in map_df.itertuples():\n    ax.text(row.MAP - 0.02, row.species, f'{row.MAP:0.2f}', ha='right', \n            va='center', fontsize=12)\nax.set_xlim((0,1.01))\nax.set_title('AnyDorsal Performance')\nax.set_xlabel('Mean average precision')\nplt.show()",
+    "objectID": "distinct.html#background",
+    "href": "distinct.html#background",
+    "title": "Grading distinctiveness",
+    "section": "Background",
+    "text": "Background\nTo understand the distinctiveness algorithm, it can be helpful to first introduce one of Pyseter’s clustering algorithms, NetworkCluster. Network clustering works with similarity scores, which represent the similarity between two individuals in a pair of images. We can define a threshold score, the match_threshold, above which we consider two individuals to be the same. That is, if the similarity score between two images is above a certain threshold, we cluster them into a proposed ID. As such, network clustering works by treating the query set as a network, where the nodes are images and the edges are similarity scores above a threshold. Each set of connected components, i.e., images whose similarity scores are above the match threshold, represents a proposed ID.\nWe might expect the indistinct individuals to cluster together. In the context of facial recognition, Deng et al. (2023) observed that “unrecognizable identities”, e.g., extremely blurry or masked faces, tend to cluster together. As such, for partially marked populations, the largest cluster in the query set may represent every indistinct individual. Following Deng et al. (2023), we can compute the average feature vector for this cluster. The distance between this average feature vector and the feature vector for each image is the distinctiveness score for that image. As such, the score applies to the image, not the animal. To get a score for an animal, users could average the distinctiveness scores across images for that animal.",
     "crumbs": [
-      "Examples",
-      "Evaluating *AnyDorsal*"
+      "Experimental",
+      "Grading distinctiveness"
     ]
   },
   {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Pyseter",
-    "section": "",
-    "text": "Pyseter is a Python package for processing images before photo-identification. Pyseter includes functions for:",
+    "objectID": "distinct.html#spinner-dolphin-example",
+    "href": "distinct.html#spinner-dolphin-example",
+    "title": "Grading distinctiveness",
+    "section": "Spinner dolphin example",
+    "text": "Spinner dolphin example\nThe images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We’ll load in the saved feature vectors from before.\n\n%config InlineBackend.figure_format = 'retina'\n\nfrom pyseter.grade import rate_distinctiveness\nfrom pyseter.sort import load_features\nfrom sklearn.metrics import roc_curve, RocCurveDisplay, roc_auc_score\nimport matplotlib.pyplot as plt\nimport pandas as pd\n\n# load the features\nfeature_dir = 'working_dir/features'\nout_path = feature_dir + '/features.npy'\nfilenames, feature_array = load_features(out_path)\n\nWe need to supply two arguments to rate_distinctiveness: the feature_array, and the match_threshold. The lower the match threshold, the more individuals will end up in the unrecognizable identity cluster, potentially including distinct individuals. Conversely, a high match threshold might split the indistinct individuals into many clusters.\n\ndistinctiveness = rate_distinctiveness(feature_array, match_threshold=0.5)\n\nUnrecognizable identity cluster consists of 196 images.\n\n\n/Users/PattonP/miniforge3/envs/pyseter_env/lib/python3.14/site-packages/pyseter/grade.py:35: UserWarning: Distinctiveness grades are experimental and should be verified.\n  warn(UserWarning('Distinctiveness grades are experimental and should be verified.'))\n\n\nrate_distinctiveness warns you that this is experimental, and lets you know how many individuals ended up in the unrecognizable identity. This should be a quick sanity check.\nWe can plot the results of the score with the receiver operator characteristic (ROC) curve. This treats the distinctiveness grade as a classifier probability. The area under the curve tells us how good the classifier is, i.e., in terms of the number of false positives and false negatives.\n\n# download the true distinctiveness scores\ndata_url = (\n    'https://raw.githubusercontent.com/philpatton/pyseter/main/' \n    'data/spinner-distinct.csv'\n)\nspinner_distinct = pd.read_csv(data_url)\n\n# merge with the predicted distinctiveness scores\ners_df = pd.DataFrame({'image': filenames, 'ers': 1 - distinctiveness})\ners_df = ers_df.merge(spinner_distinct)\n\n# compute the curve first, which will get displayed\ny_score = ers_df['ers']\ny_test, _ = ers_df.distinctiveness.factorize()\nfpr, tpr, _ = roc_curve(y_test, y_score)\n\nfig, ax = plt.subplots()\n\nroc_display = RocCurveDisplay(fpr=fpr, tpr=tpr).plot(ax=ax)\nax.spines['right'].set_visible(False)\nax.spines['top'].set_visible(False)\n\nroc_auc = roc_auc_score(y_test, y_score)\nax.text(0.95, 0.6, f'AUC={roc_auc:0.3f}', ha='right', va='top')\nimport numpy as np\nax.plot(np.arange(0, 1.1, 0.1), np.arange(0, 1.1, 0.1), linestyle='--', c='tab:grey')\nax.set_title('ROC Curve for \\nDistinctiveness Classifier')\nplt.show()\n\n\n\n\n\n\n\n\nWe can see that, for this example, the distinctiveness score is better than useless (gray dashed line).",
     "crumbs": [
-      "Pyseter"
-    ]
-  },
-  {
-    "objectID": "index.html#introduction",
-    "href": "index.html#introduction",
-    "title": "Pyseter",
-    "section": "Introduction",
-    "text": "Introduction\nPlease see the Getting Started page for a demonstration of the basic functionality of Pyseter using an example of spinner dolphins.",
-    "crumbs": [
-      "Pyseter"
-    ]
-  },
-  {
-    "objectID": "index.html#installation",
-    "href": "index.html#installation",
-    "title": "Pyseter",
-    "section": "Installation",
-    "text": "Installation\nUsers can install Pyseter with pip, uv, or pixi. For example,\npip install pyseter\nWe imagine that most Pyseter users will be more familiar with R than Python. If this is you, please see the R users who are new to Python page for detailed instructions on the steps needed to work with Pyseter.",
-    "crumbs": [
-      "Pyseter"
+      "Experimental",
+      "Grading distinctiveness"
     ]
   },
   {
@@ -481,7 +514,7 @@
     "text": "In this notebook, we’ll demonstrate how do identify animals in a query set using a catalog of known individuals (i.e., a reference set). We’ll use the Happy Whale and Dolphin Kaggle competition dataset as an example. You can download the data by following that linked page (click the big “Download all” button). FYI, you’ll have to create an account first.\nThere are three components of the Happywhale dataset that we’ll focus on:\nIn this case, we’re treating the training dataset as the reference set, since we know the true identities.",
     "crumbs": [
       "Examples",
-      "Predicting IDs"
+      "Using a reference set"
     ]
   },
   {
@@ -492,7 +525,7 @@
     "text": "Set up\nFeel free to place the data anywhere you like, e.g., within a pyseter_jobs folder or something. I frequently come back to the Happywhale dataset, so I have it saved locally.\n\n%config InlineBackend.figure_format = 'retina'\nimport os\n\nfrom pyseter.extract import FeatureExtractor\nfrom pyseter.sort import load_features\nfrom pyseter.identify import predict_ids\nimport numpy as np\nimport pandas as pd\n\ndata_dir = '/Users/PattonP/datasets/happywhale/'",
     "crumbs": [
       "Examples",
-      "Predicting IDs"
+      "Using a reference set"
     ]
   },
   {
@@ -503,7 +536,7 @@
     "text": "Extracting features using bounding boxes\nNow that we’ve downloaded the data, we’ll get ready to extract the feature vectors by initializing the FeatureExtractor. Some of the images in the Happywhale dataset are pretty big, so we’ll set the batch_size to a low value, 4.\n\n# we'll save the results in the feature_dir\nfeature_dir = data_dir + '/features'\nos.makedirs(feature_dir, exist_ok=True)\n\n# initialize the extractor \nfe = FeatureExtractor(batch_size=4)\n\nUsing device: mps (Apple Silicon GPU)\n\n\n\n\n\n\n\n\nWarning\n\n\n\nThere are about 75,000 images in the Happywhale dataset. In my testing, on an NVIDIA GPU, it takes about 45 minutes to extract the features for the 50,000 reference images, and 25 minutes to extract the features for the 25,000 query images. On my Apple M4 MacBook, it takes about 3 hours and 30 minutes for the reference images and about 2 hours for the query images.\n\n\nAdditionally, we’ll need to supply bounding boxes to the feature extractor. Many of the Happywhale images are taken from far away, so we need to crop the image to just the animal. To do so, we’ll supply the path to the bounding box .csv as to the argument, bbox_csv. The .csv needs to have columns named: ['image', 'xmin', 'xmax', 'ymin', ymax'] that contain the image name and the coordinates for the corners of the box.\n\n\n\n\n\n\n\n\n\n\nbbox_url = 'https://raw.githubusercontent.com/philpatton/pyseter/main/data/happywhale-charm-boxes.csv'\n\ntrain_dir = data_dir + '/train_images'\ntrain_features = fe.extract(image_dir=train_dir, bbox_csv=bbox_url)\n\n# this saves the dictionary as an numpy file\nout_path = feature_dir + '/train_features.npy'\nnp.save(out_path, train_features)\n\n# now do the test images\ntest_dir = data_dir + '/test_images'\ntest_features = fe.extract(image_dir=test_dir, bbox_csv=bbox_url)\n\nout_path = feature_dir + '/test_features.npy'\nnp.save(out_path, test_features)\n\nIf you’ve already extracted the features, you can load them back into your session.\n\nreference_path = feature_dir + '/train_features.npy'\nreference_files, reference_features = load_features(reference_path)\n\nquery_path = feature_dir + '/test_features.npy'\nquery_files, query_features = load_features(query_path)",
     "crumbs": [
       "Examples",
-      "Predicting IDs"
+      "Using a reference set"
     ]
   },
   {
@@ -514,7 +547,7 @@
     "text": "Identifying animals\nFirst, we’ll create two dictionaries. Dictionaries are similar to a named list in R, where we can access the value in the dictionary by providing it’s key. In this case, the key will be the image name and the value will be the feature vector for that image.\nWe’ll also need a DataFrame that tells us the identity of every individual in the reference set. This comes with the Kaggle dataset, in the train.csv file.\n\nquery_dict = dict(zip(query_files, query_features))\nreference_dict = dict(zip(reference_files, reference_features))\n\nid_df = pd.read_csv(data_dir + '/train.csv')\nid_df.head()\n\n\n\n\n\n\n\n\nimage\nspecies\nindividual_id\n\n\n\n\n0\n00021adfb725ed.jpg\nmelon_headed_whale\ncadddb1636b9\n\n\n1\n000562241d384d.jpg\nhumpback_whale\n1a71fbb72250\n\n\n2\n0007c33415ce37.jpg\nfalse_killer_whale\n60008f293a2b\n\n\n3\n0007d9bca26a99.jpg\nbottlenose_dolphin\n4b00fe572063\n\n\n4\n00087baf5cef7a.jpg\nhumpback_whale\n8e5253662392\n\n\n\n\n\n\n\nAnd now we’re ready to make predictions! By default, predict_ids returns 10 proposed IDs. Here we’ll show just 2 so for the sake of variety.\n\nprediction_df = predict_ids(reference_dict, query_dict, id_df, proposed_id_count=2)\nprediction_df.head(20)\n\n\n\n\n\n\n\n\nimage\nrank\npredicted_id\nscore\n\n\n\n\n0\na704da09e32dc3.jpg\n1\n5f2296c18e26\n0.500232\n\n\n1\na704da09e32dc3.jpg\n2\nnew_individual\n0.500000\n\n\n2\nde1569496d42f4.jpg\n1\ned237f7c2165\n0.826260\n\n\n3\nde1569496d42f4.jpg\n2\nnew_individual\n0.500000\n\n\n4\n4ab51dd663dd29.jpg\n1\nb9b24be2d5ae\n0.680653\n\n\n5\n4ab51dd663dd29.jpg\n2\n31f748b822f4\n0.503391\n\n\n6\nda27c3f9f96504.jpg\n1\nc02b7ad6faa0\n0.937103\n\n\n7\nda27c3f9f96504.jpg\n2\nnew_individual\n0.500000\n\n\n8\n0df089463bfd6b.jpg\n1\nf7b322faeeb5\n0.538287\n\n\n9\n0df089463bfd6b.jpg\n2\nae9cca8f13ca\n0.504652\n\n\n10\n813892efb592e0.jpg\n1\nc22d65f2d2f0\n0.808235\n\n\n11\n813892efb592e0.jpg\n2\nnew_individual\n0.500000\n\n\n12\n0c9304ddd0ba35.jpg\n1\n2df99dc71d85\n0.852065\n\n\n13\n0c9304ddd0ba35.jpg\n2\nnew_individual\n0.500000\n\n\n14\n14718a369776c5.jpg\n1\ne8d3c0ff0951\n0.800375\n\n\n15\n14718a369776c5.jpg\n2\nnew_individual\n0.500000\n\n\n16\n65653992318202.jpg\n1\nc4e546efa5ca\n0.842365\n\n\n17\n65653992318202.jpg\n2\nnew_individual\n0.500000\n\n\n18\n9857340b9e8c8e.jpg\n1\n1a20c92ffe68\n0.813361\n\n\n19\n9857340b9e8c8e.jpg\n2\nnew_individual\n0.500000\n\n\n\n\n\n\n\nBy default, predict_ids inserts a dummy prediction “new_individual” at 0.5. This makes it easy to evaluate the algorithm with metrics like MAP@5, or calculate the false negative rate.",
     "crumbs": [
       "Examples",
-      "Predicting IDs"
+      "Using a reference set"
     ]
   },
   {

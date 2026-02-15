@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Extracting features</title>
+<title>Grading distinctiveness</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -55,7 +55,27 @@ div.sourceCode
 @media screen {
 pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
-</style>
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+  margin-bottom: 0em;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
@@ -282,7 +302,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./extract.html">Examples</a></li><li class="breadcrumb-item"><a href="./extract.html">Extracting features</a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./app.html">Experimental</a></li><li class="breadcrumb-item"><a href="./distinct.html">Grading distinctiveness</a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
       <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
@@ -351,7 +371,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./extract.html" class="sidebar-item-text sidebar-link active">
+  <a href="./extract.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Extracting features</span></a>
   </div>
 </li>
@@ -386,7 +406,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./distinct.html" class="sidebar-item-text sidebar-link">
+  <a href="./distinct.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Grading distinctiveness</span></a>
   </div>
 </li>
@@ -408,8 +428,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">On this page</h2>
    
   <ul>
-  <li><a href="#dataset" id="toc-dataset" class="nav-link active" data-scroll-target="#dataset">Dataset</a></li>
-  <li><a href="#extracting-features" id="toc-extracting-features" class="nav-link" data-scroll-target="#extracting-features">Extracting features</a></li>
+  <li><a href="#background" id="toc-background" class="nav-link active" data-scroll-target="#background">Background</a></li>
+  <li><a href="#spinner-dolphin-example" id="toc-spinner-dolphin-example" class="nav-link" data-scroll-target="#spinner-dolphin-example">Spinner dolphin example</a></li>
   </ul>
 </nav>
     </div>
@@ -417,9 +437,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <main class="content" id="quarto-document-content">
 
 
-<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./extract.html">Examples</a></li><li class="breadcrumb-item"><a href="./extract.html">Extracting features</a></li></ol></nav>
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./app.html">Experimental</a></li><li class="breadcrumb-item"><a href="./distinct.html">Grading distinctiveness</a></li></ol></nav>
 <div class="quarto-title">
-<h1 class="title">Extracting features</h1>
+<h1 class="title">Grading distinctiveness</h1>
 </div>
 
 
@@ -436,92 +456,90 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Here we present a quick overview on how to extract feature vectors with Pyseter. Feature vectors are summaries of images that are useful for identifying individuals. If <em>AnyDorsal</em> is working, then the similarity between two images should indicate that the individuals within the images look similar.</p>
-<div id="2d99a1e1" class="cell" data-execution_count="1">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
+<p>Pyseter comes with an experimental algorithm for grading individual distinctiveness. This can be useful for partially marked populations, e.g., spinner dolphins.</p>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>To understand the distinctiveness algorithm, it can be helpful to first introduce one of Pyseter’s clustering algorithms, <code>NetworkCluster</code>. Network clustering works with similarity scores, which represent the similarity between two individuals in a pair of images. We can define a threshold score, the <code>match_threshold</code>, above which we consider two individuals to be the same. That is, if the similarity score between two images is above a certain threshold, we cluster them into a proposed ID. As such, network clustering works by treating the query set as a network, where the nodes are images and the edges are similarity scores above a threshold. Each set of connected components, i.e., images whose similarity scores are above the match threshold, represents a proposed ID.</p>
+<p>We might expect the indistinct individuals to cluster together. In the context of facial recognition, <span class="citation" data-cites="deng-2023-ui">Deng et al. (<a href="#ref-deng-2023-ui" role="doc-biblioref">2023</a>)</span> observed that “unrecognizable identities”, e.g., extremely blurry or masked faces, tend to cluster together. As such, for partially marked populations, the largest cluster in the query set may represent every indistinct individual. Following <span class="citation" data-cites="deng-2023-ui">Deng et al. (<a href="#ref-deng-2023-ui" role="doc-biblioref">2023</a>)</span>, we can compute the average feature vector for this cluster. The distance between this average feature vector and the feature vector for each image is the distinctiveness score for that image. As such, the score applies to the image, not the animal. To get a score for an animal, users could average the distinctiveness scores across images for that animal.</p>
+</section>
+<section id="spinner-dolphin-example" class="level2">
+<h2 class="anchored" data-anchor-id="spinner-dolphin-example">Spinner dolphin example</h2>
+<p>The images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We’ll load in the saved feature vectors from before.</p>
+<div id="d487ed54" class="cell" data-execution_count="1">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>config InlineBackend.figure_format <span class="op">=</span> <span class="st">'retina'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.extract <span class="im">import</span> FeatureExtractor</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> load_features, prep_images</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> gdown</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pyseter</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> zipfile</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.grade <span class="im">import</span> rate_distinctiveness</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> load_features</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.metrics <span class="im">import</span> roc_curve, RocCurveDisplay, roc_auc_score</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co"># load the features</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> <span class="st">'working_dir/features'</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>filenames, feature_array <span class="op">=</span> load_features(out_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<section id="dataset" class="level2">
-<h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
-<p>The images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We can download the data with <code>gdown</code>, which pulls data from Google Drive. We’ll unzip the file to the <code>working_dir</code>.</p>
-<div id="00d524a4" class="cell" data-execution_count="2">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the demo data</span></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>file_id <span class="op">=</span> <span class="st">'1puM7YBTVFbIAT3xNBQV1g09K0bMGLk1y'</span> </span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>file_url <span class="op">=</span> <span class="ss">f'https://drive.google.com/uc?id=</span><span class="sc">{</span>file_id<span class="sc">}</span><span class="ss">'</span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>gdown.download(file_url, quiet<span class="op">=</span><span class="va">False</span>, use_cookies<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="co"># extract the files to the working directory</span></span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> zipfile.ZipFile(<span class="st">'original_images.zip'</span>, <span class="st">'r'</span>) <span class="im">as</span> zip_ref:</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    zip_ref.extractall(<span class="st">'working_dir'</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>The demo dataset is organized into subfolders by encounter. Our lives will be a little easier if we move all these images to a flat folder. The <code>prep_images()</code> function does just that.</p>
-<div id="f595660e" class="cell" data-execution_count="3">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>working_dir <span class="op">=</span> <span class="st">'working_dir'</span></span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>original_image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/original_images'</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># new, flattened directory containing every image</span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>image_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/all_images'</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>prep_images(original_image_dir, all_image_dir<span class="op">=</span>image_dir)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>We need to supply two arguments to <code>rate_distinctiveness</code>: the <code>feature_array</code>, and the <code>match_threshold</code>. The lower the match threshold, the more individuals will end up in the unrecognizable identity cluster, potentially including distinct individuals. Conversely, a high match threshold might split the indistinct individuals into many clusters.</p>
+<div id="5984ca6f" class="cell" data-execution_count="2">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>distinctiveness <span class="op">=</span> rate_distinctiveness(feature_array, match_threshold<span class="op">=</span><span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Copied 1251 images to: working_dir/all_images
-Saved encounter information to: /Users/PattonP/source/repos/pyseter/docs/working_dir/encounter_info.csv</code></pre>
+<pre><code>Unrecognizable identity cluster consists of 196 images.</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>/Users/PattonP/miniforge3/envs/pyseter_env/lib/python3.14/site-packages/pyseter/grade.py:35: UserWarning: Distinctiveness grades are experimental and should be verified.
+  warn(UserWarning('Distinctiveness grades are experimental and should be verified.'))</code></pre>
 </div>
 </div>
-</section>
-<section id="extracting-features" class="level2">
-<h2 class="anchored" data-anchor-id="extracting-features">Extracting features</h2>
-<p>Extracting features, like all modern AI, depends on GPUs. Users with an NVIDIA GPU can expect fast feature extraction. Extracting features for the ~1200 images in the demo dataset, for example, will take about two minutes on an NVIDIA GPU. Most university or governmental high performance computing clusters (HPCs) will have GPUs available.</p>
-<p>Feature extraction also works reasonably quickly on Apple Silicon (i.e., M1-M4). Extracting features for in the demo dataset, for example, will take about 10 minutes on Apple Silicon, depending on the model.</p>
-<p>We can verify the Pyseter installation and the acceleration with <code>verify_pytorch</code>.</p>
-<div id="6fbf879e" class="cell" data-execution_count="4">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>pyseter.verify_pytorch()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>:) PyTorch 2.10.0 detected
-:) Apple Silicon (MPS) GPU available</code></pre>
+<p><code>rate_distinctiveness</code> warns you that this is experimental, and lets you know how many individuals ended up in the unrecognizable identity. This should be a quick sanity check.</p>
+<p>We can plot the results of the score with the receiver operator characteristic (ROC) curve. This treats the distinctiveness grade as a classifier probability. The area under the curve tells us how good the classifier is, i.e., in terms of the number of false positives and false negatives.</p>
+<div id="b33f8cfe" class="cell" data-execution_count="3">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the true distinctiveness scores</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data_url <span class="op">=</span> (</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'https://raw.githubusercontent.com/philpatton/pyseter/main/'</span> </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">'data/spinner-distinct.csv'</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>spinner_distinct <span class="op">=</span> pd.read_csv(data_url)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># merge with the predicted distinctiveness scores</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>ers_df <span class="op">=</span> pd.DataFrame({<span class="st">'image'</span>: filenames, <span class="st">'ers'</span>: <span class="dv">1</span> <span class="op">-</span> distinctiveness})</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>ers_df <span class="op">=</span> ers_df.merge(spinner_distinct)</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a><span class="co"># compute the curve first, which will get displayed</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>y_score <span class="op">=</span> ers_df[<span class="st">'ers'</span>]</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>y_test, _ <span class="op">=</span> ers_df.distinctiveness.factorize()</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>fpr, tpr, _ <span class="op">=</span> roc_curve(y_test, y_score)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots()</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>roc_display <span class="op">=</span> RocCurveDisplay(fpr<span class="op">=</span>fpr, tpr<span class="op">=</span>tpr).plot(ax<span class="op">=</span>ax)</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'right'</span>].set_visible(<span class="va">False</span>)</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>ax.spines[<span class="st">'top'</span>].set_visible(<span class="va">False</span>)</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>roc_auc <span class="op">=</span> roc_auc_score(y_test, y_score)</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>ax.text(<span class="fl">0.95</span>, <span class="fl">0.6</span>, <span class="ss">f'AUC=</span><span class="sc">{</span>roc_auc<span class="sc">:0.3f}</span><span class="ss">'</span>, ha<span class="op">=</span><span class="st">'right'</span>, va<span class="op">=</span><span class="st">'top'</span>)</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>ax.plot(np.arange(<span class="dv">0</span>, <span class="fl">1.1</span>, <span class="fl">0.1</span>), np.arange(<span class="dv">0</span>, <span class="fl">1.1</span>, <span class="fl">0.1</span>), linestyle<span class="op">=</span><span class="st">'--'</span>, c<span class="op">=</span><span class="st">'tab:grey'</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="st">'ROC Curve for </span><span class="ch">\n</span><span class="st">Distinctiveness Classifier'</span>)</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="distinct_files/figure-html/cell-4-output-1.png" width="445" height="467" class="figure-img"></p>
+</figure>
 </div>
 </div>
-<p>We also need to initialize the <code>FeatureExtractor</code>. The only argument is the <code>batch_size</code>, which we recommend setting to something low, like 4.</p>
-<div id="3892bf89" class="cell" data-execution_count="5">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we'll save the results in the feature_dir</span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> working_dir <span class="op">+</span> <span class="st">'/features'</span></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>os.makedirs(feature_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># initialize the extractor </span></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>fe <span class="op">=</span> FeatureExtractor(batch_size<span class="op">=</span><span class="dv">4</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>Using device: mps (Apple Silicon GPU)</code></pre>
 </div>
-</div>
-<p>The first time you extract features with Pyseter, it will download <a href="https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14167">AnyDorsal</a> to your machine. AnyDorsal is huge (4.5GB), so be prepared!</p>
-<p>This will take a minute, so we recommend saving the results afterwards.</p>
-<div id="f1461240" class="cell" data-execution_count="6">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> fe.extract(image_dir<span class="op">=</span>image_dir)</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># this saves the dictionary as an numpy file</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
-<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>np.save(out_path, features)</span>
-<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># convert keys and values to numpy arrays</span></span>
-<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>filenames <span class="op">=</span> np.array(<span class="bu">list</span>(features.keys()))</span>
-<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>feature_array <span class="op">=</span> np.array(<span class="bu">list</span>(features.values()))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<p>You can load previously saved features with <code>load_features</code></p>
-<div id="a8b96df7" class="cell" data-execution_count="7">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/features.npy'</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>filenames, feature_array <span class="op">=</span> load_features(out_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
+<p>We can see that, for this example, the distinctiveness score is better than useless (gray dashed line).</p>
+
 
 
 </section>
 
-</main> <!-- /main -->
+<div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-deng-2023-ui" class="csl-entry" role="listitem">
+Deng, Siqi, Yuanjun Xiong, Meng Wang, Wei Xia, and Stefano Soatto. 2023. <span>“Harnessing Unrecognizable Faces for Improving Face Recognition.”</span> In <em>Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision</em>, 3424–33.
+</div>
+</div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right

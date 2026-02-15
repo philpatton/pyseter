@@ -24,7 +24,7 @@ website:
         contents:
           - text: Extracting features
             file: extract.qmd
-          - text: Predicting IDs
+          - text: Using a reference set
             file: identify.qmd
           - text: Evaluating *AnyDorsal*
             file: evaluate.qmd
@@ -32,6 +32,8 @@ website:
         contents:
           - text: Identify App
             file: app.qmd
+          - text: Grading distinctiveness
+            file: distinct.qmd
       - api/index.qmd
 
 format:
