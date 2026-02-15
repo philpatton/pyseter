@@ -2,12 +2,16 @@
 title: "Pyseter"
 ---
 
-Pyseter is a Python package for processing images before photo-identification. Pyseter includes functions for:
+![](hump-crop.jpg)
+
+Pyseter is an open-source Python package for automating photo-identification. Pyseter includes functions for:
 
 - Extracting feature vectors from images with the [AnyDorsal](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14167) algorithm 
 - Clustering images by a proposed ID
 - Sorting images into directories by proposed ID then encounter
 - Grading images by distinctiveness (experimental)
+- Identifying individuals using a reference set
+- Evaluating photo-ID algorithms
 
 ## Introduction 
 

@@ -142,3 +142,10 @@ prediction_df.head(20)
 ```
 
 By default, `predict_ids` inserts a dummy prediction "new_individual" at 0.5. This makes it easy to evaluate the algorithm with metrics like MAP@5, or calculate the false negative rate. 
+
+You can save the results with `to_csv` from pandas. 
+
+```{python}
+#| eval: false
+prediction_df.to_csv('predicted_ids.csv', index=False)
+```

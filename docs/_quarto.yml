@@ -24,13 +24,15 @@ website:
         contents:
           - text: Extracting features
             file: extract.qmd
+          - text: Clustering individuals
+            file: cluster.qmd
           - text: Using a reference set
             file: identify.qmd
           - text: Evaluating *AnyDorsal*
             file: evaluate.qmd
       - section: "Experimental"
         contents:
-          - text: Identify App
+          - text: "*AnyDorsal* ID app"
             file: app.qmd
           - text: Grading distinctiveness
             file: distinct.qmd
@@ -39,7 +41,7 @@ website:
 format:
   html:
     theme: 
-      light: flatly
+      light: united
       dark: darkly
     toc: true
     code-copy: true
