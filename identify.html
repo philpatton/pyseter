@@ -77,9 +77,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-9115dec2981bc51293235a5fcfbd5815.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a302628f10137ca94cf795410198b6ee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
 <link href="site_libs/bootstrap/bootstrap-dark-aa9164bdd888a5250534403f0a9e2266.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-9115dec2981bc51293235a5fcfbd5815.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-a302628f10137ca94cf795410198b6ee.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -360,6 +360,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./cluster.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Clustering individuals</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./identify.html" class="sidebar-item-text sidebar-link active">
  <span class="menu-text">Using a reference set</span></a>
   </div>
@@ -384,7 +390,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./app.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Identify App</span></a>
+ <span class="menu-text"><em>AnyDorsal</em> ID app</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -451,7 +457,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="set-up" class="level2">
 <h2 class="anchored" data-anchor-id="set-up">Set up</h2>
 <p>Feel free to place the data anywhere you like, e.g., within a <code>pyseter_jobs</code> folder or something. I frequently come back to the Happywhale dataset, so I have it saved locally.</p>
-<div id="8cedec13" class="cell" data-execution_count="2">
+<div id="ec8f9d54" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>config InlineBackend.figure_format <span class="op">=</span> <span class="st">'retina'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -467,7 +473,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="extracting-features-using-bounding-boxes" class="level2">
 <h2 class="anchored" data-anchor-id="extracting-features-using-bounding-boxes">Extracting features using bounding boxes</h2>
 <p>Now that we’ve downloaded the data, we’ll get ready to extract the feature vectors by initializing the <code>FeatureExtractor</code>. Some of the images in the Happywhale dataset are pretty big, so we’ll set the <code>batch_size</code> to a low value, <code>4</code>.</p>
-<div id="23fbbd91" class="cell" data-execution_count="3">
+<div id="18e53d35" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we'll save the results in the feature_dir</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> data_dir <span class="op">+</span> <span class="st">'/features'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>os.makedirs(feature_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
@@ -492,7 +498,7 @@ Warning
 </div>
 </div>
 <p>Additionally, we’ll need to supply <em>bounding boxes</em> to the feature extractor. Many of the Happywhale images are taken from far away, so we need to crop the image to just the animal. To do so, we’ll supply the path to the bounding box .csv as to the argument, <code>bbox_csv</code>. The .csv needs to have columns named: <code>['image', 'xmin', 'xmax', 'ymin', ymax']</code> that contain the image name and the coordinates for the corners of the box.</p>
-<div id="62aedeef" class="cell" data-execution_count="4">
+<div id="66cba629" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -501,7 +507,7 @@ Warning
 </div>
 </div>
 </div>
-<div id="c951150f" class="cell" data-execution_count="5">
+<div id="76e84112" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bbox_url <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/philpatton/pyseter/main/data/happywhale-charm-boxes.csv'</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>train_dir <span class="op">=</span> data_dir <span class="op">+</span> <span class="st">'/train_images'</span></span>
@@ -519,7 +525,7 @@ Warning
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>np.save(out_path, test_features)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If you’ve already extracted the features, you can load them back into your session.</p>
-<div id="45afa9a2" class="cell" data-execution_count="6">
+<div id="a961b09a" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>reference_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/train_features.npy'</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>reference_files, reference_features <span class="op">=</span> load_features(reference_path)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -531,7 +537,7 @@ Warning
 <h2 class="anchored" data-anchor-id="identifying-animals">Identifying animals</h2>
 <p>First, we’ll create two dictionaries. Dictionaries are similar to a named list in R, where we can access the value in the dictionary by providing it’s key. In this case, the key will be the image name and the value will be the feature vector for that image.</p>
 <p>We’ll also need a <code>DataFrame</code> that tells us the identity of every individual in the reference set. This comes with the Kaggle dataset, in the <code>train.csv</code> file.</p>
-<div id="80bd44a1" class="cell" data-execution_count="7">
+<div id="0b050004" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>query_dict <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(query_files, query_features))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>reference_dict <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(reference_files, reference_features))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -588,7 +594,7 @@ Warning
 </div>
 </div>
 <p>And now we’re ready to make predictions! By default, <code>predict_ids</code> returns 10 proposed IDs. Here we’ll show just 2 so for the sake of variety.</p>
-<div id="83bbde16" class="cell" data-execution_count="8">
+<div id="b73342ad" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>prediction_df <span class="op">=</span> predict_ids(reference_dict, query_dict, id_df, proposed_id_count<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>prediction_df.head(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
@@ -611,7 +617,7 @@ Warning
 <td>a704da09e32dc3.jpg</td>
 <td>1</td>
 <td>5f2296c18e26</td>
-<td>0.500232</td>
+<td>0.500233</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
@@ -625,7 +631,7 @@ Warning
 <td>de1569496d42f4.jpg</td>
 <td>1</td>
 <td>ed237f7c2165</td>
-<td>0.826260</td>
+<td>0.826259</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
@@ -646,14 +652,14 @@ Warning
 <td>4ab51dd663dd29.jpg</td>
 <td>2</td>
 <td>31f748b822f4</td>
-<td>0.503391</td>
+<td>0.503390</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">6</th>
 <td>da27c3f9f96504.jpg</td>
 <td>1</td>
 <td>c02b7ad6faa0</td>
-<td>0.937103</td>
+<td>0.937102</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">7</th>
@@ -674,14 +680,14 @@ Warning
 <td>0df089463bfd6b.jpg</td>
 <td>2</td>
 <td>ae9cca8f13ca</td>
-<td>0.504652</td>
+<td>0.504653</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">10</th>
 <td>813892efb592e0.jpg</td>
 <td>1</td>
 <td>c22d65f2d2f0</td>
-<td>0.808235</td>
+<td>0.808234</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">11</th>
@@ -695,7 +701,7 @@ Warning
 <td>0c9304ddd0ba35.jpg</td>
 <td>1</td>
 <td>2df99dc71d85</td>
-<td>0.852065</td>
+<td>0.852067</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">13</th>
@@ -723,7 +729,7 @@ Warning
 <td>65653992318202.jpg</td>
 <td>1</td>
 <td>c4e546efa5ca</td>
-<td>0.842365</td>
+<td>0.842364</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">17</th>
@@ -737,7 +743,7 @@ Warning
 <td>9857340b9e8c8e.jpg</td>
 <td>1</td>
 <td>1a20c92ffe68</td>
-<td>0.813361</td>
+<td>0.813362</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">19</th>
@@ -753,6 +759,10 @@ Warning
 </div>
 </div>
 <p>By default, <code>predict_ids</code> inserts a dummy prediction “new_individual” at 0.5. This makes it easy to evaluate the algorithm with metrics like MAP@5, or calculate the false negative rate.</p>
+<p>You can save the results with <code>to_csv</code> from pandas.</p>
+<div id="ba6ce226" class="cell" data-execution_count="8">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>prediction_df.to_csv(<span class="st">'predicted_ids.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
 
 
 </section>
