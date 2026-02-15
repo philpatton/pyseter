@@ -171,7 +171,11 @@ os.makedirs(feature_dir, exist_ok=True)
 fe = FeatureExtractor(batch_size=4)
 ```
 
-Now we can extract features. This will take a while, depending on hardware. On a machine with an NVIDIA GPU, this will take a minute or two. On a Mac, this will take around 10 minutes. Unfortunately, we have not been able to test on a PC without a GPU, but expect it to be slower than 10 minutes.
+Now we can extract features. This will take a while, depending on hardware. On a machine with an NVIDIA GPU, this will take a minute or two. On a Mac, this will take around 10 minutes. 
+
+:::{.callout-warning}
+Feature extraction will be extremely slow for users who do not have access to an NVIDIA GPU or Apple Silicon. Users may want to check if their university or agency has access to GPUs via a high performance computing cluster (HPC). Also, Google Colab and other similar services (e.g., Kaggle) allow users to rent GPU resources. 
+:::
 
 The first time you extract features with Pyseter, it will download [AnyDorsal](https://besjournals.onlinelibrary.wiley.com/doi/10.1111/2041-210X.14167) to your machine. AnyDorsal is huge (4.5GB), so be prepared! 
 

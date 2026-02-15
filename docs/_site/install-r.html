@@ -477,7 +477,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="install-pytorch" class="level2">
 <h2 class="anchored" data-anchor-id="install-pytorch">Install PyTorch</h2>
-<p>Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. Extracting features should be fast for users with an NVIDIA GPU, and reasonable for users with a Mac with Apple Silicon.</p>
+<p>Installing PyTorch will allow users to extract features from images, i.e., identify individuals in images. Extracting features should be reasonably quick for users with an NVIDIA GPU (e.g., 2 minutes per 1000 images). In our testing, feature extraction takes about 5 times longer for users with Apple Silicon (e.g., 10 minutes per 1000 images).</p>
 <div class="callout callout-style-default callout-warning callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -488,7 +488,7 @@ Warning
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>For all other users, extracting features from images will be extremely slow.</p>
+<p>Feature extraction will be extremely slow for users who do not have access to an NVIDIA GPU or Apple Silicon. Users may want to check if their university or agency has access to GPUs via a high performance computing cluster (HPC). Also, Google Colab and other similar services (e.g., Kaggle) allow users to rent GPU resources.</p>
 </div>
 </div>
 <p>PyTorch installation can be a little finicky. Essentially, it depends on what operating system you’re using, and what version of <strong>CUDA</strong> you’re using. CUDA is the technology that turns your NVIDIA GPU into a deep learning machine. To install PyTorch, I recommend following <a href="https://pytorch.org/get-started/locally/">these instructions</a>.</p>
