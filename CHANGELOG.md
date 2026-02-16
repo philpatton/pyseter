@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## [0.3.2] - 2025-02-16
+
+### Added
+- `update_reference_features`, a quick way to update your reference feature dict
+
+### Changed
+- Made `pool_predictions`, `insert_new_id`, and `find_neighbors` public. 
+- Lazy imports for `verify_pytorch()` and `get_best_device()`
+
 ## [0.3.1] - 2025-02-11
 
 ### Changed
