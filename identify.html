@@ -65,6 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./evaluate.html" rel="next">
+<link href="./cluster.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -426,6 +428,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <li><a href="#set-up" id="toc-set-up" class="nav-link active" data-scroll-target="#set-up">Set up</a></li>
   <li><a href="#extracting-features-using-bounding-boxes" id="toc-extracting-features-using-bounding-boxes" class="nav-link" data-scroll-target="#extracting-features-using-bounding-boxes">Extracting features using bounding boxes</a></li>
   <li><a href="#identifying-animals" id="toc-identifying-animals" class="nav-link" data-scroll-target="#identifying-animals">Identifying animals</a></li>
+  <li><a href="#updating-the-reference-set" id="toc-updating-the-reference-set" class="nav-link" data-scroll-target="#updating-the-reference-set">Updating the reference set</a></li>
   </ul>
 </nav>
     </div>
@@ -463,13 +466,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="set-up" class="level2">
 <h2 class="anchored" data-anchor-id="set-up">Set up</h2>
 <p>Feel free to place the data anywhere you like, e.g., within a <code>pyseter_jobs</code> folder or something. I frequently come back to the Happywhale dataset, so I have it saved locally.</p>
-<div id="ec8f9d54" class="cell" data-execution_count="1">
+<div id="bad632db" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>config InlineBackend.figure_format <span class="op">=</span> <span class="st">'retina'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> os</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.extract <span class="im">import</span> FeatureExtractor</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.sort <span class="im">import</span> load_features</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.identify <span class="im">import</span> predict_ids</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pyseter.identify <span class="im">import</span> predict_ids, update_reference_features</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
@@ -479,7 +482,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="extracting-features-using-bounding-boxes" class="level2">
 <h2 class="anchored" data-anchor-id="extracting-features-using-bounding-boxes">Extracting features using bounding boxes</h2>
 <p>Now that we’ve downloaded the data, we’ll get ready to extract the feature vectors by initializing the <code>FeatureExtractor</code>. Some of the images in the Happywhale dataset are pretty big, so we’ll set the <code>batch_size</code> to a low value, <code>4</code>.</p>
-<div id="18e53d35" class="cell" data-execution_count="2">
+<div id="3f696f3f" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we'll save the results in the feature_dir</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>feature_dir <span class="op">=</span> data_dir <span class="op">+</span> <span class="st">'/features'</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>os.makedirs(feature_dir, exist_ok<span class="op">=</span><span class="va">True</span>)</span>
@@ -504,7 +507,7 @@ Warning
 </div>
 </div>
 <p>Additionally, we’ll need to supply <em>bounding boxes</em> to the feature extractor. Many of the Happywhale images are taken from far away, so we need to crop the image to just the animal. To do so, we’ll supply the path to the bounding box .csv as to the argument, <code>bbox_csv</code>. The .csv needs to have columns named: <code>['image', 'xmin', 'xmax', 'ymin', ymax']</code> that contain the image name and the coordinates for the corners of the box.</p>
-<div id="66cba629" class="cell" data-execution_count="3">
+<div id="aa861527" class="cell" data-execution_count="3">
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -513,7 +516,7 @@ Warning
 </div>
 </div>
 </div>
-<div id="76e84112" class="cell" data-execution_count="4">
+<div id="894ad2a9" class="cell" data-execution_count="4">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bbox_url <span class="op">=</span> <span class="st">'https://raw.githubusercontent.com/philpatton/pyseter/main/data/happywhale-charm-boxes.csv'</span></span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>train_dir <span class="op">=</span> data_dir <span class="op">+</span> <span class="st">'/train_images'</span></span>
@@ -531,7 +534,7 @@ Warning
 <span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>np.save(out_path, test_features)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>If you’ve already extracted the features, you can load them back into your session.</p>
-<div id="a961b09a" class="cell" data-execution_count="5">
+<div id="1a722cd1" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>reference_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/train_features.npy'</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>reference_files, reference_features <span class="op">=</span> load_features(reference_path)</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -543,7 +546,7 @@ Warning
 <h2 class="anchored" data-anchor-id="identifying-animals">Identifying animals</h2>
 <p>First, we’ll create two dictionaries. Dictionaries are similar to a named list in R, where we can access the value in the dictionary by providing it’s key. In this case, the key will be the image name and the value will be the feature vector for that image.</p>
 <p>We’ll also need a <code>DataFrame</code> that tells us the identity of every individual in the reference set. This comes with the Kaggle dataset, in the <code>train.csv</code> file.</p>
-<div id="0b050004" class="cell" data-execution_count="6">
+<div id="9660d97f" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>query_dict <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(query_files, query_features))</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>reference_dict <span class="op">=</span> <span class="bu">dict</span>(<span class="bu">zip</span>(reference_files, reference_features))</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -600,7 +603,7 @@ Warning
 </div>
 </div>
 <p>And now we’re ready to make predictions! By default, <code>predict_ids</code> returns 10 proposed IDs. Here we’ll show just 2 so for the sake of variety.</p>
-<div id="b73342ad" class="cell" data-execution_count="7">
+<div id="3d8cd9f6" class="cell" data-execution_count="7">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>prediction_df <span class="op">=</span> predict_ids(reference_dict, query_dict, id_df, proposed_id_count<span class="op">=</span><span class="dv">2</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>prediction_df.head(<span class="dv">20</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="6">
@@ -766,8 +769,88 @@ Warning
 </div>
 <p>By default, <code>predict_ids</code> inserts a dummy prediction “new_individual” at 0.5. This makes it easy to evaluate the algorithm with metrics like MAP@5, or calculate the false negative rate.</p>
 <p>You can save the results with <code>to_csv</code> from pandas.</p>
-<div id="ba6ce226" class="cell" data-execution_count="8">
+<div id="4970a16e" class="cell" data-execution_count="8">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>prediction_df.to_csv(<span class="st">'predicted_ids.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+</section>
+<section id="updating-the-reference-set" class="level2">
+<h2 class="anchored" data-anchor-id="updating-the-reference-set">Updating the reference set</h2>
+<p>Let’s say you’ve gone through and confirmed all the matches in your query set, e.g., with the <a href="./app.html"><em>AnyDorsal</em> ID app</a>. Now you would like to update your reference set with the new IDs.</p>
+<p>Here, we’ll take the naive approach that the algorithm’s first choice was always correct and update our reference set accordingly.</p>
+<div id="bf3cba3a" class="cell" data-execution_count="9">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># select the first match as the correct one</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>confirmed_matches <span class="op">=</span> prediction_df.loc[prediction_df[<span class="st">'rank'</span>] <span class="op">==</span> <span class="dv">1</span>]</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>Now we’ll want to update two things: <code>id_df</code>, which contains the true ids for all our reference images, and <code>reference_features</code>, which contains the feature vectors for every reference image. <code>update_reference_features</code> allows us to update the reference features, such that we can easily import them later with <code>load_features()</code>.</p>
+<div id="e9106522" class="cell" data-execution_count="10">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># a dataframe for every image with a confirmed id</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>confirmed_match_df <span class="op">=</span> confirmed_matches[[<span class="st">'image'</span>, <span class="st">'predicted_id'</span>]]</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>confirmed_match_df.columns <span class="op">=</span> [<span class="st">'image'</span>, <span class="st">'individual_id'</span>]</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># create a new reference dict </span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>updated_reference_dict <span class="op">=</span> update_reference_features(</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    reference_dict, query_dict, confirmed_match_df</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="co"># save the output so we can load them later </span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>out_path <span class="op">=</span> feature_dir <span class="op">+</span> <span class="st">'/updated_features.npy'</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>np.save(out_path, updated_reference_dict)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<p>We can also update our <code>id_df</code>. To do so, we need to “union” it (SQL jargon) with the confirmed matches. We do this with <code>pd.concat()</code>, which is similar to R’s <code>rbind</code>. Note that that we don’t have the species classification for the individuals in the query set.</p>
+<div id="e3f3dca2" class="cell" data-execution_count="11">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># union with the id_df </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>updated_id_df <span class="op">=</span> pd.concat((id_df, confirmed_match_df)).reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>updated_id_df.to_csv(data_dir <span class="op">+</span> <span class="st">'updated_ids.csv'</span>, index<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>updated_id_df.head()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">image</th>
+<th data-quarto-table-cell-role="th">species</th>
+<th data-quarto-table-cell-role="th">individual_id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>00021adfb725ed.jpg</td>
+<td>melon_headed_whale</td>
+<td>cadddb1636b9</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>000562241d384d.jpg</td>
+<td>humpback_whale</td>
+<td>1a71fbb72250</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>0007c33415ce37.jpg</td>
+<td>false_killer_whale</td>
+<td>60008f293a2b</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>0007d9bca26a99.jpg</td>
+<td>bottlenose_dolphin</td>
+<td>4b00fe572063</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">4</th>
+<td>00087baf5cef7a.jpg</td>
+<td>humpback_whale</td>
+<td>8e5253662392</td>
+</tr>
+</tbody>
+</table>
+
+</div>
+</div>
 </div>
 
 
@@ -1187,6 +1270,18 @@ Warning
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./cluster.html" class="pagination-link" aria-label="Clustering individuals">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Clustering individuals</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./evaluate.html" class="pagination-link" aria-label="Evaluating *AnyDorsal*">
+        <span class="nav-page-text">Evaluating <em>AnyDorsal</em></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

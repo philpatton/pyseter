@@ -65,6 +65,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./distinct.html" rel="next">
+<link href="./negative.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -449,7 +451,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 
 <p>Pyseter ships with an experimental app that allows users to click through proposed IDs, identify matches, and export the results of the identification via a .csv. It’s worth reiterating that this is an experimental feature and, as such, is pretty bare bones. Nevertheless, we hope people will find it useful and suggest ways it could be improved.</p>
-<p>This notebook will demonstrate how to run the app locally, and show users a demo version of the app. Running the code below will launch a version of the app based on the Happywhale data, where the test images are the “query set” and the training images are the “reference set”. The demo version is hosted on Hugging Face, and represents a subset of the Happywhale dataset.</p>
+<p>This notebook will demonstrate how to run the app locally, and show users a demo version of the app. Running the code below will launch a version of the app based on the Happywhale data, where the test images are the “query set” and the training images are the “reference set”.</p>
+<p>You can also check out <a href="https://huggingface.co/spaces/pattonp/pyseter-app-demo">the demo version Hugging Face</a>. The demo version contains a subset of the Happywhale dataset.</p>
 <section id="launching-the-app-locally" class="level2">
 <h2 class="anchored" data-anchor-id="launching-the-app-locally">Launching the app locally</h2>
 <p>Here we’ll assume that you’ve already extracted the features for the query images and the reference images. As such, we can just load them in.</p>
@@ -490,7 +493,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="demo-version" class="level2">
 <h2 class="anchored" data-anchor-id="demo-version">Demo version</h2>
-<p>Here, we demonstrate what the app looks like when you run it locally. This demo version contains 68 images from the Happywhale dataset, and represents a roughly even sample of every catalog in the dataset.</p>
+<p>Here, we demonstrate what the app looks like when you run it locally. This demo version contains 68 images from the Happywhale dataset, and represents a roughly even sample of every catalog in the dataset. You can also check out <a href="https://huggingface.co/spaces/pattonp/pyseter-app-demo">the demo version Hugging Face</a>.</p>
 <p>Here are a few pointers on how to use the app</p>
 <ul>
 <li><strong>Next</strong> and <strong>Prev</strong> navigate between query images</li>
@@ -920,6 +923,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./negative.html" class="pagination-link" aria-label="False negative rates">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">False negative rates</span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./distinct.html" class="pagination-link" aria-label="Grading distinctiveness">
+        <span class="nav-page-text">Grading distinctiveness</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 
