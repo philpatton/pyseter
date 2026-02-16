@@ -11,7 +11,7 @@ Pyseter is an open-source Python package for automating photo-identification. Py
 
 ## Introduction 
 
-Please see the [Getting Started](getting-started.qmd) page for a demonstration of the basic functionality of Pyseter using an example of spinner dolphins.
+Please see the [Getting Started](https://philpatton.github.io/pyseter/getting-started.html) page for a demonstration of the basic functionality of Pyseter using an example of spinner dolphins.
 
 ## Installation
 
@@ -21,4 +21,4 @@ Users can install Pyseter with pip, uv, or pixi. For example,
 pip install pyseter
 ```
 
-We imagine that most Pyseter users will be more familiar with R than Python. If this is you, please see the [R users who are new to Python](install-r.qmd) page for detailed instructions on the steps needed to work with Pyseter. 
+We imagine that most Pyseter users will be more familiar with R than Python. If this is you, please see the [R users who are new to Python](https://philpatton.github.io/pyseter/install-r.html) page for detailed instructions on the steps needed to work with Pyseter. 
