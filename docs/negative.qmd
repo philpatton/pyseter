@@ -10,11 +10,11 @@ execute:
   cache: true
 ---
 
-A subtle but important choice when deciding how to automate photo-ID is the number of proposed matches you are going to evaluate. AI optimists will argue that you just need to check the first proposed ID to make sure it's not a false positive (i.e., claiming two distinct individuals are one). AI skeptics will argue that you need to check every proposed ID (i.e., every individual in the reference set).
+A subtle but important choice when deciding how to automate photo-ID is the number of proposed matches you are going to evaluate before deciding that an individual is new to the dataset. An algorithm optimist might argue that you just need to check the first proposed ID to make sure it's not a false positive (i.e., claiming two distinct individuals are one). An algorithm skeptic might argue that you need to check every proposed ID, i.e., every individual in the reference set, before adding a new individual to the dataset.
 
-One can reframe this debate in terms of false negative rates. A false negative occurs when you didn't look far enough down the list of proposed IDs, and marked an individual as new to the catalog when you've seen them before. The AI optimist is arguing that the algorithm won't produce false negatives, or they aren't important. The AI skeptic is arguing that the algorithm will produce false negatives and that false negatives are critical.
+We can reframe this debate in terms of false negative rates. A false negative occurs when you didn't look far enough down the list of proposed IDs, and added a new individual that already existed in the dataset. Our algorithm optimist is arguing that the algorithm won't produce false negatives, or they aren't important. Our algorithm skeptic is arguing that the algorithm will produce false negatives and that false negatives are critical.
 
-We agree with the AI skeptic in that false negatives are critically important. An 8% false negative rate sounds small, but suggests that you will overestimate your population size by 20% [@patton-2025-optimizing]. This overestimation can have grim consequences if, say, the estimate is used to compute potential biological removal.
+The skeptic is right in that false negatives are critically important. An 8% false negative rate might seem small, but it suggests that you will overestimate your population size by 20% [@patton-2025-optimizing]. This overestimation can have grim consequences if, say, the estimate is used to compute potential biological removal.
 
 Either the skeptic or the optimist could be right about the prevalence of false negatives. But why trust them, when we can estimate them ourselves?
 

@@ -11,7 +11,9 @@ execute:
 
 Pyseter ships with an experimental app that allows users to click through proposed IDs, identify matches, and export the results of the identification via a .csv. It's worth reiterating that this is an experimental feature and, as such, is pretty bare bones. Nevertheless, we hope people will find it useful and suggest ways it could be improved. 
 
-This notebook will demonstrate how to run the app locally, and show users a demo version of the app. Running the code below will launch a version of the app based on the Happywhale data, where the test images are the "query set" and the training images are the "reference set". The demo version is hosted on Hugging Face, and represents a subset of the Happywhale dataset. 
+This notebook will demonstrate how to run the app locally, and show users a demo version of the app. Running the code below will launch a version of the app based on the Happywhale data, where the test images are the "query set" and the training images are the "reference set". 
+
+You can also check out [the demo version Hugging Face](https://huggingface.co/spaces/pattonp/pyseter-app-demo). The demo version contains a subset of the Happywhale dataset.
 
 ## Launching the app locally 
 
@@ -63,7 +65,7 @@ launch_review(
 
 ## Demo version
 
-Here, we demonstrate what the app looks like when you run it locally. This demo version contains 68 images from the Happywhale dataset, and represents a roughly even sample of every catalog in the dataset. 
+Here, we demonstrate what the app looks like when you run it locally. This demo version contains 68 images from the Happywhale dataset, and represents a roughly even sample of every catalog in the dataset. You can also check out [the demo version Hugging Face](https://huggingface.co/spaces/pattonp/pyseter-app-demo).
 
 Here are a few pointers on how to use the app
 

@@ -29,7 +29,7 @@ import os
 
 from pyseter.extract import FeatureExtractor
 from pyseter.sort import load_features
-from pyseter.identify import predict_ids
+from pyseter.identify import predict_ids, update_reference_features
 import numpy as np
 import pandas as pd
 
@@ -148,4 +148,41 @@ You can save the results with `to_csv` from pandas.
 ```{python}
 #| eval: false
 prediction_df.to_csv('predicted_ids.csv', index=False)
+```
+
+## Updating the reference set
+
+Let's say you've gone through and confirmed all the matches in your query set, e.g., with the [*AnyDorsal* ID app](app.qmd). Now you would like to update your reference set with the new IDs.
+
+Here, we'll take the naive approach that the algorithm's first choice was always correct and update our reference set accordingly.
+
+```{python}
+# select the first match as the correct one
+confirmed_matches = prediction_df.loc[prediction_df['rank'] == 1]
+```
+
+Now we'll want to update two things: `id_df`, which contains the true ids for all our reference images, and `reference_features`, which contains the feature vectors for every reference image. `update_reference_features` allows us to update the reference features, such that we can easily import them later with `load_features()`.
+
+```{python}
+# a dataframe for every image with a confirmed id
+confirmed_match_df = confirmed_matches[['image', 'predicted_id']]
+confirmed_match_df.columns = ['image', 'individual_id']
+
+# create a new reference dict 
+updated_reference_dict = update_reference_features(
+    reference_dict, query_dict, confirmed_match_df
+)
+
+# save the output so we can load them later 
+out_path = feature_dir + '/updated_features.npy'
+np.save(out_path, updated_reference_dict)
+```
+
+We can also update our `id_df`. To do so, we need to "union" it (SQL jargon) with the confirmed matches. We do this with `pd.concat()`, which is similar to R's `rbind`. Note that that we don't have the species classification for the individuals in the query set. 
+
+```{python}
+# union with the id_df 
+updated_id_df = pd.concat((id_df, confirmed_match_df)).reset_index(drop=True)
+updated_id_df.to_csv(data_dir + 'updated_ids.csv', index=False)
+updated_id_df.head()
 ```

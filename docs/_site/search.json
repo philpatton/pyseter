@@ -303,7 +303,7 @@
     "href": "identify.html#set-up",
     "title": "Identifying animals with a reference set",
     "section": "Set up",
-    "text": "Set up\nFeel free to place the data anywhere you like, e.g., within a pyseter_jobs folder or something. I frequently come back to the Happywhale dataset, so I have it saved locally.\n\n%config InlineBackend.figure_format = 'retina'\nimport os\n\nfrom pyseter.extract import FeatureExtractor\nfrom pyseter.sort import load_features\nfrom pyseter.identify import predict_ids\nimport numpy as np\nimport pandas as pd\n\ndata_dir = '/Users/PattonP/datasets/happywhale/'",
+    "text": "Set up\nFeel free to place the data anywhere you like, e.g., within a pyseter_jobs folder or something. I frequently come back to the Happywhale dataset, so I have it saved locally.\n\n%config InlineBackend.figure_format = 'retina'\nimport os\n\nfrom pyseter.extract import FeatureExtractor\nfrom pyseter.sort import load_features\nfrom pyseter.identify import predict_ids, update_reference_features\nimport numpy as np\nimport pandas as pd\n\ndata_dir = '/Users/PattonP/datasets/happywhale/'",
     "crumbs": [
       "Examples",
       "Using a reference set"
@@ -332,11 +332,22 @@
     ]
   },
   {
+    "objectID": "identify.html#updating-the-reference-set",
+    "href": "identify.html#updating-the-reference-set",
+    "title": "Identifying animals with a reference set",
+    "section": "Updating the reference set",
+    "text": "Updating the reference set\nLet’s say you’ve gone through and confirmed all the matches in your query set, e.g., with the AnyDorsal ID app. Now you would like to update your reference set with the new IDs.\nHere, we’ll take the naive approach that the algorithm’s first choice was always correct and update our reference set accordingly.\n\n# select the first match as the correct one\nconfirmed_matches = prediction_df.loc[prediction_df['rank'] == 1]\n\nNow we’ll want to update two things: id_df, which contains the true ids for all our reference images, and reference_features, which contains the feature vectors for every reference image. update_reference_features allows us to update the reference features, such that we can easily import them later with load_features().\n\n# a dataframe for every image with a confirmed id\nconfirmed_match_df = confirmed_matches[['image', 'predicted_id']]\nconfirmed_match_df.columns = ['image', 'individual_id']\n\n# create a new reference dict \nupdated_reference_dict = update_reference_features(\n    reference_dict, query_dict, confirmed_match_df\n)\n\n# save the output so we can load them later \nout_path = feature_dir + '/updated_features.npy'\nnp.save(out_path, updated_reference_dict)\n\nWe can also update our id_df. To do so, we need to “union” it (SQL jargon) with the confirmed matches. We do this with pd.concat(), which is similar to R’s rbind. Note that that we don’t have the species classification for the individuals in the query set.\n\n# union with the id_df \nupdated_id_df = pd.concat((id_df, confirmed_match_df)).reset_index(drop=True)\nupdated_id_df.to_csv(data_dir + 'updated_ids.csv', index=False)\nupdated_id_df.head()\n\n\n\n\n\n\n\n\nimage\nspecies\nindividual_id\n\n\n\n\n0\n00021adfb725ed.jpg\nmelon_headed_whale\ncadddb1636b9\n\n\n1\n000562241d384d.jpg\nhumpback_whale\n1a71fbb72250\n\n\n2\n0007c33415ce37.jpg\nfalse_killer_whale\n60008f293a2b\n\n\n3\n0007d9bca26a99.jpg\nbottlenose_dolphin\n4b00fe572063\n\n\n4\n00087baf5cef7a.jpg\nhumpback_whale\n8e5253662392",
+    "crumbs": [
+      "Examples",
+      "Using a reference set"
+    ]
+  },
+  {
     "objectID": "app.html",
     "href": "app.html",
     "title": "AnyDorsal ID app",
     "section": "",
-    "text": "Pyseter ships with an experimental app that allows users to click through proposed IDs, identify matches, and export the results of the identification via a .csv. It’s worth reiterating that this is an experimental feature and, as such, is pretty bare bones. Nevertheless, we hope people will find it useful and suggest ways it could be improved.\nThis notebook will demonstrate how to run the app locally, and show users a demo version of the app. Running the code below will launch a version of the app based on the Happywhale data, where the test images are the “query set” and the training images are the “reference set”. The demo version is hosted on Hugging Face, and represents a subset of the Happywhale dataset.",
+    "text": "Pyseter ships with an experimental app that allows users to click through proposed IDs, identify matches, and export the results of the identification via a .csv. It’s worth reiterating that this is an experimental feature and, as such, is pretty bare bones. Nevertheless, we hope people will find it useful and suggest ways it could be improved.\nThis notebook will demonstrate how to run the app locally, and show users a demo version of the app. Running the code below will launch a version of the app based on the Happywhale data, where the test images are the “query set” and the training images are the “reference set”.\nYou can also check out the demo version Hugging Face. The demo version contains a subset of the Happywhale dataset.",
     "crumbs": [
       "Experimental",
       "*AnyDorsal* ID app"
@@ -358,7 +369,7 @@
     "href": "app.html#demo-version",
     "title": "AnyDorsal ID app",
     "section": "Demo version",
-    "text": "Demo version\nHere, we demonstrate what the app looks like when you run it locally. This demo version contains 68 images from the Happywhale dataset, and represents a roughly even sample of every catalog in the dataset.\nHere are a few pointers on how to use the app\n\nNext and Prev navigate between query images\nYou can navigate between reference images of proposed IDs with the left and right arrow keys\nThe radio buttons under Select correct match allow you to select which proposed ID best matches the query image, if any\nConfirm match locks in your choice\nDownload csv downloads a .csv where one column is the query image and the other column is the confirmed ID\nClicking the X in the top right corner brings up a grid of images. Clicking an image on the grid returns to the single image viewer.",
+    "text": "Demo version\nHere, we demonstrate what the app looks like when you run it locally. This demo version contains 68 images from the Happywhale dataset, and represents a roughly even sample of every catalog in the dataset. You can also check out the demo version Hugging Face.\nHere are a few pointers on how to use the app\n\nNext and Prev navigate between query images\nYou can navigate between reference images of proposed IDs with the left and right arrow keys\nThe radio buttons under Select correct match allow you to select which proposed ID best matches the query image, if any\nConfirm match locks in your choice\nDownload csv downloads a .csv where one column is the query image and the other column is the confirmed ID\nClicking the X in the top right corner brings up a grid of images. Clicking an image on the grid returns to the single image viewer.",
     "crumbs": [
       "Experimental",
       "*AnyDorsal* ID app"
@@ -852,7 +863,7 @@
     "href": "negative.html",
     "title": "Computing false negative rates",
     "section": "",
-    "text": "A subtle but important choice when deciding how to automate photo-ID is the number of proposed matches you are going to evaluate. AI optimists will argue that you just need to check the first proposed ID to make sure it’s not a false positive (i.e., claiming two distinct individuals are one). AI skeptics will argue that you need to check every proposed ID (i.e., every individual in the reference set).\nOne can reframe this debate in terms of false negative rates. A false negative occurs when you didn’t look far enough down the list of proposed IDs, and marked an individual as new to the catalog when you’ve seen them before. The AI optimist is arguing that the algorithm won’t produce false negatives, or they aren’t important. The AI skeptic is arguing that the algorithm will produce false negatives and that false negatives are critical.\nWe agree with the AI skeptic in that false negatives are critically important. An 8% false negative rate sounds small, but suggests that you will overestimate your population size by 20% (Patton et al. 2025). This overestimation can have grim consequences if, say, the estimate is used to compute potential biological removal.\nEither the skeptic or the optimist could be right about the prevalence of false negatives. But why trust them, when we can estimate them ourselves?",
+    "text": "A subtle but important choice when deciding how to automate photo-ID is the number of proposed matches you are going to evaluate before deciding that an individual is new to the dataset. An algorithm optimist might argue that you just need to check the first proposed ID to make sure it’s not a false positive (i.e., claiming two distinct individuals are one). An algorithm skeptic might argue that you need to check every proposed ID, i.e., every individual in the reference set, before adding a new individual to the dataset.\nWe can reframe this debate in terms of false negative rates. A false negative occurs when you didn’t look far enough down the list of proposed IDs, and added a new individual that already existed in the dataset. Our algorithm optimist is arguing that the algorithm won’t produce false negatives, or they aren’t important. Our algorithm skeptic is arguing that the algorithm will produce false negatives and that false negatives are critical.\nThe skeptic is right in that false negatives are critically important. An 8% false negative rate might seem small, but it suggests that you will overestimate your population size by 20% (Patton et al. 2025). This overestimation can have grim consequences if, say, the estimate is used to compute potential biological removal.\nEither the skeptic or the optimist could be right about the prevalence of false negatives. But why trust them, when we can estimate them ourselves?",
     "crumbs": [
       "Examples",
       "False negative rates"

@@ -2,6 +2,7 @@
 title: "Pyseter"
 ---
 
+<!-- ![Happywhale - Whale and Dolphin Identification Kaggle competition](hump-crop.jpg) -->
 ![](hump-crop.jpg)
 
 Pyseter is an open-source Python package for automating photo-identification. Pyseter includes functions for:

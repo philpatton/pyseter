@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.8.26">
+<meta name="generator" content="quarto-1.8.27">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -85,6 +85,8 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
+<link href="./app.html" rel="next">
+<link href="./evaluate.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/axe/axe-check.js" type="module"></script>
@@ -92,14 +94,14 @@ div.csl-indent {
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-b758ccaa5987ceb1b75504551e579abf.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-587c61ba64f3a5504c4d52d930310e48.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-4d9afe2b8d18ee9fa5d0d57b5ed4214d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-1f185f230c0af84f026963a15901cd3d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-76856fad3469a9725597717dd028a81b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-1f185f230c0af84f026963a15901cd3d.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-4a8ee3fa9d3035b30da8ba277ece6e2b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-eb8d642b4129249168a1de44a01d957b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="site_libs/bootstrap/bootstrap-4a8ee3fa9d3035b30da8ba277ece6e2b.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -472,9 +474,9 @@ div.csl-indent {
 </header>
 
 
-<p>A subtle but important choice when deciding how to automate photo-ID is the number of proposed matches you are going to evaluate. AI optimists will argue that you just need to check the first proposed ID to make sure it’s not a false positive (i.e., claiming two distinct individuals are one). AI skeptics will argue that you need to check every proposed ID (i.e., every individual in the reference set).</p>
-<p>One can reframe this debate in terms of false negative rates. A false negative occurs when you didn’t look far enough down the list of proposed IDs, and marked an individual as new to the catalog when you’ve seen them before. The AI optimist is arguing that the algorithm won’t produce false negatives, or they aren’t important. The AI skeptic is arguing that the algorithm will produce false negatives and that false negatives are critical.</p>
-<p>We agree with the AI skeptic in that false negatives are critically important. An 8% false negative rate sounds small, but suggests that you will overestimate your population size by 20% <span class="citation" data-cites="patton-2025-optimizing">(<a href="#ref-patton-2025-optimizing" role="doc-biblioref">Patton et al. 2025</a>)</span>. This overestimation can have grim consequences if, say, the estimate is used to compute potential biological removal.</p>
+<p>A subtle but important choice when deciding how to automate photo-ID is the number of proposed matches you are going to evaluate before deciding that an individual is new to the dataset. An algorithm optimist might argue that you just need to check the first proposed ID to make sure it’s not a false positive (i.e., claiming two distinct individuals are one). An algorithm skeptic might argue that you need to check every proposed ID, i.e., every individual in the reference set, before adding a new individual to the dataset.</p>
+<p>We can reframe this debate in terms of false negative rates. A false negative occurs when you didn’t look far enough down the list of proposed IDs, and added a new individual that already existed in the dataset. Our algorithm optimist is arguing that the algorithm won’t produce false negatives, or they aren’t important. Our algorithm skeptic is arguing that the algorithm will produce false negatives and that false negatives are critical.</p>
+<p>The skeptic is right in that false negatives are critically important. An 8% false negative rate might seem small, but it suggests that you will overestimate your population size by 20% <span class="citation" data-cites="patton-2025-optimizing">(<a href="#ref-patton-2025-optimizing" role="doc-biblioref">Patton et al. 2025</a>)</span>. This overestimation can have grim consequences if, say, the estimate is used to compute potential biological removal.</p>
 <p>Either the skeptic or the optimist could be right about the prevalence of false negatives. But why trust them, when we can estimate them ourselves?</p>
 <section id="dataset" class="level2">
 <h2 class="anchored" data-anchor-id="dataset">Dataset</h2>
@@ -1169,6 +1171,18 @@ Patton, Philip T., Krishna Pacifici, Robin W. Baird, Erin M. Oleson, Jason B. Al
     }
   });
   </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./evaluate.html" class="pagination-link" aria-label="Evaluating *AnyDorsal*">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text">Evaluating <em>AnyDorsal</em></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./app.html" class="pagination-link" aria-label="*AnyDorsal* ID app">
+        <span class="nav-page-text"><em>AnyDorsal</em> ID app</span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
 </div> <!-- /content -->
 
 

@@ -6,6 +6,7 @@ execute:
   freeze: auto
 
 website:
+  page-navigation: true
   sidebar:
     style: "docked"
     search: true
