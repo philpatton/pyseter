@@ -27,3 +27,7 @@ pip install pyseter
 ```
 
 We imagine that most Pyseter users will be more familiar with R than Python. If this is you, please see the [R users who are new to Python](install-r.qmd) page for detailed instructions on the steps needed to work with Pyseter. 
+
+## Contributing
+
+If Pyseter leaves something to be desired, or if you have any ideas on how to improve the package, please feel free to [open an issue](https://github.com/philpatton/pyseter/issues) on the Pyseter GitHub page. 

@@ -41,6 +41,17 @@ data_url = (
 )
 id_df = pd.read_csv(data_url)
 
+# fix known species errors
+id_df.replace(
+    {
+        "globis": "short_finned_pilot_whale",
+        "pilot_whale": "short_finned_pilot_whale",
+        "kiler_whale": "killer_whale",
+        "bottlenose_dolpin": "bottlenose_dolphin"
+    }, 
+    inplace=True
+)
+
 id_df.head(10)
 ```
 
@@ -62,11 +73,11 @@ prediction_df = predict_ids(reference_dict, query_dict, id_df, proposed_id_count
 prediction_df.head(20)
 ```
 
-## Mean average precision
+## Top 5%
 
-We are going to evaluate *AnyDorsal* with Mean Average Precision (MAP). MAP evaluates a set of predictions, in this case, a set of 5 predictions. For a set of five ordered predictions, the precision score will be $1/1 = 1$ if the first prediction is correct, $1/2$ if the second is correct, and so on until $1/5$ if the fifth prediction is correct, or $0$ if none of the five predictions are correct. MAP is the mean precision score for a set.
+We can evaluate the performance with several metrics, including Top 5%, or top 5 accuracy, which is just the percentage of times that the correct answer was one of the top five predictions. To do so, we need to compute the `rank` of the prediction, that is, the location of the correct ID in the proposed IDs for every image in the test set. 
 
-So we need to get the `rank` of the correct ID for every image in the test set. One way to do so is to merge the ID DataFrame with the prediction DataFrame. We only want one row per test image, so we need to merge on both the image and ID columns. We can check to see that it worked by checking the number of rows in the result (there are `27956` images in the testing dataset).
+One way to do so is to merge the ID DataFrame with the prediction DataFrame, using both `image` and ID columns as keys. We'll do a left join, such that when the true ID is one of the proposed IDs, the prediction, its rank and score are returned. When true true ID is not one of the proposed IDs, we'll get NAs for those columns. We can check to see that it worked by checking the number of rows in the result (there are `27956` images in the testing dataset).
 
 ```{python}
 # add the predictions and the scores to the id dataframe
@@ -87,13 +98,55 @@ print(performance_df.shape)
 performance_df.head(20)
 ```
 
-Any image with an `NA` rank means that the true ID was not one of the `proposed_ids`. 
+Any image with an `NA` rank means that the true ID was not one of the `proposed_ids`. We'll fill those with some large value, say, `9999`. Then, we just need to compute the average number of times that the rank was less than 6.
 
-We can compute the precision by taking the reciprocal of the rank. After we do that, we'll fill the NA values with zero, since none of the five predictions were correct.
+```{python}
+performance_df['rank'] = performance_df['rank'].fillna(9999)
+performance_df['in_top_5'] = performance_df['rank'] < 6
+print(f'Top 5%: {performance_df.in_top_5.mean():0.1%}')
+```
+
+We can see that the correct answer was in the top 5 predictions for 92% of test images. For fun, we can look at this performance across species.
+
+```{python}
+#| fig-cap: Percentage of images (blue dots) where the correct ID was in the top 5 proposed IDs for each species
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mtick 
+
+plt.style.use('fivethirtyeight')
+plt.rcParams['axes.facecolor'] = 'white'
+plt.rcParams['figure.facecolor'] = 'white'
+
+map_df = (
+    performance_df.groupby('species')
+        .in_top_5
+        .mean()
+        .rename('top5')
+        .reset_index()
+        .sort_values('top5')
+)
+map_df.species = map_df.species.str.replace('_', ' ')
+
+fig, ax = plt.subplots(figsize=(4, 8))
+ax.scatter(map_df.top5, map_df.species)
+for row in map_df.itertuples():
+    ax.text(row.top5 - 0.02, row.species, f'{row.top5:0.0%}', ha='right', 
+            va='center', fontsize=12)
+ax.xaxis.set_major_formatter(mtick.PercentFormatter(1))
+ax.set_title('AnyDorsal Performance')
+ax.set_xlabel('Top 5%')
+ax.set_xlim((0,1.03))
+plt.show()
+```
+
+We can see that the 12 of 24 species achieve a Top 5% of over 95%. Some of these species are being rewarded (or punished) by the prevalence of `new_individual`s in the dataset, since `new_individual` is almost always one of the top 5 proposed IDs. 
+
+## Mean average precision
+
+We can also evaluate *AnyDorsal* with Mean Average Precision (MAP), a slightly more rigorous metric. MAP evaluates a set of predictions, in this case, a set of 5 predictions. For a set of five ordered predictions, the precision score will be $1/1 = 1$ if the first prediction is correct, $1/2$ if the second is correct, and so on until $1/5$ if the fifth prediction is correct, or $0$ if none of the five predictions are correct. As such, the precision is just the reciprocal of the rank. Recall that we set the `NA` values to `9999` earlier, and $1/9999 \approx 0$.  MAP is the mean precision score for a set.
 
 ```{python}
 performance_df['precision'] = 1 / performance_df['rank'] 
-performance_df['precision'] = performance_df['precision'].fillna(0)
 map5 = performance_df.precision.mean()
 print(f'MAP@5: {map5:0.3f}')
 ```
@@ -101,11 +154,7 @@ print(f'MAP@5: {map5:0.3f}')
 For fun, we can look at the results by species
 
 ```{python}
-import matplotlib.pyplot as plt
-
-plt.style.use('fivethirtyeight')
-plt.rcParams['axes.facecolor'] = 'white'
-plt.rcParams['figure.facecolor'] = 'white'
+#| fig-cap: Mean average precision (blue dots) of predictions for each species.
 
 map_df = (
     performance_df.groupby('species')
@@ -115,6 +164,7 @@ map_df = (
         .reset_index()
         .sort_values('MAP')
 )
+map_df.species = map_df.species.str.replace('_', ' ')
 
 fig, ax = plt.subplots(figsize=(4, 8))
 ax.scatter(map_df.MAP, map_df.species)

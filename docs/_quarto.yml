@@ -7,9 +7,13 @@ execute:
 
 website:
   page-navigation: true
+  repo-url: https://github.com/philpatton/pyseter
   sidebar:
     style: "docked"
     search: true
+    tools:
+      - icon: github
+        href: https://github.com/philpatton/pyseter
     contents:
       - text: "Pyseter"
         href: index.qmd
@@ -45,7 +49,7 @@ format:
   html:
     theme: 
       light: united
-      dark: darkly
+      # dark: darkly
     toc: true
     code-copy: true
     code-fold: false
