@@ -1,6 +1,6 @@
 """
 Pyseter
-Processing images before photo-identification
+Open source photo-identification in Python
 """
 
 __version__ = "0.3.2"
