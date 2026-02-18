@@ -141,4 +141,41 @@ ax.set_xlabel('False positive rate (Positive label: Distinctive)')
 plt.show()
 ```
 
-We can see that the classifier achieves an AUC of 0.92, outperforming the random classifier (AUC = 0.5). The true positive rate grow rapidly initially because there are so few distinct individuals with low ERS  [@fig-hist]. Then, the curve begins to sag a bit as it enters the area of overlap between 0.4 and 0.6 ERS [@fig-hist]
+We can see that the classifier achieves an AUC of 0.92, outperforming the random classifier (AUC = 0.5). The true positive rate grow rapidly initially because there are so few distinct individuals with low ERS  [@fig-hist]. Then, the curve begins to sag a bit as it enters the area of overlap between 0.4 and 0.6 ERS [@fig-hist].
+
+We can also try to visualize the feature vectors with UMAP [@mcinnes-2018-umap]. Interpreting UMAP is a minefield of caveats, but it can be a useful visualization technique for extremely high dimensional spaces. The feature vectors reside on a 5,504 dimensional hypersphere. 
+
+```{python}
+#| fig-cap: UMAP projection of feature vectors for images of not distinctive (orange dots) and distinctive (blue dots) individuals. 
+import umap
+
+# project the embeddings with UMAP
+embedding = umap.UMAP(
+    min_dist = 0.55, n_neighbors=25, metric='cosine'
+).fit_transform(feature_array)
+
+
+fig, ax = plt.subplots(figsize=(5, 5), tight_layout=True)
+
+indistinct = embedding[y_test == 0]
+ax.scatter(indistinct[:, 0], indistinct[:, 1], s=5, label='Not Distinctive', 
+           color='C1', zorder=2)
+
+distinct = embedding[y_test == 1]
+ax.scatter(distinct[:, 0], distinct[:, 1], s=5, label='Distinctive', color='C0', 
+           zorder=-2, alpha=0.8)
+
+ax.set_xticks([])
+ax.set_yticks([])
+ax.legend()
+
+ax.set_title(f'UMAP projection of feature vectors')
+
+plt.show()
+```
+
+UMAP echoes our previous results, namely, that the embeddings for the not distinctive individuals tend to cluster together. There is, however, substantial overlap, and there are a few not distinctive embeddings lingering where they shouldn't (at least theoretically). 
+
+:::{.callout-warning}
+Users will need to install [umap-learn](https://umap-learn.readthedocs.io/en/latest/), e.g., `conda install umap-learn -c conda-forge`, to run the above code block
+:::
