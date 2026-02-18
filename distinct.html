@@ -341,7 +341,7 @@ window.Quarto = {
 <section id="spinner-dolphin-example" class="level2">
 <h2 class="anchored" data-anchor-id="spinner-dolphin-example">Spinner dolphin example</h2>
 <p>The images in this example were collected during a multi-year photo-ID survey of spinner dolphins in Hawaiʻi. We’ll load in the saved feature vectors from before.</p>
-<div id="df7d1c3f" class="cell" data-execution_count="1">
+<div id="239ccfe3" class="cell" data-execution_count="1">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>config InlineBackend.figure_format <span class="op">=</span> <span class="st">'retina'</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> PIL <span class="im">import</span> Image</span>
@@ -357,7 +357,7 @@ window.Quarto = {
 <span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>filenames, feature_array <span class="op">=</span> load_features(out_path)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <p>We need to supply two arguments to <code>rate_distinctiveness</code>: the <code>feature_array</code>, and the <code>match_threshold</code>. The lower the match threshold, the more individuals will end up in the unrecognizable identity cluster, potentially including distinct individuals. Conversely, a high match threshold might split the indistinct individuals into many clusters.</p>
-<div id="a447c3b2" class="cell" data-execution_count="2">
+<div id="1fd7862e" class="cell" data-execution_count="2">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>distinctiveness <span class="op">=</span> rate_distinctiveness(feature_array, match_threshold<span class="op">=</span><span class="fl">0.5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Unrecognizable identity cluster consists of 196 images.</code></pre>
@@ -369,7 +369,7 @@ window.Quarto = {
 </div>
 <p><code>rate_distinctiveness</code> warns you that this is experimental, and lets you know how many individuals ended up in the unrecognizable identity. This should be a quick sanity check.</p>
 <p>We can plot the results of the score with the receiver operator characteristic (ROC) curve. This treats the distinctiveness grade as a classifier probability. The area under the curve tells us how good the classifier is, i.e., in terms of the number of false positives and false negatives.</p>
-<div id="1ddd257f" class="cell" data-execution_count="3">
+<div id="95082c9f" class="cell" data-execution_count="3">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># download the true distinctiveness scores</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>data_url <span class="op">=</span> (</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">'https://raw.githubusercontent.com/philpatton/pyseter/main/'</span> </span>
@@ -439,7 +439,7 @@ Figure&nbsp;1: The five images with an ERS over 0.8, yet had been manually class
 </div>
 <p>One of the images (top left) is clearly a cropping error. Two of the images depict an individual with some rake marks across the dorsal fin that <em>AnyDorsal</em> might be keying in on. The individual in the middle right does have some notches along its fin. It’s unclear what <em>AnyDorsal</em> sees in the image in the upper right hand corner</p>
 <p>Additionally, we can see that distinctive individuals (blue) rarely have a low ERS <a href="#fig-hist" class="quarto-xref">Figure&nbsp;1</a>. While 0.57% of distinct individuals and have an ERS less than 0.5, that number is 43% for indistinct individuals. We can look at the six outlier distinctive individuals with an ERS below 0.5.</p>
-<div id="263ad77c" class="cell" data-execution_count="5">
+<div id="2d6b89dd" class="cell" data-execution_count="5">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>outliers <span class="op">=</span> ers_df.loc[(ers_df.distinctiveness <span class="op">==</span> <span class="st">'d1-d2'</span>) <span class="op">&amp;</span> (ers_df.ers <span class="op">&lt;</span> <span class="fl">0.5</span>), <span class="st">'image'</span>]</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">3</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">9</span>))</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -464,7 +464,7 @@ Figure&nbsp;1: The five images with an ERS over 0.8, yet had been manually class
 </div>
 <p>The images show relatively clean fins but with certain characteristics (e.g., fin shape), that stood out to human reviewers as distinctive enough for classification.</p>
 <p>Another way to assess the usefulness of the ERS is to treat it as a classifier where <span class="math inline">\(I(\mathrm{ers} &gt; \tau) = 1\)</span> for some threshold <span class="math inline">\(\tau\)</span>. We can evaluate the classifier with an ROC curve.</p>
-<div id="dd3b2b2e" class="cell" data-execution_count="6">
+<div id="8ee3209b" class="cell" data-execution_count="6">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>display <span class="op">=</span> RocCurveDisplay.from_predictions(</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    y_test, y_score, name<span class="op">=</span><span class="st">"ERS"</span>, plot_chance_level<span class="op">=</span><span class="va">True</span>, despine<span class="op">=</span><span class="va">True</span></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>)</span>
@@ -486,7 +486,57 @@ Figure&nbsp;1: The five images with an ERS over 0.8, yet had been manually class
 </div>
 </div>
 </div>
-<p>We can see that the classifier achieves an AUC of 0.92, outperforming the random classifier (AUC = 0.5). The true positive rate grow rapidly initially because there are so few distinct individuals with low ERS <a href="#fig-hist" class="quarto-xref">Figure&nbsp;1</a>. Then, the curve begins to sag a bit as it enters the area of overlap between 0.4 and 0.6 ERS <a href="#fig-hist" class="quarto-xref">Figure&nbsp;1</a></p>
+<p>We can see that the classifier achieves an AUC of 0.92, outperforming the random classifier (AUC = 0.5). The true positive rate grow rapidly initially because there are so few distinct individuals with low ERS <a href="#fig-hist" class="quarto-xref">Figure&nbsp;1</a>. Then, the curve begins to sag a bit as it enters the area of overlap between 0.4 and 0.6 ERS <a href="#fig-hist" class="quarto-xref">Figure&nbsp;1</a>.</p>
+<p>We can also try to visualize the feature vectors with UMAP <span class="citation" data-cites="mcinnes-2018-umap">(<a href="#ref-mcinnes-2018-umap" role="doc-biblioref">McInnes et al. 2018</a>)</span>. Interpreting UMAP is a minefield of caveats, but it can be a useful visualization technique for extremely high dimensional spaces. The feature vectors reside on a 5,504 dimensional hypersphere.</p>
+<div id="3e2a976b" class="cell" data-execution_count="7">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> umap</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="co"># project the embeddings with UMAP</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>embedding <span class="op">=</span> umap.UMAP(</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>    min_dist <span class="op">=</span> <span class="fl">0.55</span>, n_neighbors<span class="op">=</span><span class="dv">25</span>, metric<span class="op">=</span><span class="st">'cosine'</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>).fit_transform(feature_array)</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">5</span>, <span class="dv">5</span>), tight_layout<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>indistinct <span class="op">=</span> embedding[y_test <span class="op">==</span> <span class="dv">0</span>]</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>ax.scatter(indistinct[:, <span class="dv">0</span>], indistinct[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">5</span>, label<span class="op">=</span><span class="st">'Not Distinctive'</span>, </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>           color<span class="op">=</span><span class="st">'C1'</span>, zorder<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>distinct <span class="op">=</span> embedding[y_test <span class="op">==</span> <span class="dv">1</span>]</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>ax.scatter(distinct[:, <span class="dv">0</span>], distinct[:, <span class="dv">1</span>], s<span class="op">=</span><span class="dv">5</span>, label<span class="op">=</span><span class="st">'Distinctive'</span>, color<span class="op">=</span><span class="st">'C0'</span>, </span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>           zorder<span class="op">=-</span><span class="dv">2</span>, alpha<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>ax.set_xticks([])</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>ax.set_yticks([])</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>ax.legend()</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="ss">f'UMAP projection of feature vectors'</span>)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="distinct_files/figure-html/cell-8-output-1.png" width="470" height="470" class="figure-img"></p>
+<figcaption>UMAP projection of feature vectors for images of not distinctive (orange dots) and distinctive (blue dots) individuals.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>UMAP echoes our previous results, namely, that the embeddings for the not distinctive individuals tend to cluster together. There is, however, substantial overlap, and there are a few not distinctive embeddings lingering where they shouldn’t (at least theoretically).</p>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Users will need to install <a href="https://umap-learn.readthedocs.io/en/latest/">umap-learn</a>, e.g., <code>conda install umap-learn -c conda-forge</code>, to run the above code block</p>
+</div>
+</div>
 
 
 
@@ -495,6 +545,9 @@ Figure&nbsp;1: The five images with an ERS over 0.8, yet had been manually class
 <div id="quarto-appendix" class="default"><section class="quarto-appendix-contents" role="doc-bibliography" id="quarto-bibliography"><h2 class="anchored quarto-appendix-heading">References</h2><div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
 <div id="ref-deng-2023-ui" class="csl-entry" role="listitem">
 Deng, Siqi, Yuanjun Xiong, Meng Wang, Wei Xia, and Stefano Soatto. 2023. <span>“Harnessing Unrecognizable Faces for Improving Face Recognition.”</span> In <em>Proceedings of the IEEE/CVF Winter Conference on Applications of Computer Vision</em>, 3424–33.
+</div>
+<div id="ref-mcinnes-2018-umap" class="csl-entry" role="listitem">
+McInnes, Leland, John Healy, Nathaniel Saul, and Lukas Großberger. 2018. <span>“UMAP: Uniform Manifold Approximation and Projection.”</span> <em>Journal of Open Source Software</em> 3 (29): 861. <a href="https://doi.org/10.21105/joss.00861">https://doi.org/10.21105/joss.00861</a>.
 </div>
 </div></section></div></main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
